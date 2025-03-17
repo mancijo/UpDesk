@@ -1,0 +1,4 @@
+UpDesk-desktop/dist/** filter=lfs diff=lfs merge=lfs -text
+UpDesk-desktop/node_modules/** filter=lfs diff=lfs merge=lfs -text
+**/*.exe filter=lfs diff=lfs merge=lfs -text
+**/*.msi filter=lfs diff=lfs merge=lfs -text
