@@ -1,0 +1,29 @@
+
+
+• Quais são as principais funcionalidades do sistema atual?
+• Quais tipos de solicitações de suporte técnico são mais comuns?
+• Como os chamados são registrados e acompanhados atualmente?
+• Qual é o fluxo dos times até o encerramento do atendimento?
+• Qual impacto vocês esperam obter com a implementação da IA?
+• Existem metas específicas que vocês gostariam de atingir? (Ex: Redução de tempo de atendimento, melhor experiencia do cliente?)
+• 
+
+• Quais etapas do fluxo de gerenciamento de chamados vocês acreditam que a IA pode automatizar ou otimizar?
+• Vocês imaginam a IA mais como suporte para as equipes ou como uma automação completa de tarefas?
+
+• A equipe está preparada para adotar novas tecnologias com a IA? Será necessário treinamento?
+• Existe algum prazo especifico para a implementação ou resultado iniciais?
+• Quais são as melhores práticas para implementar a IA nesse contexto?
+
+• A empresa tem alguma estimativa de redução de erros com a implementação da IA?
+• 
+
+• Quais informações são essenciais no registro de um chamado?
+	o Ex.: descrição do problema, nível de urgência, anexos etc.
+• Existem etapas específicas no fluxo de atendimento?
+	o Ex.: triagem, encaminhamento, acompanhamento e encerramento
+
+• Como o sistema atual prioriza ou categoriza os chamados?
+• Existe algum processo automatizado na triagem ou solução dos chamados?
+• Quais melhorias os Stakeholders esperam com a implementação de inteligência artificial?
+
