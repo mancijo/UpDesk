@@ -1,9 +1,7 @@
-
-
 -Abertura de chamado
 	-Login 
 		-Nome completo
-		-Email
+		-E-mail
 		-ID
 		-Telefone 
 	-Título
@@ -34,13 +32,13 @@
 -Gerenciamento de usuários (Supervisor)
 	-Supervisor
 	-Focal Point
-	-TI (nv1, nv2, nv3)
+	-TI (n1, n2, n3)
 	-Triagem
 	-Usuário
 
--Inteligencia Artificial
+-Inteligência Artificial
 	-Inicio do atendimento
 	-Abrir chamado
 	-Sugerir soluções
-
-
+	-Direcionamento de chamado
+	-Encerramento de chamado
