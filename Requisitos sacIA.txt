@@ -1,0 +1,46 @@
+
+
+-Abertura de chamado
+	-Login 
+		-Nome completo
+		-Email
+		-ID
+		-Telefone 
+	-Título
+	-Descrição (Inserida pelo usuário)
+	-Anexo
+	-Prioridade
+	-Tempo espera
+	-Incidência
+	-Finalizar chamado
+
+-Gerenciamento de chamado
+	-Times de suporte
+	-Categorização de chamados
+	-Histórico de chamados
+		-Ticket
+		-Nome solicitante
+		-Status
+		-Categorização
+		-Data
+		-Backlog (Conversas e informações)
+		-Descrição geral
+	-Chamados pendentes
+	-Solicitação de urgência
+	-Iniciar chamado
+		-Exibir dados
+	-Validação de chamados pela IA (Triagem)
+
+-Gerenciamento de usuários (Supervisor)
+	-Supervisor
+	-Focal Point
+	-TI (nv1, nv2, nv3)
+	-Triagem
+	-Usuário
+
+-Inteligencia Artificial
+	-Inicio do atendimento
+	-Abrir chamado
+	-Sugerir soluções
+
+
