@@ -1,0 +1,28 @@
+Use Case - Requisitos 
+
+Usuário 
+Autenticar Usuário
+Abrir Chamado
+Monitoramento Chamados
+Avaliar Solução Aplicada
+
+IA 
+Analisar Chamado
+Sugerir soluções
+Transferir atendimento
+Aprender com Feedback
+
+N1 
+Receber Chamado de Baixa e Média Complexidade
+Resolver Chamados Baixa e Média Complexidade
+Transferir chamado N2	
+Consultar Histórico de Chamados
+
+N2
+Receber Chamados Escalados
+Resolver chamado N2
+Consultar Histórico de Chamados
+
+Supervisor
+Gerenciar usuários
+Visualizar Relatórios de Usuários
