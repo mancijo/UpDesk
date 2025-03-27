@@ -3,7 +3,8 @@
 ## Equipe do Projeto
 - **PO**: Jonatas Santos  
 - **Scrum Master**: Andrei Mancijo  
-- **Dev Team**:  
+- **Dev Team**:
+  - Filipe Vitor dos Santos
   - Mateus Teodoro da Silva  
   - Kaique Batista da Silva  
   - Mariozan Damasceno Lacerda Júnior  
