@@ -13,6 +13,12 @@
 
 ---
 
+## Planejamento
+-<a href="https://github.com/mancijo/serviceDesk/blob/useCase/planning/Backlog%20UpDesk.md">**Backlog**</a>
+-<a href="https://github.com/mancijo/serviceDesk/blob/useCase/planning/sprintPlanning.md">**Sprint Planning**</a>
+
+---
+
 ## Requisitos Funcionais
 - ✅ Protótipo de uma interface **WEB responsiva**  
 - ✅ Interface de gerenciamento de chamados  
