@@ -16,7 +16,7 @@
 
 ## Planejamento
 - **Backlog do Produto**: [Backlog do UpDesk](https://github.com/mancijo/serviceDesk/blob/useCase/planning/Backlog%20UpDesk.md)  
-- **Planejamento da Sprint**: [Sprint Planning](https://github.com/mancijo/serviceDesk/blob/useCase/planning/sprintPlanning.md)
+- **Planejamento da Sprint**: [Sprint Planning](https://github.com/mancijo/UpDesk/blob/main/planning/sprintPlanning.md)
 
 ---
 
