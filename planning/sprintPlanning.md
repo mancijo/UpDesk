@@ -9,27 +9,30 @@
 - Estrutura do protótipo da interface desktop
 
 ## 08/04/25
+- **Semana de provas**
+
+## 15/04/25
 - **Estruturar banco de dados**
 - Estilização do protótipo da interface desktop
 
-## 15/04/25
+## 22/04/25
 ### Documentação
 - Resumo
 - Introdução
 - Análise de Sistemas Orientada a Objetos
 
-## 22/04/25
+## 29/04/25
 ### Documentação
 - Engenharia de Software 2
 - POO 1
 - Projeto de Interface com o Usuário
 
-## 29/04/25
+## 06/04/25
 ### Documentação
 - Banco de Dados
 - Economia de Mercado
 - Gestão estratégica de Recursos Humanos
 
-## 06/05/25
+## 18/05/25
 - **Planilha de testes**
 - **PowerPoint para apresentação**
