@@ -1,0 +1,14 @@
+C:\Users\Mateus Teodoro\source\repos\UpDesk\bin\Debug\net8.0\UpDesk.exe
+C:\Users\Mateus Teodoro\source\repos\UpDesk\bin\Debug\net8.0\UpDesk.deps.json
+C:\Users\Mateus Teodoro\source\repos\UpDesk\bin\Debug\net8.0\UpDesk.runtimeconfig.json
+C:\Users\Mateus Teodoro\source\repos\UpDesk\bin\Debug\net8.0\UpDesk.dll
+C:\Users\Mateus Teodoro\source\repos\UpDesk\bin\Debug\net8.0\UpDesk.pdb
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\UpDesk.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\UpDesk.AssemblyInfoInputs.cache
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\UpDesk.AssemblyInfo.cs
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\UpDesk.csproj.CoreCompileInputs.cache
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\UpDesk.dll
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\refint\UpDesk.dll
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\UpDesk.pdb
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\UpDesk.genruntimeconfig.cache
+C:\Users\Mateus Teodoro\source\repos\UpDesk\obj\Debug\net8.0\ref\UpDesk.dll
