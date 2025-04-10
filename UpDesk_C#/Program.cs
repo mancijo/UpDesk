@@ -1,6 +1,7 @@
 ﻿using UpDesk;
+using System;
 
-public class Program
+class Program
 {
     static void Main(string[] args)
     {
@@ -30,9 +31,7 @@ public class Program
                     Console.Write("Descrição do problema: ");
                     string descricao = Console.ReadLine();
                     Console.Write("Nome do usuário: ");
-                    string usuario = Console.ReadLine();
-
-                    service.CriarChamado(titulo, descricao, usuario);
+                    service.CriarChamado(titulo, descricao, Console.ReadLine());
                     Console.WriteLine("\nChamado criado com sucesso!");
                     break;
 

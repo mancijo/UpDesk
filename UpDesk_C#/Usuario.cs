@@ -10,14 +10,19 @@ namespace UpDesk
     {
         private int Id { get; set; }
         private string Nome { get; set; }
-        private string Login { get; set; }
+        private string Email { get; set; }
         private string Senha { get; set; }
 
-        public Usuario(string login, string senha)
+        public Usuario(int id, string nome, string Email, string senha)
         {
-            Login = login;
-            Senha = senha;
+            id = id;
+            nome = nome;
+            Email = Email;
+            senha = senha;
         }
 
-    }
+        public virtual string TipoUsuario => "Comum";
+
+        
+    }   
 }
