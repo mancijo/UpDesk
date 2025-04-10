@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UpDesk")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ee8659610fc0fb2f397fdf44984fa80b33fed67f")]
 [assembly: System.Reflection.AssemblyProductAttribute("UpDesk")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UpDesk")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
