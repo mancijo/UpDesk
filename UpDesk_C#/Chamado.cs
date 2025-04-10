@@ -8,25 +8,47 @@ namespace UpDesk
 {
     class Chamado
     {
-        public int Id { get; set; }
-        public string Titulo { get; set; }
-        public string Descricao { get; set; }
-        public string Status { get; set; }
-        public string Usuario { get; set; }
-        public object chamados { get; private set; }
+        internal object Id;
+        internal object Titulo;
+        internal object Descricao;
+        internal object Status;
+        internal object Usuario;
+        private int id;
+        private string titulo;
+        private string descricao;
+        private string status;
+        private Usuario usuario;
 
-        public void CriarChamado(string titulo, string descricao, string usuario)
+        public Chamado(int v1, string titulo, string descricao, string v2, Usuario usuario)
         {
-            int proximoId = 0;
-            var chamado = new Chamado
-            {
-                Id = proximoId++,
-                Titulo = titulo,
-                Descricao = descricao,
-                Status = "Aberto",
-                Usuario = usuario,
+            V1 = v1;
+            this.titulo = titulo;
+            this.descricao = descricao;
+            V2 = v2;
+            this.usuario = usuario;
+        }
 
-            };
+        public Chamado(int id, string titulo, string descricao, string status, Usuario usuario, string solucaoIA)
+        {
+            this.id = id;
+            this.titulo = titulo;
+            this.descricao = descricao;
+            this.status = status;
+            this.usuario = usuario;
+            
+        }
+
+        public int V1 { get; }
+        public string V2 { get; }
+
+        public void ExibirDetalhes()
+        {
+            Console.WriteLine($"ID: {id}");
+            Console.WriteLine($"Título: {titulo}");
+            Console.WriteLine($"Descrição: {descricao}");
+            Console.WriteLine($"Status: {status}");
+            Console.WriteLine($"Usuário: {usuario.TipoUsuario}");
+            
         }
     }
 }

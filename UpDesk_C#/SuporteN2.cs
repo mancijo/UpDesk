@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace UpDesk
 {
-    class SuporteN1 : Usuario
+    class SuporteN2 : Usuario
     {
-        public SuporteN1(int id, string nome, string email, string senha)
+        public SuporteN2(int id, string nome, string email, string senha)
             : base(id, nome, email, senha) { }
 
-        public override string TipoUsuario => "Suporte N1";
+        public override string TipoUsuario => "Suporte N2";
     }
 }
