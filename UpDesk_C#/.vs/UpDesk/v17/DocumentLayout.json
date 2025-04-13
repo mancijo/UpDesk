@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|c:\\users\\mateus teodoro\\updesk\\updesk_c#\\classdiagram1.cd||{59B0B277-7DDF-4E36-A3ED-02DAC5B9E2FA}|",
+      "RelativeMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|solutionrelative:classdiagram1.cd||{59B0B277-7DDF-4E36-A3ED-02DAC5B9E2FA}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|c:\\users\\mateus teodoro\\updesk\\updesk_c#\\supervisor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|solutionrelative:supervisor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|c:\\users\\mateus teodoro\\updesk\\updesk_c#\\suporten2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|solutionrelative:suporten2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|c:\\users\\mateus teodoro\\updesk\\updesk_c#\\chamado.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|solutionrelative:chamado.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|c:\\users\\mateus teodoro\\updesk\\updesk_c#\\supervisor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|solutionrelative:supervisor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C18BACEF-9316-426A-AE65-D10EF5FA2EB2}|UpDesk.csproj|c:\\users\\mateus teodoro\\updesk\\updesk_c#\\suporten1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,6 +51,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ClassDiagram1.cd",
+              "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\ClassDiagram1.cd",
+              "RelativeDocumentMoniker": "ClassDiagram1.cd",
+              "ToolTip": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\ClassDiagram1.cd",
+              "RelativeToolTip": "ClassDiagram1.cd",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000463|",
+              "WhenOpened": "2025-04-13T22:32:09.312Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "SuporteN2.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\SuporteN2.cs",
               "RelativeDocumentMoniker": "SuporteN2.cs",
@@ -59,7 +75,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "UsuarioComum.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\UsuarioComum.cs",
               "RelativeDocumentMoniker": "UsuarioComum.cs",
@@ -72,7 +88,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "ChamadoService.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\ChamadoService.cs",
               "RelativeDocumentMoniker": "ChamadoService.cs",
@@ -85,7 +101,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Chamado.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\Chamado.cs",
               "RelativeDocumentMoniker": "Chamado.cs",
@@ -98,7 +114,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Supervisor.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\Supervisor.cs",
               "RelativeDocumentMoniker": "Supervisor.cs",
@@ -111,7 +127,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "SuporteN1.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\SuporteN1.cs",
               "RelativeDocumentMoniker": "SuporteN1.cs",
@@ -124,7 +140,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Usuario.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\Usuario.cs",
               "RelativeDocumentMoniker": "Usuario.cs",
@@ -137,7 +153,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
