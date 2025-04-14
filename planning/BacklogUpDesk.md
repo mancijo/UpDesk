@@ -86,3 +86,31 @@
   - Editar informações de usuários
   - Inativar usuários
 - **Visualizar relatórios de usuários em chamados**
+
+# Não funcionais 
+- **Banco de dados**
+  - Conceitual
+  - Lógico
+  - Físico
+- **Protótipo Figma**
+  - Baixa fidelidade
+  - Média fidelidade
+  - Alta fidelidade
+- **Diagramas e casos de uso**
+  - Casos de uso descritivo
+  - Diagrama de casos de uso
+  - Diagrama de sequência
+  - Diagrama de implementação
+  - Diagrama de classes
+- **Testes**
+  - Planilha de testes
+- **Documentação PIM**
+  - Resumo
+  - Introdução
+  - Análise de Sistemas Orientada a Objetos
+  - Engenharia de Software 2
+  - POO 1
+  - Projeto de Interface com o Usuário
+  - Banco de Dados
+  - Economia de Mercado
+  - Gestão estratégica de Recursos Humanos
