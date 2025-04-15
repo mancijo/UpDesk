@@ -52,5 +52,3 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
  - Correções e validação com professores
 
 ---
-
-Agora seu planejamento está devidamente ajustado! Precisa de mais algum refinamento? 😃
