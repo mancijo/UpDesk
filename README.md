@@ -7,7 +7,7 @@
   - [Mariozan Damasceno Lacerda Júnior](https://github.com/MariozanJr)
   - [Mateus Teodoro](https://github.com/MateusTeod)
   - [Kaique Batista da Silva](https://github.com/Kaiq-commits)
-  - Filipe Vitor dos Santos
+  - [Filipe Vitor dos Santos](https://github.com/flp07)
 
 ## Sobre o Projeto
 **UpDesk** é um projeto acadêmico focado no desenvolvimento de um sistema de abertura de chamados com suporte de **inteligência artificial**.
