@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UpDesk
 {
     class SuporteN1 : Usuario
     {
         public SuporteN1(int id, string nome, string email, string senha)
-            : base(id, nome, email, senha) { }
+            : base(id, nome, email, senha)
+        {
+        }
 
-        public override string TipoUsuario => "Suporte N1";
+        public override string GetTipoUsuario()
+        {
+            return "Suporte N1";
+        }
     }
 }

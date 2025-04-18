@@ -8,20 +8,32 @@ namespace UpDesk
 {
     class Usuario
     {
-        private int Id { get; set; }
-        private string Nome { get; set; }
-        private string Email { get; set; }
-        private string Senha { get; set; }
+        public int Id { get; private set; }
+        public string Nome { get; private set; }
+        public string Email { get; private set; }
+        public string Senha { get; private set; }
 
-        public Usuario(int id, string nome, string Email, string senha)
+        public Usuario(int id, string nome, string email, string senha)
         {
-            id = id;
-            nome = nome;
-            Email = Email;
-            senha = senha;
+            Id = id;
+            Nome = nome;
+            Email = email;
+            Senha = senha;
         }
 
-        public virtual string TipoUsuario => "Comum";
+
+        public virtual string GetTipoUsuario()
+        {
+            return "Comum";
+        }
+
+        public virtual void ExibirPerfil ()
+        {
+            Console.WriteLine($"ID: {Id}");
+            Console.WriteLine($"Nome: {Nome}");
+            Console.WriteLine($"Email: {Email}");
+            Console.WriteLine($"Tipo: {GetTipoUsuario()}");
+        }
 
         
     }   
