@@ -3,57 +3,42 @@
   <Class Name="UpDesk.Chamado">
     <Position X="3.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQCAAAEAAEBAAAAAQAABAAAAAAAAgQAAAAEEAAAAhA=</HashCode>
+      <HashCode>AAACAAAEAAEDAABAAAAAAAAAAAAAAAAAAAAEAAAAABA=</HashCode>
       <FileName>Chamado.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="UpDesk.ChamadoService">
-    <Position X="5.25" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAgAAAAACAAAAAAgAAACAAAAAAAAQAAAEAAAAAAA=</HashCode>
-      <FileName>ChamadoService.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="UpDesk.Supervisor">
     <Position X="7.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAEAA=</HashCode>
       <FileName>Supervisor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="UpDesk.SuporteN1">
     <Position X="9.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>SuporteN1.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="UpDesk.SuporteN2">
     <Position X="14.5" Y="3.75" Width="1.5" />
-    <InheritanceLine Type="UpDesk.Usuario" ManuallyRouted="true" FixedFromPoint="true">
-      <Path>
-        <Point X="12.25" Y="3.324" />
-        <Point X="12.25" Y="3.51" />
-        <Point X="15.25" Y="3.51" />
-        <Point X="15.25" Y="3.75" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>SuporteN2.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="UpDesk.UsuarioComum">
     <Position X="12" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>UsuarioComum.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="UpDesk.Usuario">
-    <Position X="11.5" Y="1" Width="1.5" />
+    <Position X="11.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAAAAAAAAAgAAAAACAAAAAAAAAAAAEAAAA=</HashCode>
+      <HashCode>AAACAAAAACAAAAAAAAAAAAAAACAAAAAAAAAAgAEAEAA=</HashCode>
       <FileName>Usuario.cs</FileName>
     </TypeIdentifier>
   </Class>
