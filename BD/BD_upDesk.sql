@@ -46,7 +46,15 @@ create table SolucoesIA (
     ia_DataSugestao datetime default current_timestamp,
     ia_Responsavel varchar(100) not null,
     foreign key (ia_ChamadoId) references Chamados(chamado_ID)
-);*/
+);
 
+CREATE TABLE BaseDeConhecimento (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    Titulo NVARCHAR(255) NOT NULL,
+    DataCriacao DATETIME DEFAULT GETDATE(),
+    DataModificacao DATETIME DEFAULT GETDATE(),
+    Anexo VARBINARY(MAX),
+    Descricao NVARCHAR(MAX)
+);*/
 
 
