@@ -17,14 +17,17 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 
 ## 📅 22/04/25 – Diagramas 
 - Diagrama conceitual do banco de dados
+- Diagrama lógico do banco de dados
+- Diagrama Físico do banco de dados
 - Diagrama de Sequencia
-- Diagrama de Implementação
-
+- Projeto de Interface com o Usuário
+- Início do desenvolvimento do protótipo de alta fidelidade
 
 ## 📅 29/04/25  
 - Engenharia de Software 2  
 - POO 1  
-- Projeto de Interface com o Usuário  
+- Diagrama de Implementação
+- Documentação Introdução 
 
 ## 📅 06/05/25  
 - Banco de Dados  
@@ -32,15 +35,14 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 - Gestão estratégica de Recursos Humanos  
 
 ## 📅 13/05/25 – Protótipo Avançado  
-- Protótipo de alta fidelidade da interface
-- Diagrama lógico do banco de dados
-- Diagrama Físico do banco de dados
+- finalização do protótipo de alta fidelidade da interface
+- Elaboração da planilha de testes  
+
 
 ## 📅 18/05/25 – Preparação para Testes e Apresentação
-- Elaboração da planilha de testes  
 - Análise de Sistemas Orientada a Objetos
-  - Casos de uso descritivos
-- Redação do resumo e introdução  
+- Casos de uso descritivos
+- Redação do resumo  
   
 ## 📅 19/05 a 23/05 – **Semana de Provas**  
 _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_  
