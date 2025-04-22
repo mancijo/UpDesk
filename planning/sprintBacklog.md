@@ -38,7 +38,11 @@
 
 ### Alteração da Sprint Planning
 - **Responsável:** Andrei  
-- **Modificações:** Revisão e ajuste das sprints e datas definidas  
+- **Modificações:** Revisão e ajuste das sprints e datas definidas
+
+### Documentação PIM
+- **Responsável:** Kaique  
+- **Modificações:** Documentação ISO e Definicição de Estratégias  
 
 ---
 
