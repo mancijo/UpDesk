@@ -41,3 +41,25 @@
 - **Modificações:** Revisão e ajuste das sprints e datas definidas  
 
 ---
+
+## 4ª Entrega 
+
+### Modelagem do Banco de Dados (Brmodelo)
+- **Responsável:** Jonatas
+- **Status:** Aguardando validação
+
+### Documentação Interface de Usuário
+- **Responsável:** Andrei
+- **Status:** Aguardando validação
+
+### Diagrama de Sequência 
+- **Responsável:** Matheus
+- **Status:** Aguardando validação
+
+### Documentação Introdução
+- **Responsável:** Kaique
+- **Status:** Aguardando validação
+
+### Progressão no desenvolvimento do protótipo de interface
+- **Responsável:** Mariozan
+- **Status:** Em desenvolvimento
