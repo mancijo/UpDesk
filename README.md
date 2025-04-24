@@ -18,7 +18,7 @@
 - **Backlog do Produto**: [Backlog do UpDesk](https://github.com/mancijo/UpDesk/blob/main/planning/Backlog%20UpDesk.md)  
 - **Planejamento da Sprint**: [Sprint Planning](https://github.com/mancijo/UpDesk/blob/main/planning/sprintPlanning.md)
 - **Backlog de Sprints**: [Sprint Backlog](https://github.com/mancijo/UpDesk/blob/main/planning/sprintBacklog.md)
-- **Desenvolvimento do protótipo**: [Protótipo Figma](https://www.figma.com/proto/E1MoJEdet6K1CZIIEW0vfm/UpDesk?node-id=0-1&t=oEE2cMRVGQmr9kaA-1)
+<!-- - **Desenvolvimento do protótipo**: [Protótipo Figma](https://www.figma.com/proto/E1MoJEdet6K1CZIIEW0vfm/UpDesk?node-id=0-1&t=oEE2cMRVGQmr9kaA-1) -->
 
 ---
 
