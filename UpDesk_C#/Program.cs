@@ -1,57 +1,83 @@
-﻿using UpDesk;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-class Program
+namespace UpDesk
 {
-    static void Main(string[] args)
+    class Program
     {
-        
-        int opcao;
-
-        do
+        static void Main(string[] args)
         {
-            Console.Clear();
-            Console.WriteLine("=== Sistema de Gerenciamento de Chamados ===");
-            Console.WriteLine("1 - Criar chamado");
-            Console.WriteLine("2 - Listar chamados");
-            Console.WriteLine("3 - Atualizar chamado");
-            Console.WriteLine("4 - Deletar chamado");
-            Console.WriteLine("0 - Sair");
-            Console.Write("Escolha uma opção: ");
+            ChamadoService chamadoService = new ChamadoService();
 
-            if (!int.TryParse(Console.ReadLine(), out opcao)) continue;
+            Usuario usuarioLogado = new UsuarioComum(1, "Mateus", "mateus@email.com", "123");
 
-            Console.Clear();
+            int opcao;
 
-            switch (opcao)
+            do
             {
-                case 1:
-                    Console.Write("Título do chamado: ");
-                    string titulo = Console.ReadLine();
-                    Console.Write("Descrição do problema: ");
-                    string descricao = Console.ReadLine();
-                    Console.Write("Nome do usuário: ");
-                    
-                    Console.WriteLine("\nChamado criado com sucesso!");
-                   
-                    break;
+                Console.Clear();
+                Console.WriteLine("=== UPDESK - SISTEMA DE CHAMADOS ===");
+                Console.WriteLine("1 - Criar chamado");
+                Console.WriteLine("2 - Listar chamados");
+                Console.WriteLine("3 - Atualizar status de chamado");
+                Console.WriteLine("4 - Adicionar interação");
+                Console.WriteLine("5 - Ver detalhes do chamado");
+                Console.WriteLine("0 - Sair");
+                Console.Write("Escolha uma opção: ");
+                opcao = int.Parse(Console.ReadLine());
 
-             
-                 
+                switch (opcao)
+                {
+                    case 1:
+                        Console.Write("Título: ");
+                        string titulo = Console.ReadLine();
+                        Console.Write("Descrição: ");
+                        string descricao = Console.ReadLine();
 
-                case 0:
-                    Console.WriteLine("Encerrando o sistema...");
-                    break;
+                        chamadoService.CriarChamado(titulo, descricao, usuarioLogado);
+                        break;
 
-                default:
-                    Console.WriteLine("Opção inválida!");
-                    break;
-            }
+                    case 2:
+                        chamadoService.ListarChamados();
+                        break;
 
-            Console.WriteLine("\nPressione qualquer tecla para continuar...");
-            Console.ReadKey();
+                    case 3:
+                        Console.Write("ID do chamado: ");
+                        int idStatus = int.Parse(Console.ReadLine());
+                        Console.Write("Novo status: ");
+                        string novoStatus = Console.ReadLine();
 
-        } while (opcao != 0);
+                        chamadoService.AtualizarStatus(idStatus, novoStatus);
+                        break;
+
+                    case 4:
+                        Console.Write("ID do chamado: ");
+                        int idInteracao = int.Parse(Console.ReadLine());
+                        Console.Write("Mensagem: ");
+                        string mensagem = Console.ReadLine();
+
+                        chamadoService.AdicionarInteracao(idInteracao, mensagem, usuarioLogado.Nome);
+                        break;
+
+                    case 5:
+                        Console.Write("ID do chamado: ");
+                        int idExibir = int.Parse(Console.ReadLine());
+                        chamadoService.ExibirChamado(idExibir);
+                        break;
+
+                    case 0:
+                        Console.WriteLine("Encerrando o sistema...");
+                        break;
+
+                    default:
+                        Console.WriteLine("Opção inválida!");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione qualquer tecla para continuar...");
+                Console.ReadKey();
+
+            } while (opcao != 0);
+        }
     }
 }
