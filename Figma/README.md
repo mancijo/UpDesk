@@ -4,12 +4,17 @@ Este diretório contém os protótipos do projeto **UpDesk**, desenvolvidos no *
 ## 📂 Estrutura de Arquivos  
 
 ### 👤 Perfil Usuário  
-🔹 **Tela de Login** → `LoginUsuario.png`  
-🔹 **Ver Chamados** → `Ver Chamados.png`  
+🔹 **Login** → `01_LoginUsuario.png`  
+    🔹 **Esqueci Minha Senha** → `02_Esqueci minha senha.png`  
+      🔹 **Esqueci minha senha Notificação** → `03_Esqueci minha senha Notificação.png`  
+      
+  🔹 **Home Usuario** → `04_Home Usuario .png`  
+  🔹 **Abertura Chamado** → `05_AberturaChamado.png`  
+
 
 ### 🛡 Perfil Admin  
-🔹 **Tela de Login** → `LoginUsuario.png`  
-🔹 **Monitoramento Chamados** → `MonitoramentoChamados.png`  
+🔹 **Tela de Login** → `LoginUsuario.png`   
+  
 
 ---
 
