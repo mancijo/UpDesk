@@ -68,6 +68,8 @@
 - **Responsável:** Mariozan
 - **Status:** Em desenvolvimento
 
+---
+
 ## 5ª Entrega 29/04/25
 
 ### Diagrama de classes nos casos de uso
