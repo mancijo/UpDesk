@@ -1,0 +1,52 @@
+// ISO/IEC 27001 – Sistema de Gestão de Segurança da Informação (SGSI)
+
+-> É a principal norma internacional para segurança da informação.
+
+-> Estabelece um conjunto de controles e processos para proteger a confidencialidade, integridade e disponibilidade das informações.
+
+-> Apoia diretamente os princípios da LGPD, como segurança e prevenção.
+ 
+
+
+// ISO/IEC 27701 – Extensão da ISO 27001 para Gestão da Privacidade
+
+-> Complementa a ISO/IEC 27001 e ISO/IEC 27002.
+
+-> Foca especificamente na gestão de informações pessoais identificáveis (PII).
+
+-> Ajuda na implementação de um Sistema de Gestão da Privacidade da Informação (SGPI).
+
+-> Considerada uma das normas mais alinhadas à LGPD e outras legislações de proteção de dados, como o GDPR europeu.
+
+
+
+// ISO/IEC 27002 – Código de práticas para controles de segurança da informação
+
+-> Fornece diretrizes práticas para implementar os controles definidos na ISO/IEC 27001.
+
+-> Inclui práticas como controle de acesso, criptografia, segurança física e continuidade de negócios.
+
+
+// ISO/IEC 29100 – Estrutura de Privacidade
+
+-> Fornece uma estrutura de alto nível para proteção de privacidade em sistemas de informação.
+
+-> Define princípios de privacidade, como consentimento, limitação de propósito, retenção limitada, etc.
+
+-> É complementar à ISO/IEC 27701.
+
+
+// ISO/IEC 29134 – Avaliação de Impacto à Privacidade (PIA/DPIA)
+
+-> Fornece diretrizes sobre como realizar uma Privacy Impact Assessment (PIA), ou seja, avaliações de impacto à proteção de dados.
+
+-> Essencial para lidar com atividades de tratamento de dados que representem riscos aos titulares.
+
+
+
+6. ISO 9001 – Sistema de Gestão da Qualidade
+
+-> Embora não trate diretamente da privacidade, suporta a padronização e melhoria contínua de processos, o que pode fortalecer práticas de compliance com a LGPD.
+
+
+
