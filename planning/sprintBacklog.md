@@ -1,6 +1,6 @@
 # Entregas do Projeto
 
-## 1ª Entrega
+## 1ª Entrega  25/03/25
 
 ### Diagrama de Casos de Uso
 - **Responsáveis:** Andrei e Mariozan  
@@ -12,7 +12,7 @@
 
 ---
 
-## 2ª Entrega
+## 2ª Entrega 01/04/25
 
 ### Sprint Planning
 - **Responsável:** Andrei  
@@ -26,7 +26,7 @@
 
 ---
 
-## 3ª Entrega
+## 3ª Entrega 15/04/25 
 
 ### Diagrama de Classes
 - **Responsáveis:** Kaique, Filipe e Jonatas  
@@ -46,9 +46,9 @@
 
 ---
 
-## 4ª Entrega 
+## 4ª Entrega 22/04/25 
 
-### Modelagem do Banco de Dados (Brmodelo)
+### Modelagem do Banco de Dados conceitual, lógico e físico (Brmodelo)
 - **Responsável:** Jonatas
 - **Status:** Aguardando validação
 
@@ -58,7 +58,7 @@
 
 ### Diagrama de Sequência 
 - **Responsável:** Matheus
-- **Status:** Aguardando validação
+- **Status:** Em andamento
 
 ### Documentação Introdução
 - **Responsável:** Kaique
