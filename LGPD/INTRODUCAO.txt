@@ -1,5 +1,0 @@
-Com a tecnologia evoluindo rapidamente e as empresas enfrentando uma demanda cada vez maior por suporte técnico, surge a necessidade de soluções mais práticas, organizadas e inteligentes para lidar com esses chamados. Muitos setores ainda sofrem com atendimentos lentos, registros bagunçados e dificuldade em identificar quais problemas precisam de atenção com mais urgência.
-
-Diante disso, o principal desafio enfrentado atualmente é justamente a má gestão desses chamados técnicos. Isso acaba gerando atrasos, deixando usuários insatisfeitos e aumentando os custos da operação. O grande objetivo deste projeto é encontrar uma forma de resolver esses problemas, e a proposta é usar a Inteligência Artificial como aliada nesse processo.
-
-A ideia é desenvolver um sistema integrado de gestão de chamados, capaz de utilizar algoritmos de IA para organizar melhor as solicitações, identificar automaticamente os chamados mais urgentes e até sugerir soluções com base em situações parecidas que já aconteceram. Além disso, o sistema poderá gerar relatórios que ajudem a equipe técnica a tomar decisões com mais agilidade e precisão.
