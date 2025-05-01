@@ -22,12 +22,15 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 - Diagrama de Sequencia
 - Projeto de Interface com o Usuário
 - Início do desenvolvimento do protótipo de alta fidelidade
+- Documentação Introdução 
+
 
 ## 📅 29/04/25  
 - Engenharia de Software 2  
-- POO 1  
-- Diagrama de Implementação
-- Documentação Introdução 
+- POO 1
+- Diagrama de Sequencia
+- Documentação LGPD
+- Protótipo da interface do ator Supervisor de alta fidelidade
 
 ## 📅 06/05/25  
 - Banco de Dados  
@@ -37,6 +40,7 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 ## 📅 13/05/25 – Protótipo Avançado  
 - finalização do protótipo de alta fidelidade da interface
 - Elaboração da planilha de testes  
+- Diagrama de Implementação
 
 
 ## 📅 18/05/25 – Preparação para Testes e Apresentação
