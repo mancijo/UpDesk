@@ -1,7 +1,16 @@
-# 🖌️ Prototipagem - Figma
+# 🖌️ Prototipagem - Figma  
+Este diretório contém os protótipos do projeto **UpDesk**, desenvolvidos no **Figma**. Aqui estão organizadas as telas do sistema, representando o fluxo de navegação e a interface visual.  
 
-Este diretório contém os protótipos do projeto **UpDesk**, desenvolvidos no **Figma**. Aqui estão organizadas as telas do sistema, representando o fluxo de navegação e a interface visual.
+## 📂 Estrutura de Arquivos  
 
-## 📂 Estrutura de Arquivos
+### 👤 Perfil Usuário  
+🔹 **Tela de Login** → `LoginUsuario.png`  
+🔹 **Ver Chamados** → `Ver Chamados.png`  
 
-- **LoginUsuario.png** → Tela de login do usuário  
+### 🛡 Perfil Admin  
+🔹 **Tela de Login** → `LoginUsuario.png`  
+🔹 **Monitoramento Chamados** → `MonitoramentoChamados.png`  
+
+---
+
+
