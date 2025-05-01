@@ -44,7 +44,7 @@
 - 👥 Usuários com **diferentes permissões**  
 - 🎯 Direcionamento automatizado de chamados
 
-  ----
+---
   
 ## Prototipagem - [Figma](https://github.com/mancijo/UpDesk/blob/main/Figma/README.md)
  
