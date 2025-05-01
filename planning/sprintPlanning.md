@@ -26,28 +26,26 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 
 
 ## 📅 29/04/25  
-- Engenharia de Software 2  
-- POO 1
-- Diagrama de Sequencia
+- Engenharia de Software 2
+- Diagrama de classes em cada casos de usos
 - Documentação LGPD
-- Protótipo da interface do ator Supervisor de alta fidelidade
-
+  
 ## 📅 06/05/25  
-- Banco de Dados  
-- Economia de Mercado  
-- Gestão estratégica de Recursos Humanos  
+- Banco de Dados documentação (Kaique)
+- POO 1 (FILIPE)
+- Diagrama de Sequencia
 
 ## 📅 13/05/25 – Protótipo Avançado  
 - finalização do protótipo de alta fidelidade da interface
 - Elaboração da planilha de testes  
 - Diagrama de Implementação
 
-
 ## 📅 18/05/25 – Preparação para Testes e Apresentação
 - Análise de Sistemas Orientada a Objetos
 - Casos de uso descritivos
-- Redação do resumo  
-  
+- Redação do resumo
+- Protótipo da interface do ator Supervisor de alta fidelidade
+
 ## 📅 19/05 a 23/05 – **Semana de Provas**  
 _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_  
 
@@ -55,6 +53,6 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 - Correções e validação com professores
 
 ## 📅 03/06/25 – Conclusão do Projeto  
- - Correções e validação com professores
+- Correções e validação com professores
 
 ---
