@@ -1,0 +1,15 @@
+Engenharia de Software II - Visão Geral
+
+A disciplina de Engenharia de Software II aprofunda os conhecimentos teóricos e práticos já adquiridos no desenvolvimento do sistema computacional. O foco desta disciplina está na qualidade, estrutura e organização do processo de construção de software.
+
+Os testes unitários são uma das partes mais importantes para garantir que cada componente de um sistema funcione isoladamente. Ao projetar testes específicos para funções e métodos, podemos encontrar bugs o mais cedo possível na fase de implementação, o que aumenta consideravelmente a confiabilidade e a manutenibilidade do software.
+
+Outro conceito importante é o caso de uso descritivo, que auxilia na modelagem dos requisitos do sistema. O caso de uso define o comportamento de uma aplicação ao descrever verbalmente as interações entre os usuários (atores) e o sistema, ajudando a fornecer documentação para o design do sistema e auxiliando na sua verificação.
+Segue alguns exemplos de casos de uso descritivos:
+
+
+Além disso, a descrição da interface do sistema do usuário também é importante. O design de boas interfaces de interação considera os princípios de usabilidade, garantindo que o sistema seja simples de aprender, eficiente de usar e agradável de trabalhar. Fatores como coerência visual geral, feedback claro e informação de fácil acesso garantem grandemente o sucesso do sistema.
+
+
+
+
