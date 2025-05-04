@@ -49,21 +49,45 @@
 ## 4ª Entrega 22/04/25 
 
 ### Modelagem do Banco de Dados conceitual, lógico e físico (Brmodelo)
-- **Responsável:** Jonatas
-- **Status:** Aguardando validação
+- **Responsável:** Jônatas
+- **Status:** Faltando integração com IA (Incompleto)
 
 ### Documentação Interface de Usuário
 - **Responsável:** Andrei
-- **Status:** Aguardando validação
+- **Status:** Feito e validado com o professor Flávio
 
 ### Diagrama de Sequência 
-- **Responsável:** Matheus
-- **Status:** Em andamento
+- **Responsáveis:** Matheus, Jonatas e Andrei
+- **Status:** Adiada devido a ausencia de diagrama de classes em cada casos de usos
 
 ### Documentação Introdução
 - **Responsável:** Kaique
-- **Status:** Aguardando validação
+- **Status:** Entregue
 
 ### Progressão no desenvolvimento do protótipo de interface
 - **Responsável:** Mariozan
+- **Status:** Em desenvolvimento
+
+---
+
+## 5ª Entrega 29/04/25
+
+### Diagrama de classes nos casos de uso
+- **Responsáveis:** Matheus, Jonatas e Andrei
+- **Status:** Aguardando validação
+
+### Documentação: Introdução e LGPD
+- **Responsável:** Kaique
+- **Status:** Aguardando validação
+
+### Documentação de Engenharia de Software II
+- **Responsável:** Filipe
+- **Status:** Incompleto
+
+### Criado interface de informações do usuário, cabeçalho de alta fidelidade, tela de login de alta fidelidade e tela inicial de admin e usuário de alta fidelidade.
+- **Responsável:** Mariozan
+- **Status:** Em desenvolvimento
+
+### Criado componentes de botões e cabeçalhos no protótipo da interface
+- **Responsável:** Andrei 
 - **Status:** Em desenvolvimento
