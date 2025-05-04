@@ -42,4 +42,15 @@
 - 📝 Sistema de abertura e acompanhamento de chamados  
 - ⚡ Priorização de chamados  
 - 👥 Usuários com **diferentes permissões**  
-- 🎯 Direcionamento automatizado de chamados  
+- 🎯 Direcionamento automatizado de chamados
+
+---
+  
+## Prototipagem - [Figma](https://github.com/mancijo/UpDesk/blob/main/Figma/README.md)
+ 
+Este diretório contém os protótipos do projeto UpDesk, desenvolvidos no Figma. Aqui estão organizadas as telas do sistema, representando o fluxo de navegação e a interface visual.
+
+📂 Estrutura de Arquivos  
+- 👤 Perfil Usuário  
+- 🛡 Perfil Admin
+
