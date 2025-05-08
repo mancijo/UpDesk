@@ -47,6 +47,7 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 - Documentação Desenvolvimento
 - Análise de Sistemas Orientada a Objetos
 - Documentação IA
+- Funcionalidade de gerar impressão de relatórios
 
 ## 📅 18/05/25 – Preparação para Testes e Apresentação
 - Casos de uso descritivos
