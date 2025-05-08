@@ -29,22 +29,28 @@ _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_
 - Engenharia de Software 2
 - Diagrama de classes em cada casos de usos
 - Documentação LGPD
+- Documentação Eng de Software II
+
   
 ## 📅 06/05/25  
-- Banco de Dados documentação (Kaique)
-- POO 1 (FILIPE)
-- Diagrama de Sequencia
+- Banco de Dados documentação 
+- POO 1 
+- Diagramas de Sequencia em cada casos de uso
+- Documentação Eng de Software II
+- Finalização do protótipo de alta fidelidade da interface
+- Diagrama de Implantação
+
 
 ## 📅 13/05/25 – Protótipo Avançado  
-- finalização do protótipo de alta fidelidade da interface
-- Elaboração da planilha de testes  
-- Diagrama de Implementação
+- Elaboração da planilha de testes
+- Diagrama de implementação
+- Documentação Desenvolvimento
+- Análise de Sistemas Orientada a Objetos
+- Documentação IA
 
 ## 📅 18/05/25 – Preparação para Testes e Apresentação
-- Análise de Sistemas Orientada a Objetos
 - Casos de uso descritivos
 - Redação do resumo
-- Protótipo da interface do ator Supervisor de alta fidelidade
 
 ## 📅 19/05 a 23/05 – **Semana de Provas**  
 _(Pausa no desenvolvimento para foco em avaliações acadêmicas)_  
