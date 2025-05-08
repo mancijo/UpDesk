@@ -52,7 +52,7 @@
 - **Responsável:** Jônatas
 - **Status:** Faltando integração com IA (Incompleto)
 
-### Documentação Interface de Usuário
+### Documentação Projeto Interface de Usuário
 - **Responsável:** Andrei
 - **Status:** Feito e validado com o professor Flávio
 
@@ -74,11 +74,11 @@
 
 ### Diagrama de classes nos casos de uso
 - **Responsáveis:** Matheus, Jonatas e Andrei
-- **Status:** Aguardando validação
+- **Status:** Entregue e validado
 
 ### Documentação: Introdução e LGPD
 - **Responsável:** Kaique
-- **Status:** Aguardando validação
+- **Status:** Entregue e validado
 
 ### Documentação de Engenharia de Software II
 - **Responsável:** Filipe
@@ -91,3 +91,35 @@
 ### Criado componentes de botões e cabeçalhos no protótipo da interface
 - **Responsável:** Andrei 
 - **Status:** Em desenvolvimento
+
+---
+
+## 6ª Entrega 06/05/2025
+
+### Documentação: Engenharia de Software II
+- **Responsável:** Filipe
+- **Status:** Entregue e validado
+
+### Finalização do protótipo de alta fidelidade
+- **Responsáveis:** Andrei e Mariozan
+- **Status:** Entregue e validado
+
+### Diagramas de sequência nos casos de uso
+- **Responsável:** Matheus
+- **Status:** Entregue e validado
+
+### Diagrama de Implantação
+- **Responsável:** Matheus 
+- **Status:** Entregue e validado
+
+### Documentação: Introdução
+- **Responsável:** Kaique
+- **Status:** Entregue e validado
+
+### Documentação: Banco de dados
+- **Responsável:** Jonatas
+- **Status:** Aguardando validação
+
+### Documentação: POO
+- **Responsável:** Filipe
+- **Status:** Aguardando validação
