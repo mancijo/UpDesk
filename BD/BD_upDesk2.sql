@@ -1,10 +1,10 @@
 /*USE master;
-ALTER DATABASE upDesk2 SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-DROP DATABASE upDesk2;*/
+ALTER DATABASE master SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE master;*/
 
---create database upDesk2
+--create database upDesk
 
---use upDesk2
+--use upDesk
 
 
 /* Lógico_1: */
@@ -12,60 +12,76 @@ DROP DATABASE upDesk2;*/
 CREATE TABLE Usuario (
     user_ID INT identity(1000,1) PRIMARY KEY,
     nome VARCHAR(100) not null,
-    email VARCHAR(7) not null,
+    email VARCHAR(255) not null,
     senha VARCHAR(30),
     setor VARCHAR(10),
     hierarquia VARCHAR(15),
-	user_type varchar(20) not null check (user_type IN ('UsuaioComum','N1','N2', 'Triagem', 'Supervisor'))
+	user_type varchar(20) not null check (user_type IN ('Usuaio','N1','N2', 'Triagem', 'Supervisor'))
 );
 
 CREATE TABLE IA (
-    ia_Nome VARCHAR(100),
+    ia_Nome VARCHAR(50),
     ia_ID INT PRIMARY KEY
 );
 
 CREATE TABLE Chamado (
-    chamado_ID INT PRIMARY KEY,
+    chamado_ID INT identity(1000000,1) PRIMARY KEY,
     atendenteID INT,
     solicitanteID INT,
-    titulo VARCHAR(255),
-    descricao VARCHAR(400),
-    categoria VARCHAR(100),
-    prioridade VARCHAR(50),
-    anexo VARBINARY(MAX),
-    status VARCHAR(50),
-    dataAbertura DATE,
-    dataUltimaModificacao DATE,
+    titulo_Chamado VARCHAR(255) not null,
+    descricao_Chamado VARCHAR(400) not null,
+    categoria_Chamado VARCHAR(100) not null,
+    prioridade_Chamado VARCHAR(15)not null,
+    anexo_Chamado VARBINARY(MAX),
+   	status_Chamado varchar(20) default 'Aberto' check (status_Chamado in ('Aberto', 'Em Atendimento', 'Resolvido', 'Transferido', 'Agendado')),
+    dataAbertura datetime default current_timestamp,
+    dataUltimaModificacao datetime null,
     solucaoSugerida VARCHAR(255),
     solucaoAplicada VARCHAR(255),
     chatID INT,
     fk_IA_ia_ID INT,
-    CONSTRAINT FK_Chamado_Atendente FOREIGN KEY (atendenteID) REFERENCES Usuario(user_ID),
+    CONSTRAINT FK_Chamado_AtendenteID FOREIGN KEY (atendenteID) REFERENCES Usuario(user_ID),
     CONSTRAINT FK_Chamado_Solicitante FOREIGN KEY (solicitanteID) REFERENCES Usuario(user_ID),
     CONSTRAINT FK_Chamado_IA FOREIGN KEY (fk_IA_ia_ID) REFERENCES IA(ia_ID)
 );
 
+-- Criando o trigger para atualizar dataUltimaModificacao
+GO
+CREATE TRIGGER trg_UpdateChamado
+ON Chamado
+AFTER UPDATE
+AS
+BEGIN
+    UPDATE Chamado
+    SET dataUltimaModificacao = GETDATE()
+    FROM Chamado C
+    INNER JOIN inserted I ON C.chamado_ID = I.chamado_ID;
+END;
+GO
+
+
 CREATE TABLE TI__N1_N2_ (
     ti_Nome VARCHAR(100),
-    ti_ID INT PRIMARY KEY
+    ti_ID INT identity(1000,1) PRIMARY KEY not null
 );
 
 
 CREATE TABLE Analista_Triagem (
-    triagem_ID INT PRIMARY KEY,
+    triagem_ID INT identity(1000,1) PRIMARY KEY not null,
     triagem_Nome VARCHAR(100),
     fk_IA_ia_ID INT
 );
 
 CREATE TABLE Sugestao_de_solucao_IA (
-    ID_procedimento INT PRIMARY KEY,
+    ID_procedimento INT identity PRIMARY KEY,
     Titulo_procedimento VARCHAR(255),
-    fk_IA_ia_ID INT
+    fk_IA_ia_ID INT identity
 );
 
 CREATE TABLE Chat (
     remetente VARCHAR(100),
     destinatario VARCHAR(100),
+	chat_ID int identity (1000,1) primary key
     fk_Chamado_atendenteID INT,
     fk_Chamado_chamado_ID INT,
     fk_Chamado_solicitanteID INT,
@@ -77,19 +93,36 @@ CREATE TABLE Mensagem (
     chatID INT,
     remetente VARCHAR(100),
     mensagem VARCHAR(255),
-    mensagemID INT,
+    mensagemID INT not null,
     PRIMARY KEY (chatID, mensagemID)
 );
 
 CREATE TABLE Base_de_Conhecimento (
-    procedimento_ID INT PRIMARY KEY,
-    procedimento_titulo VARCHAR(255),
-    procedimento_descricao VARCHAR(255),
+    procedimento_ID INT identity(1000000,1) PRIMARY KEY not null,
+    procedimento_titulo VARCHAR(255) not null,
+    procedimento_descricao VARCHAR(255) not null,
     procedimento_anexo VARBINARY(MAX),
-    procedimento_status VARCHAR(255),
-    procedimento_dataAbertura DATE,
-    procedimento_dateLastMod DATE
+    procedimento_Status varchar(20) default 'Aberto' check (procedimento_Status in ('Draft', 'Published', 'Retired')),
+    procedimento_dataAbertura datetime default current_timestamp,
+    procedimento_dateLastMod datetime default null
 );
+
+-- Criando o trigger para atualizar procedimento_dateLastMod
+
+GO
+CREATE TRIGGER trg_UpdateBaseConhecimento
+ON Base_de_Conhecimento
+AFTER UPDATE
+AS
+BEGIN
+    UPDATE Base_de_Conhecimento
+    SET procedimento_dateLastMod = GETDATE()
+    FROM Base_de_Conhecimento B
+    INNER JOIN inserted I ON B.procedimento_ID = I.procedimento_ID;
+END;
+GO
+
+
 
 CREATE TABLE Abre (
     fk_Usuario_user_ID INT,
@@ -204,4 +237,3 @@ ALTER TABLE Chat ADD CONSTRAINT FK_Chat_Chamado
     FOREIGN KEY (fk_Chamado_chamado_ID)
     REFERENCES Chamado (chamado_ID)
     ON DELETE CASCADE;
-	
