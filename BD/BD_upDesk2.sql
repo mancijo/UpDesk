@@ -6,17 +6,20 @@ DROP DATABASE master;*/
 
 --use upDesk
 
+-- criando um usuário no bd
+
+/*INSERT INTO Usuario (nome, email, senha, setor, user_type)
+VALUES ('João Silva', 'joao.silva@email.com', 'senha123', 'TI', 'N1');*/
 
 /* Lógico_1: */
 
-CREATE TABLE Usuario (
+/*CREATE TABLE Usuario (
     user_ID INT identity(1000,1) PRIMARY KEY,
     nome VARCHAR(100) not null,
     email VARCHAR(255) not null,
     senha VARCHAR(30),
     setor VARCHAR(10),
-    hierarquia VARCHAR(15),
-	user_type varchar(20) not null check (user_type IN ('Usuaio','N1','N2', 'Triagem', 'Supervisor'))
+    user_type varchar(20) not null check (user_type IN ('Usuaio','N1','N2', 'Triagem', 'Supervisor'))
 );
 
 CREATE TABLE IA (
@@ -237,3 +240,4 @@ ALTER TABLE Chat ADD CONSTRAINT FK_Chat_Chamado
     FOREIGN KEY (fk_Chamado_chamado_ID)
     REFERENCES Chamado (chamado_ID)
     ON DELETE CASCADE;
+	*/
