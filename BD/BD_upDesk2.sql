@@ -1,6 +1,6 @@
 /*USE master;
-ALTER DATABASE master SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-DROP DATABASE master;*/
+ALTER DATABASE upDesk2 SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE upDesk2;*/
 
 --create database upDesk
 
@@ -13,7 +13,7 @@ VALUES ('João Silva', 'joao.silva@email.com', 'senha123', 'TI', 'N1');*/
 
 /* Lógico_1: */
 
-/*CREATE TABLE Usuario (
+CREATE TABLE Usuario (
     user_ID INT identity(1000,1) PRIMARY KEY,
     nome VARCHAR(100) not null,
     email VARCHAR(255) not null,
@@ -76,16 +76,16 @@ CREATE TABLE Analista_Triagem (
 );
 
 CREATE TABLE Sugestao_de_solucao_IA (
-    ID_procedimento INT identity PRIMARY KEY,
+    ID_procedimento INT PRIMARY KEY,
     Titulo_procedimento VARCHAR(255),
-    fk_IA_ia_ID INT identity
+    fk_IA_ia_ID INT identity (1000,1)
 );
 
 CREATE TABLE Chat (
     remetente VARCHAR(100),
     destinatario VARCHAR(100),
 	chat_ID int identity (1000,1) primary key
-    fk_Chamado_atendenteID INT,
+    fk_Chamado_atendenteID INT FOREIGN KEY references Chamado,
     fk_Chamado_chamado_ID INT,
     fk_Chamado_solicitanteID INT,
     fk_Chamado_chatID INT
@@ -240,4 +240,4 @@ ALTER TABLE Chat ADD CONSTRAINT FK_Chat_Chamado
     FOREIGN KEY (fk_Chamado_chamado_ID)
     REFERENCES Chamado (chamado_ID)
     ON DELETE CASCADE;
-	*/
+	
