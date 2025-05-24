@@ -1,0 +1,11 @@
+Como o Diagrama Entidade-Relacionamento (ER) e os scripts de carga de dados facilitam o desenvolvimento, testes e manutenção de um sistema de chamados com suporte técnico baseado em IA?
+
+O Diagrama Entidade-Relacionamento (ER) é uma ferramenta muito útil na hora de planejar um sistema, porque ele ajuda a visualizar como os dados vão se organizar dentro do banco. Ele mostra, de forma simples, quais são as principais informações que o sistema vai guardar (como usuários, chamados e técnicos), quais são as características dessas informações (por exemplo, nome, e-mail, status do chamado) e como elas se conectam entre si.
+
+No caso de um sistema de suporte técnico com uso de inteligência artificial (IA), o diagrama ER ajuda a entender como tudo está ligado: os usuários que abrem chamados, os técnicos que atendem, as categorias de problemas, os históricos das ações e até as sugestões que a IA pode oferecer para resolver os chamados.
+
+Com esse modelo em mãos, fica mais fácil garantir que os dados estejam organizados da melhor forma, sem repetições desnecessárias e prontos para crescer caso o sistema precise de melhorias ou novas funções no futuro. Por exemplo, saber que um chamado pode ter várias sugestões da IA ou que pode passar por diferentes etapas até ser resolvido ajuda a planejar o sistema de maneira mais eficiente.
+
+Já os scripts de carga de dados de teste são como um "empurrãozinho" para começar os testes do sistema. Eles preenchem o banco de dados com informações fictícias, simulando situações reais. Isso é ótimo para os desenvolvedores testarem se tudo está funcionando corretamente, como as consultas SQL, os relatórios e o comportamento da IA.
+
+Esses scripts também deixam o ambiente de testes mais parecido com o real, ajudando a encontrar e corrigir problemas com antecedência. Assim, quando o sistema for colocado em uso, as chances de erro serão bem menores.
