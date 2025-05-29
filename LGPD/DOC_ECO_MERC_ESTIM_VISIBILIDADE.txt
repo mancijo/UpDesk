@@ -1,9 +1,0 @@
-Economia e Mercado Estimativa da Viabilidade.
-
-O sistema integrado para gestão de chamados e suporte técnico com inteligência artificial foi pensado para atender empresas que lidam com muitos pedidos de suporte, tanto de funcionários quanto de clientes. Muitas vezes, essas empresas enfrentam dificuldades para organizar os atendimentos e acabam sobrecarregando suas equipes técnicas. A ideia do sistema é justamente facilitar esse processo, tornando o atendimento mais rápido, organizado e eficiente.
-
-Atualmente, existem diversas ferramentas de help desk no mercado. No entanto, poucas oferecem recursos de inteligência artificial de forma acessível e personalizável. O diferencial da solução proposta neste projeto é unir automação inteligente com praticidade, oferecendo funcionalidades como sugestões automáticas para resolver chamados e o registro detalhado do histórico de cada atendimento.
-
-Para avaliar se a ideia é viável, foram considerados alguns custos básicos, como o tempo necessário para desenvolver o sistema, os recursos de hospedagem e banco de dados, e eventuais integrações com ferramentas de IA. O retorno esperado vem da economia de tempo da equipe técnica, da melhoria no tempo de resposta e da satisfação de quem utiliza o serviço.
-
-Pensando na realidade de pequenas e médias empresas, o projeto se mostra viável tanto do ponto de vista técnico quanto financeiro. A estimativa é que, em cerca de seis meses de uso, os ganhos em produtividade e organização já compensem os investimentos iniciais, trazendo benefícios concretos para o dia a dia da operação.
