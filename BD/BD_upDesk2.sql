@@ -11,9 +11,19 @@ DROP DATABASE upDesk2;*/
 /*INSERT INTO Usuario (nome, email, senha, setor, user_type)
 VALUES ('João Silva', 'joao.silva@email.com', 'senha123', 'TI', 'N1');*/
 
+/*INSERT INTO Usuario (nome, email, senha, setor, user_type)
+VALUES ('Matheus Teodoro', 'matheus.teodoro@email.com', 'senha123', 'TI', 'N2');*/
+
+/*INSERT INTO Usuario (nome, email, senha, setor, user_type)
+VALUES ('Andrei Mancijo', 'andrei.mancijo@email.com', 'senha123', 'TI', 'Supervisor');*/
+
+-- SELECT * FROM Usuario;
+
+--DELETE FROM Usuario WHERE user_ID = 1001;
+
 /* Lógico_1: */
 
-CREATE TABLE Usuario (
+/*CREATE TABLE Usuario (
     user_ID INT identity(1000,1) PRIMARY KEY,
     nome VARCHAR(100) not null,
     email VARCHAR(255) not null,
@@ -240,4 +250,4 @@ ALTER TABLE Chat ADD CONSTRAINT FK_Chat_Chamado
     FOREIGN KEY (fk_Chamado_chamado_ID)
     REFERENCES Chamado (chamado_ID)
     ON DELETE CASCADE;
-	
+	*/
