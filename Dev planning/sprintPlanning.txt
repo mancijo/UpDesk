@@ -1,12 +1,43 @@
-12/08/2025
-	
 19/08/2025
+	Desenvolvimento web: 
+		Kaique: login - front 
+		Mariozan: inicial supervisor - front
+		Filipe: card perfil - front
+		Andrei: card chamado enviado - front
+	ServerSide:
+		Jonatas: CRUD Chat - mySQL chat
+		Matheus: CRUD Perfis - mySQL perfis
 
 26/08/2025
+	Desenvolvimento web:
+		card editar perfis - front
+		card confirma excluir usuário - front
+		card confirmar identidade - front
+		gerenciamento de usuários - front
+		formulário de abertura de chamado - front
+		tela de solução sugerida Up Desk - front
+		tela chamado resolvido Up Desk - front
 
+	Desenvolvimento ServerSide: 
+		definir estrutura JSON API
+		servidor de requisições
+		validar login
+	
 02/09/2025
+	Desenvolvimento web:
+		painel triagem - front
+		card dados do chamado - front
+		card dados do chamado na triagem - front
+		card aprovar ações IA - front
+		card prioridade do chamado - front
+		card confirma transferência de chamado - front
+		card feedback de transferência de chamado - front
+		painel ver chamados - front
+		card info chamados - front
+	Server side: 
 
 09/09/2025
+
 
 16/09/2025
 
