@@ -94,7 +94,7 @@
     <div class="container">
         <div class="header">
             <h2>Monitoramento de Chamados</h2>
-            <div>Usuário: <strong>João</strong></div>
+            <div>Usuário: {{ nome }}</div>
         </div>
 
         <div class="filtros">
@@ -107,47 +107,39 @@
             <input type="text" placeholder="Buscar chamado...">
         </div>
 
-        <table>
-            <thead>
+<div class="container mt-4">
+    <h2>Lista de Chamados</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Data </th>
+                <th>Ações</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for chamado in chamados %}
                 <tr>
-                    <th>Título</th>
-                    <th>Prioridade</th>
-                    <th>Status</th>
-                    <th>Data</th>
-                    
+                    <td>{{ chamado.id }}</td>
+                    <td>{{ chamado.titulo }}</td>                    
+                    <td>{{ chamado.status }}</td>
+                    <td>{{ chamado.data_criacao.strftime("%d/%m/%Y %H:%M") }}</td>
                 </tr>
-            </thead>
-            <tbody>
+            {% else %}
                 <tr>
-                    <td>Problema na impressora</td>
-                    <td>Baixa</td>
-                    <td class="status verde">Resolvido</td>
-                    <td>01/05/25</td>
-                    <td><button class="btn btn-detalhes">Ver Detalhes</button></td>
-                    <td><button class="btn">Atender</button></td>
+                    <td colspan="7" class="text-center">Nenhum chamado encontrado.</td>
                 </tr>
-                <tr>
-                    <td>Desconexão com a rede</td>
-                    <td>Média</td>
-                    <td class="status azul">Em atendimento</td>
-                    <td>01/05/25</td>
-                    <td><button class="btn btn-detalhes">Ver Detalhes</button></td>
-                    <td><button class="btn">Atender</button></td>
-                </tr>
-                <tr>
-                    <td>Desconexão com a rede</td>
-                    <td>Alta</td>
-                    <td class="status vermelho">Pendente</td>
-                    <td>01/05/25</td>
-                    <td><button class="btn btn-detalhes">Ver Detalhes</button></td>
-                    <td><button class="btn">Atender</button></td>
-                </tr>
-            </tbody>
-        </table>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
         <div class="bottom-bar">
             <button class="btn" onclick="window.location.href='/home'">Página inicial</button>
-            <button class="btn btn-gestao">Relatório Gestão 🖨️</button>
+            <button class="btn btn-gestao">Relatório Gestão </button>
         </div>
     </div>
 
