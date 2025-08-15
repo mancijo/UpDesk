@@ -11,6 +11,100 @@
 </head>
 <body>
     {% include 'navbar.html' %}
+    <div class="container mt-4">
+    <h2>Gerenciamento de usuários</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>nome</th>
+                <th>Email</th>
+                <th>Cargo/Função</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.tipo }}</td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger" onclick="abrirModalExcluir('{{ usuario.id }}', '{{ usuario.nome }}', '{{ usuario.email }}')">Excluir usuário 🗑</button>
+                        <button type="button" class="btn btn-primary">Editar usuário ✏</button>   
+                    </td> 
+                         
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Nenhum usuario encontrado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+        <div class="bottom-bar">
+            <button class="btn" onclick="window.location.href='/home'">Voltar</button>
+        </div>
+    </div>
+    <!-- Modal de confirmação de exclusão -->
+<div class="modal fade" id="modalExcluirUsuario" tabindex="-1" aria-labelledby="modalExcluirUsuarioLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalExcluirUsuarioLabel">Confirmar Exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza que deseja excluir o usuário abaixo?</p>
+        <ul>
+          <li><strong>ID:</strong> <span id="modalUsuarioId"></span></li>
+          <li><strong>Nome:</strong> <span id="modalUsuarioNome"></span></li>
+          <li><strong>Email:</strong> <span id="modalUsuarioEmail"></span></li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmarExcluir">Sim, excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let usuarioIdParaExcluir = null;
+
+function abrirModalExcluir(id, nome, email) {
+    usuarioIdParaExcluir = id;
+    document.getElementById('modalUsuarioId').textContent = id;
+    document.getElementById('modalUsuarioNome').textContent = nome;
+    document.getElementById('modalUsuarioEmail').textContent = email;
+    var modal = new bootstrap.Modal(document.getElementById('modalExcluirUsuario'));
+    modal.show();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('btnConfirmarExcluir').onclick = function() {
+        // Aqui você pode fazer a requisição para excluir o usuário
+        // Exemplo usando fetch:
+        fetch(`/excluir_usuario/${usuarioIdParaExcluir}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Erro ao excluir usuário.');
+                }
+            });
+    };
+});
+</script>
     
+
 </body>
 </html>

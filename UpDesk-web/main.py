@@ -27,6 +27,7 @@ db = SQLAlchemy(app)
 # Modelo Chamado (ORM)
 class Chamado(db.Model):
     __tablename__ = 'Chamados'
+
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(200), nullable=False)
     descricao = db.Column(db.Text, nullable=False)
@@ -37,6 +38,7 @@ class Chamado(db.Model):
 
 class Usuario(db.Model):
     __tablename__ = 'Usuarios'
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
@@ -48,11 +50,6 @@ class Usuario(db.Model):
 with app.app_context():
     db.create_all()
 
-# Banco fictício de usuários
-usuarios = [
-    {"id": 1, "nome": "João Silva", "email": "joao@email.com", "senha": "123456", "tipo": "usuario"},
-    {"id": 2, "nome": "Maria Suporte", "email": "maria@email.com", "senha": "abc123", "tipo": "suporte_n1"}
-]
 
 # Rota inicial - login
 @app.route('/')
@@ -91,8 +88,12 @@ def home():
     nome_usuario = session.get('usuario_nome', 'Usuário')
     return render_template('home.html', nome_usuario=nome_usuario)
 
-# abrir chamado (salvar no banco)
 @app.route('/chamado')
+def abrir_chamado():
+        return render_template('chamado.html')
+
+# abrir chamado (salvar no banco)
+@app.route('/chamado', methods=['POST'])
 def chamado():
     data = request.json
     if not data:
@@ -107,23 +108,45 @@ def chamado():
     db.session.add(chamado)
     db.session.commit()
 
+    
     return jsonify({
-        "mensagem": "Chamado registrado com sucesso!",
-        "chamado_id": chamado.id
-    }), 201
-
+         "mensagem": "Chamado registrado com sucesso!",
+         "chamado_id": chamado.id
+     }), 201
+    
+    
 # Tela de ver chamados (listar)
 @app.route('/ver-chamado')
 def ver_chamado():
-    return render_template('Verchamado.html')
+    lista_chamados = Chamado.query.all()
+    nome_usuario = session.get('usuario_nome', 'Usuário')
+    return render_template('Verchamado.html', chamados=lista_chamados)
 
 
 @app.route('/ger-usuarios')
 def ger_usuarios():
+    lista_usuarios = Usuario.query.all()
+    return render_template('ger_usuarios.html', usuarios=lista_usuarios)
+
+@app.route('/excluir_usuario/<int:id>', methods=['POST'])
+def excluir_usuario(id):
+    usuario = Usuario.query.get(id)
+    if usuario:
+        db.session.delete(usuario)
+        db.session.commit()
+        return jsonify({'success': True}), 200
+    return jsonify({'error': 'Usuário não encontrado'}), 404
+
+@app.route('/cadastro', methods=['POST'])
+def cadastro():
     return render_template('ger_usuarios.html')
+    
+
+@app.route('/triagem')
+def triagem():
+    return render_template('triagem.html')
 
 
 # Inicia servidor
 if __name__ == '__main__':
-    print("Conexão estabelecida com o banco de dados.")
     app.run(debug=True)
