@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import urllib.parse
 
+
+
 # Configurações de conexão com SQL Server
 params = urllib.parse.quote_plus(
     "Driver={ODBC Driver 17 for SQL Server};"
@@ -35,6 +37,7 @@ class Chamado(db.Model):
     status = db.Column(db.String(50), default='Aberto')
     usuario_id = db.Column(db.Integer, nullable=False)
     data_criacao = db.Column(db.DateTime, default=db.func.now())
+    prioridade = db.Column(db.String(50), nullable=False, default='baixa')
 
 class Usuario(db.Model):
     __tablename__ = 'Usuarios'
@@ -67,19 +70,19 @@ def login():
     senha = data['senha']
 
     usuario = Usuario.query.filter_by(email=email, senha=senha).first()
-    if not usuario:
-        return jsonify({"mensagem": "Usuário ou senha inválidos"}), 401
-    session['usuario_nome'] = usuario.nome
+    if usuario:
+        session['usuario_nome'] = usuario.nome
+        return jsonify({
+            "mensagem": "Login realizado com sucesso!",
+            "usuario": {
+                "id": usuario.id,
+                "nome": usuario.nome,
+                "email": usuario.email,
+                "tipo": usuario.tipo
+            }
+        }), 200
 
-    return jsonify({
-        "mensagem": "Login realizado com sucesso!",
-        "usuario": {
-            "id": usuario.id,
-            "nome": usuario.nome,
-            "email": usuario.email,
-            "tipo": usuario.tipo
-        }
-    }), 200
+    return jsonify({"mensagem": "Email ou senha incorretos"}), 401
  
 
 # Tela do dashboard do supervisor
@@ -103,7 +106,8 @@ def chamado():
         titulo=data.get("titulo"),
         descricao=data.get("descricao"),
         categoria=data.get("categoria"),
-        usuario_id=data.get("usuario_id")
+        usuario_id=data.get("usuario_id"),
+        prioridade=data.get("prioridade", "baixa")
     )
     db.session.add(chamado)
     db.session.commit()
@@ -120,7 +124,7 @@ def chamado():
 def ver_chamado():
     lista_chamados = Chamado.query.all()
     nome_usuario = session.get('usuario_nome', 'Usuário')
-    return render_template('Verchamado.html', chamados=lista_chamados)
+    return render_template('Verchamado.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
 
 @app.route('/ger-usuarios')

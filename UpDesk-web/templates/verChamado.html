@@ -48,10 +48,13 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th, td, tr {
             text-align: center;
+            align-items: center;
+            vertical-align: middle;
             padding: 12px;
             border-bottom: 1px solid #ddd;
+            
         }
 
         .status {
@@ -94,7 +97,7 @@
     <div class="container">
         <div class="header">
             <h2>Monitoramento de Chamados</h2>
-            <div>Usuário: {{ nome }}</div>
+            <div>Usuário: {{ nome_usuario }}</div>
         </div>
 
         <div class="filtros">
@@ -112,8 +115,8 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Título</th>
+                <th>Prioridade</th>
                 <th>Status</th>
                 <th>Data </th>
                 <th>Ações</th>
@@ -123,10 +126,14 @@
         <tbody>
             {% for chamado in chamados %}
                 <tr>
-                    <td>{{ chamado.id }}</td>
-                    <td>{{ chamado.titulo }}</td>                    
+                    <td>{{ chamado.titulo }}</td>
+                    <td>{{ chamado.prioridade }}</td>                    
                     <td>{{ chamado.status }}</td>
                     <td>{{ chamado.data_criacao.strftime("%d/%m/%Y %H:%M") }}</td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm">Ver detalhes</button>
+                        <button class="btn btn-secondary btn-sm">Atender</button>   
+                    </td> 
                 </tr>
             {% else %}
                 <tr>
