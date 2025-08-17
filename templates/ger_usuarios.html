@@ -8,35 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<<<<<<< HEAD
-    <nav class="navbar navbar-expand-lg bg-body-tertiary"> <!--  Cabeçalho  -->
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">UpDesk</font></font></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Alternar navegação">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link " href="{{ url_for('home') }}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('chamado') }}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Abrir chamado</font></font></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('ver_chamado') }}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Monitoramento de chamados</font></font></a>
-              </li>
-
-          </ul>
-          <button class="btn btn-outline-danger" type="submit"><a href="{{ url_for('index') }}" style="text-decoration: none; color: inherit"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sair</font></font></a></button>
-        </div>
-      </div>
-    </nav>
-
-=======
     {% include 'navbar.html' %}
     <div class="container mt-4">
     <h2>Gerenciamento de usuários</h2>
@@ -131,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 });
 </script>
->>>>>>> 24af98630b66ec7654c66b7e0658eed92858b1f6
     
 
 </body>

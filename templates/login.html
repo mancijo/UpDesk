@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpDesk - Login</title>
+    
+    <style>
+
+
+        body {
+            font-family: "Abel", sans-serif;
+            background: #2B4C7E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 480px;
+            height: 620px;
+            flex-shrink: 0; 
+            background: white; 
+            box-shadow: 0px 6px 4px 10px rgba(0, 0, 0, 0.25); 
+            border-radius: 15px
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="email"], input[type="password"] {
+            display: flex;
+            margin: 0 auto;
+            margin-top: 20px;
+            padding: 10px 20px;
+            width: 369px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 50px;
+            border: 1px solid #000;
+            background: #FFF;
+        }
+        button {
+            display: flex;
+            width: 125px;
+            height: 36px;
+            padding: 20px;
+            margin: 20px auto;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            border-radius: 20px;
+            border: 1px solid #000;
+            background: #2B4C7E;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            color: red;
+            
+        }
+
+        .logo {
+            width: 279px;
+            height: 279px;
+            flex-shrink: 0;
+            aspect-ratio: 1/1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            justify-content: center;
+            background: url(<path-to-image>) rgb(255, 255, 255) 50% / cover no-repeat;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img class="logo" src="/static/assets/logoUpd.png" />
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="senha" placeholder="Senha" required>
+        <button onclick="fazerLogin()">Login</button>
+        <div class="message" id="mensagem"></div>
+    </div>
+
+    <script>
+        async function fazerLogin() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const mensagem = document.getElementById('mensagem');
+
+            const resposta = await fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+        },
+    body: JSON.stringify({ email, senha })
+});
+
+
+
+const dados = await resposta.json();
+
+if (resposta.ok) {
+    window.location.href = "http://localhost:5000/home"; // redireciona
+} else {
+    mensagem.style.color = 'red';
+    mensagem.innerText = dados.mensagem;
+}
+        }
+    </script>
+</body>
+</html>
