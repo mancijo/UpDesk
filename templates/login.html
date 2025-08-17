@@ -6,6 +6,8 @@
     <title>UpDesk - Login</title>
     
     <style>
+
+
         body {
             font-family: "Abel", sans-serif;
             background: #2B4C7E;
@@ -92,23 +94,23 @@
             const mensagem = document.getElementById('mensagem');
 
             const resposta = await fetch('http://localhost:5000/login', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, senha })
-            });
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+        },
+    body: JSON.stringify({ email, senha })
+});
 
 
 
-        const dados = await resposta.json();
+const dados = await resposta.json();
 
-        if (resposta.ok) {
-            window.location.href = "http://localhost:5000/home"; // redireciona
-        } else {
-            mensagem.style.color = 'red';
-            mensagem.innerText = dados.mensagem;
-        }
+if (resposta.ok) {
+    window.location.href = "http://localhost:5000/home"; // redireciona
+} else {
+    mensagem.style.color = 'red';
+    mensagem.innerText = dados.mensagem;
+}
         }
     </script>
 </body>
