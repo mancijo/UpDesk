@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ver Chamados - UpDesk</title>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #DFE2E8 !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h2 {
+            font-weight: 600;
+        }
+
+        .filtros {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        select, input[type="text"] {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #aaa;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .status {
+            font-weight: 600;
+        }
+
+        .verde { color: green; }
+        .azul { color: blue; }
+        .vermelho { color: red; }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            background: #ccc;
+            cursor: pointer;
+        }
+
+        .btn-detalhes:hover {
+            background: #bbb;
+        }
+
+        .bottom-bar {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-gestao {
+            background-color: #2B4C7E;
+            color: white;
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <div class="header">
+            <h2>Monitoramento de Chamados</h2>
+            <div>Usuário: {{ nome }}</div>
+        </div>
+
+        <div class="filtros">
+            <select>
+                <option>Todos</option>
+                <option>Pendente</option>
+                <option>Em atendimento</option>
+                <option>Resolvido</option>
+            </select>
+            <input type="text" placeholder="Buscar chamado...">
+        </div>
+
+<div class="container mt-4">
+    <h2>Lista de Chamados</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Data </th>
+                <th>Ações</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for chamado in chamados %}
+                <tr>
+                    <td>{{ chamado.id }}</td>
+                    <td>{{ chamado.titulo }}</td>                    
+                    <td>{{ chamado.status }}</td>
+                    <td>{{ chamado.data_criacao.strftime("%d/%m/%Y %H:%M") }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Nenhum chamado encontrado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+        <div class="bottom-bar">
+            <button class="btn" onclick="window.location.href='/home'">Página inicial</button>
+            <button class="btn btn-gestao">Relatório Gestão </button>
+        </div>
+    </div>
+
+</body>
+</html>
