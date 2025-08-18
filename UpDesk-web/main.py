@@ -7,7 +7,7 @@ import urllib.parse
 # Configurações de conexão com SQL Server
 params = urllib.parse.quote_plus(
     "Driver={ODBC Driver 17 for SQL Server};"
-    "Server=localhost\\SQLEXPRESS;"
+    "Server=(localdb)\\MSSQLLocalDB;"
     "Database=UpDesk;"
     "Trusted_Connection=yes;"
 )

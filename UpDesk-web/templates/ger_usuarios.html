@@ -10,11 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-<<<<<<< HEAD
-    <nav class="navbar navbar-expand-lg bg-body-tertiary"> <!--  Cabeçalho  -->
+<body> 
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">UpDesk</font></font></a>
+        <a class="nav-link" href="{{ url_for('home') }}">UpDesk</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Alternar navegação">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,46 +34,44 @@
         </div>
       </div>
     </nav>
-
-=======
-    {% include 'navbar.html' %}
+    
     <div class="container mt-4">
     <h2>Gerenciamento de usuários</h2>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>nome</th>
-                <th>Email</th>
-                <th>Cargo/Função</th>
-                <th>Status</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for usuario in usuarios %}
+        <table class="table table-bordered table-striped">
+            <thead>
                 <tr>
-                    <td>{{ usuario.id }}</td>
-                    <td>{{ usuario.nome }}</td>
-                    <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.tipo }}</td>
-                    <td>
-                        
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-outline-danger" onclick="abrirModalExcluir('{{ usuario.id }}', '{{ usuario.nome }}', '{{ usuario.email }}')">Excluir usuário 🗑</button>
-                        <button type="button" class="btn btn-primary">Editar usuário ✏</button>   
-                    </td> 
-                         
+                    <th>ID</th>
+                    <th>nome</th>
+                    <th>Email</th>
+                    <th>Cargo/Função</th>
+                    <th>Status</th>
+                    <th>Ações</th>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7" class="text-center">Nenhum usuario encontrado.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.id }}</td>
+                        <td>{{ usuario.nome }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.tipo }}</td>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" onclick="abrirModalExcluir('{{ usuario.id }}', '{{ usuario.nome }}', '{{ usuario.email }}')">Excluir usuário 🗑</button>
+                            <button type="button" class="btn btn-primary">Editar usuário ✏</button>   
+                        </td> 
+                                
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhum usuario encontrado.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
         <div class="bottom-bar">
             <button class="btn" onclick="window.location.href='/home'">Voltar</button>
@@ -131,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 });
 </script>
->>>>>>> 24af98630b66ec7654c66b7e0658eed92858b1f6
     
 
 </body>
