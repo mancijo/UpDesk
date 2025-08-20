@@ -57,7 +57,7 @@ with app.app_context():
 # Rota inicial - login
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('ger_usuarios.html')
 
 # Login - API
 @app.route('/login', methods=['POST'])
