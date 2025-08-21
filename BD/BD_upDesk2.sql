@@ -92,22 +92,25 @@ CREATE TABLE Sugestao_de_solucao_IA (
 );
 
 CREATE TABLE Chat (
-    remetente VARCHAR(100),
-    destinatario VARCHAR(100),
-	chat_ID int identity (1000,1) primary key
-    fk_Chamado_atendenteID INT FOREIGN KEY references Chamado,
-    fk_Chamado_chamado_ID INT,
-    fk_Chamado_solicitanteID INT,
-    fk_Chamado_chatID INT
+    chat_ID INT IDENTITY(1000,1) PRIMARY KEY,
+    chamado_ID INT NOT NULL,
+    remetente_ID INT NOT NULL,
+    destinatario_ID INT NOT NULL,
+    FOREIGN KEY (chamado_ID) REFERENCES Chamado(chamado_ID),
+    FOREIGN KEY (remetente_ID) REFERENCES Usuario(user_ID),
+    FOREIGN KEY (destinatario_ID) REFERENCES Usuario(user_ID)
 );
 
 CREATE TABLE Mensagem (
-    date DATE,
-    chatID INT,
-    remetente VARCHAR(100),
-    mensagem VARCHAR(255),
-    mensagemID INT not null,
-    PRIMARY KEY (chatID, mensagemID)
+    mensagem_ID INT IDENTITY(1,1) PRIMARY KEY,
+    chat_ID INT NOT NULL,
+    remetente_ID INT NOT NULL,
+    destinatario_ID INT NOT NULL,
+    conteudo VARCHAR(255) NOT NULL,
+    data_envio DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (chat_ID) REFERENCES Chat(chat_ID),
+    FOREIGN KEY (remetente_ID) REFERENCES Usuario(user_ID),
+    FOREIGN KEY (destinatario_ID) REFERENCES Usuario(user_ID)
 );
 
 CREATE TABLE Base_de_Conhecimento (
