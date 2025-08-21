@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, url_for, redirect, session
+from flask import Flask, request, jsonify, render_template, url_for, redirect, session, flash
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -58,6 +58,11 @@ with app.app_context():
 @app.route('/')
 def index():
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    ('Você foi desconectado com sucesso!')
+    return render_template('login.html', flash_message='Você foi desconectado com sucesso!')
 
 # Login - API
 @app.route('/login', methods=['POST'])
