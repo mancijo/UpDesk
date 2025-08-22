@@ -4,3 +4,8 @@ const openCreateUserModal = (e) => {
     modal.show();
 }
 
+const openEditUserModal = (e) => {
+    e.preventDefault();
+    var modal = new bootstrap.Modal(document.getElementById('modalEditUser'));
+    modal.show();
+}
