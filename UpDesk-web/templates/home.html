@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <title>Dashboard Supervisor - UpDesk</title>
@@ -21,7 +22,7 @@
       align-items: center;
       position: relative;
       flex-wrap: wrap;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
     .logo {
@@ -81,7 +82,7 @@
       background-color: white;
       border: 1px solid #2B4C7E;
       border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       min-width: 160px;
       z-index: 1000;
       flex-direction: column;
@@ -132,7 +133,7 @@
       background: white;
       border-radius: 15px;
       padding: 20px;
-      box-shadow: 1px 1px 8px rgba(0,0,0,0.08);
+      box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.08);
       text-align: center;
       transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
       border: 1px solid transparent;
@@ -140,7 +141,7 @@
 
     .card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
       border: 1px solid #2B4C7E20;
     }
 
@@ -182,7 +183,7 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
       width: 100%;
       max-width: 300px;
@@ -191,7 +192,7 @@
     .action-btn:hover {
       background-color: #1f3960;
       transform: translateY(-3px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     }
 
     .action-btn:active {
@@ -212,16 +213,49 @@
       body {
         padding: 10px;
       }
-      .card span { height: 80px; font-size: 22px; }
-      .action-btn { padding: 15px; font-size: 14px; width: 100%; }
-      nav.navbar { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .nav-links { flex-direction: column; width: 100%; }
-      .nav-links a { padding: 10px 0; }
-      .logo { position: static; transform: none; text-align: center; width: 100%; margin-bottom: 10px; }
-      .user-menu { margin-left: 0; margin-top: 10px; }
+
+      .card span {
+        height: 80px;
+        font-size: 22px;
+      }
+
+      .action-btn {
+        padding: 15px;
+        font-size: 14px;
+        width: 100%;
+      }
+
+      nav.navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .nav-links a {
+        padding: 10px 0;
+      }
+
+      .logo {
+        position: static;
+        transform: none;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .user-menu {
+        margin-left: 0;
+        margin-top: 10px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <nav class="navbar">
@@ -300,4 +334,5 @@
   </script>
 
 </body>
+
 </html>
