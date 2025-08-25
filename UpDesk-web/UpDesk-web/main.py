@@ -149,7 +149,8 @@ def excluir_usuario(id):
 @app.route('/cadastro', methods=['POST'])
 def cadastro():
     return render_template('ger_usuarios.html')
-    
+
+
 
 @app.route('/triagem')
 def triagem():
