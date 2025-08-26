@@ -72,11 +72,12 @@ Este documento reúne:
 ## ✅ DoR (Definition of Ready)
 Critérios que devem estar prontos antes que uma história entre em desenvolvimento:
 
-- História descrita claramente.
-- Critérios de aceitação definidos.
-- Protótipo ou diagrama associado (quando necessário).
-- Dependências mapeadas.
-- Estimativa realizada pela equipe.
+| Necessidade (User Story) | Funcionalidade (Definition) |
+| :--- | :--- |
+| "Preciso controlar os acessos ao sistema e restringir o que cada um pode mexer" | gerenciamento de usuários |
+| "Seria bom um sistema automatizado que auxilie nos atendimentos" | Suporte com IA |
+| "Gostaria de uma interface para que eu possa acessar tanto no PC, celular ou no navegador" | Aplicação web, Desktop e Android |
+| "Quero poder acessar históricos de chamados" | banco de dados em nuvem/interface de chamados |
 
 ---
 
