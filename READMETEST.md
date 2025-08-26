@@ -14,23 +14,24 @@ O UpDesk propõe uma solução inovadora com **inteligência artificial integrad
 ## 📅 Cronograma de Evolução
 - **Etapa 1** → Levantamento de requisitos e modelagem inicial  
 - **Etapa 2** → Protótipos em baixa, média e alta fidelidade (Figma)  
-- **Etapa 3** → Implementação da interface web e modelagem do banco  
+- **Etapa 3** → Implementação da interface web e modelagem do banco
+- **Etapa 4** → Implementação do sistema Desktop e Android
 
 ---
 
 ## 📊 Tabela de Sprints
 
-| Período da Sprint | Documentação | Incremento (YouTube) |
+| Período da Sprint | Documentação | Incremento |
 |-------------------|--------------|-----------------------|
-| Sprint 1 | Planejamento inicial | [Vídeo Sprint 1](https://youtube.com/placeholder) |
-| Sprint 2 | Backlog de Sprint | [Vídeo Sprint 2](https://youtube.com/placeholder) |
-| Sprint 3 | Requisitos & Casos de Uso | [Vídeo Sprint 3](https://youtube.com/placeholder) |
+| Sprint 1 | Planejamento inicial | [Documento Sprint 1](https://youtube.com/placeholder) |
+| Sprint 2 | Backlog de Sprint | [Documento Sprint 2](https://youtube.com/placeholder) |
+| Sprint 3 | Requisitos & Casos de Uso | [Documento Sprint 3](https://youtube.com/placeholder) |
 
 ---
 
 ## 🛠 Tecnologias Utilizadas
-- **Backend**: C# (.NET)  
-- **Banco de Dados**: MS SQL Server  
+- **Backend**: Python
+- **Banco de Dados**: MYSQL Server  
 - **Frontend**: HTML, CSS, JavaScript  
 - **Protótipos**: Figma  
 - **Versionamento**: GitHub  
@@ -63,7 +64,7 @@ UpDesk/
 Este documento reúne:
 
 - Modelagem do banco de dados
-- Diagramas de casos de uso e sequência
+- Diagramas UML
 - Planejamentos de sprint
 - Roteiros de teste
 - Políticas de LGPD
@@ -93,32 +94,7 @@ Critérios para considerar uma história finalizada:
 ---
 
 ## 📘 Manual do Usuário
-### 🔐 Acesso
-O usuário deve realizar login com e-mail e senha cadastrados.  
-A autenticação garante o acesso às funcionalidades de acordo com a hierarquia.
-
-### 📝 Abertura de Chamado
-1. Clique em **Abrir Chamado**.  
-2. Preencha os campos: título, descrição e categoria.  
-3. A IA poderá sugerir soluções antes do envio.  
-   - Caso o usuário aceite → o chamado é encerrado automaticamente.  
-   - Caso recuse → o chamado segue para triagem.  
-
-### 👥 Perfis de Usuário
-- **Supervisor** → Gerencia usuários, acessos e relatórios.  
-- **TI Nível 1** → Atende chamados de baixa/média complexidade.  
-- **TI Nível 2** → Atende chamados de média/alta complexidade.  
-- **Triagem** → Classifica chamados e valida ações da IA.  
-- **Usuário Padrão** → Abre chamados.  
-- **Inteligência Artificial** → Sugere soluções e categoriza chamados.  
-
-### 📊 Relatórios Disponíveis
-- Evolução dos chamados.  
-- Desempenho dos funcionários.  
-- Eficiência da IA.  
-- Tendências por categoria.  
-- Histórico de atendimentos.  
-
+### [Manual do usuário](https://youtube.com/placeholder)
 ---
 
 ## 👥 Equipe do Projeto
@@ -130,6 +106,3 @@ A autenticação garante o acesso às funcionalidades de acordo com a hierarquia
   - Kaique Batista da Silva  
   - Filipe Vitor dos Santos  
 
----
-
-👉 Agora está tudo **em um único arquivo `.md`** – você pode simplesmente salvar esse conteúdo como `README.md` e terá toda a documentação centralizada.  
