@@ -9,6 +9,8 @@ O UpDesk propõe uma solução inovadora com **inteligência artificial integrad
 
 ## 📋 Backlog do Produto
 
+### [Clique aqui para backlog](https://github.com/mancijo/UpDesk/blob/main/Dev%20planning/backlogSprint.txt)
+
 ---
 
 ## 📅 Cronograma de Evolução
@@ -19,13 +21,9 @@ O UpDesk propõe uma solução inovadora com **inteligência artificial integrad
 
 ---
 
-## 📊 Tabela de Sprints
+## 📊 Cronograma de Sprints
 
-| Período da Sprint | Documentação | Incremento |
-|-------------------|--------------|-----------------------|
-| Sprint 1 | Planejamento inicial | [Documento Sprint 1](https://youtube.com/placeholder) |
-| Sprint 2 | Backlog de Sprint | [Documento Sprint 2](https://youtube.com/placeholder) |
-| Sprint 3 | Requisitos & Casos de Uso | [Documento Sprint 3](https://youtube.com/placeholder) |
+### [Clique aqui para o cronograma](https://github.com/mancijo/UpDesk/blob/main/Dev%20planning/sprintPlanning.md) 
 
 ---
 
@@ -36,15 +34,6 @@ O UpDesk propõe uma solução inovadora com **inteligência artificial integrad
 - **Protótipos**: Figma  
 - **Versionamento**: GitHub  
 - **Metodologia**: Scrum  
-
----
-
-## 📂 Estrutura do Projeto
-UpDesk/
-│── src/ # Código-fonte do sistema
-│── db/ # Scripts SQL e modelagem
-│── tests/ # Casos e roteiros de testes
-│── README.md # Apresentação principal do projeto
 
 ---
 
@@ -94,7 +83,7 @@ Critérios para considerar uma história finalizada:
 ---
 
 ## 📘 Manual do Usuário
-### [Manual do usuário](https://youtube.com/placeholder)
+### [Manual do usuário](https://github.com/mancijo/UpDesk/blob/main/Documentation/Manual%20do%20Usu%C3%A1rio.docx)
 ---
 
 ## 👥 Equipe do Projeto
