@@ -106,7 +106,51 @@
           </form>
         </div>
       </div>
-    </div>
+    </div> <!-- Modal Create Usr -->
+
+    <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form id="formEditarUsuario" method="post" action="/editar">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar usuário</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+              </div>
+              <div class="mb-3">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" required>
+              </div>
+              <div class="mb-3">
+                <label for="setor" class="form-label">Setor</label>
+                <input type="text" class="form-control" id="setor" name="setor" required>
+              </div>
+              <div class="mb-3">
+                <label for="cargo" class="form-label">Cargo</label>
+                <input type="text" class="form-control" id="cargo" name="cargo" required>
+              </div>
+              <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="senha" name="senha" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-success">Editar usuário</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> <!-- Modal Edit Usr -->
 
     <table class="table table-bordered table-striped">
       <thead>
@@ -130,10 +174,18 @@
 
           </td>
           <td>
-            <button type="button" class="btn btn-outline-danger"
+            <button 
+              type="button" 
+              class="btn btn-outline-danger"
               onclick="abrirModalExcluir('{{ usuario.id }}', '{{ usuario.nome }}', '{{ usuario.email }}')">Excluir
-              usuário 🗑</button>
-            <button type="button" class="btn btn-primary">Editar usuário ✏</button>
+              usuário 🗑
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-primary"
+              key="{{usuario.id}}"
+              onclick="openEditUserModal(e)"
+            >Editar usuário ✏</button>
           </td>
 
         </tr>
@@ -144,11 +196,10 @@
         {% endfor %}
       </tbody>
     </table>
-  </div>
+  </div> <!-- Tabela Usr -->
 
-  <div class="container me-auto">
+  <div class="container m-auto">
     <button class="btn btn-secondary btn-sm" onclick="window.location.href='/home'" type="button">Voltar</button>
-  </div>
   </div>
   <!-- Modal de confirmação de exclusão -->
   <div class="modal fade" id="modalExcluirUsuario" tabindex="-1" aria-labelledby="modalExcluirUsuarioLabel"
