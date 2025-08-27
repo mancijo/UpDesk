@@ -4,10 +4,17 @@ const openCreateUserModal = (e) => {
     modal.show();
 }
 
+let IDtoEdit = 0;
+
 const openEditUserModal = (e) => {
     e.preventDefault();
-    var modal = new bootstrap.Modal(document.getElementById('modalEditUser'));
+    IDtoEdit = e.target.key
+    var modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
     modal.show();
+}
+
+const editUser = () => {
+    
 }
 
 let usuarioIdParaExcluir = null;
