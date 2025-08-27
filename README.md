@@ -7,6 +7,11 @@ O UpDesk propõe uma solução inovadora com **inteligência artificial integrad
 
 ---
 
+## Casos de usos
+
+### [Clique aqui para casos de usos](https://github.com/mancijo/UpDesk/tree/main/Dev%20planning)
+
+---
 ## 📋 Backlog do Produto
 
 ### [Clique aqui para backlog](https://github.com/mancijo/UpDesk/blob/main/Dev%20planning/backlogSprint.txt)
