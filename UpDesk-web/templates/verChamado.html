@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Ver Chamados - UpDesk</title>
@@ -37,7 +38,8 @@
             margin-top: 20px;
         }
 
-        select, input[type="text"] {
+        select,
+        input[type="text"] {
             padding: 8px 12px;
             border-radius: 20px;
             border: 1px solid #aaa;
@@ -49,22 +51,32 @@
             border-collapse: collapse;
         }
 
-        th, td, tr {
+        th,
+        td,
+        tr {
             text-align: center;
             align-items: center;
             vertical-align: middle;
             padding: 12px;
             border-bottom: 1px solid #ddd;
-            
+
         }
 
         .status {
             font-weight: 600;
         }
 
-        .verde { color: green; }
-        .azul { color: blue; }
-        .vermelho { color: red; }
+        .verde {
+            color: green;
+        }
+
+        .azul {
+            color: blue;
+        }
+
+        .vermelho {
+            color: red;
+        }
 
         .btn {
             padding: 8px 16px;
@@ -89,9 +101,9 @@
             color: white;
             border: none;
         }
-
     </style>
 </head>
+
 <body>
     {% include 'navbar.html' %}
 
@@ -111,39 +123,39 @@
             <input type="text" placeholder="Buscar chamado...">
         </div>
 
-<div class="container mt-4">
-    <h2>Lista de Chamados</h2>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Prioridade</th>
-                <th>Status</th>
-                <th>Data </th>
-                <th>Ações</th>
+        <div class="container mt-4">
+            <h2>Lista de Chamados</h2>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th>Data </th>
+                        <th>Ações</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            {% for chamado in chamados %}
-                <tr>
-                    <td>{{ chamado.titulo }}</td>
-                    <td>{{ chamado.prioridade }}</td>                    
-                    <td>{{ chamado.status }}</td>
-                    <td>{{ chamado.data_criacao.strftime("%d/%m/%Y %H:%M") }}</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm">Ver detalhes</button>
-                        <button class="btn btn-secondary btn-sm">Atender</button>   
-                    </td> 
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7" class="text-center">Nenhum chamado encontrado.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chamado in chamados %}
+                    <tr>
+                        <td>{{ chamado.titulo }}</td>
+                        <td>{{ chamado.prioridade }}</td>
+                        <td>{{ chamado.status }}</td>
+                        <td>{{ chamado.data_criacao.strftime("%d/%m/%Y %H:%M") }}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm">Ver detalhes</button>
+                            <button class="btn btn-secondary btn-sm">Atender</button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhum chamado encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <div class="bottom-bar">
             <button class="btn" onclick="window.location.href='/home'">Página inicial</button>
@@ -152,4 +164,5 @@
     </div>
 
 </body>
+
 </html>
