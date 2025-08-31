@@ -33,7 +33,8 @@ class LoginForm(FlaskForm):
     senha = PasswordField('Senha', validators=[DataRequired()])
     Submit =  SubmitField('Login')
 
-
+senha = PasswordField('Senha', validators=[DataRequired(), Length(min=6)])
+confirma_senha = PasswordField('Confirme a Senha', validators=[DataRequired(), EqualTo('senha')])
     
 
 
