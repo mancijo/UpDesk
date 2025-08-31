@@ -16,4 +16,4 @@ VALUES ('Mariozan Junior', 'mariozan.junior@updesk.com', '123456', 'TI', 'Superv
 INSERT INTO Usuario (nome, email, senha, setor, user_type)
 VALUES ('Filipe Vitor', 'filipe.vitor@updesk.com', '123456', 'TI', 'Supervisor');*/
 
--- SELECT * FROM Usuario;
+--SELECT * FROM Usuario;
