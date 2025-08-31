@@ -139,10 +139,10 @@
                 <tbody>
                     {% for chamado in chamados %}
                     <tr>
-                        <td>{{ chamado.titulo }}</td>
-                        <td>{{ chamado.prioridade }}</td>
-                        <td>{{ chamado.status }}</td>
-                        <td>{{ chamado.data_criacao.strftime("%d/%m/%Y %H:%M") }}</td>
+                        <td>{{ chamado.titulo_Chamado }}</td>
+                        <td>{{ chamado.prioridade_Chamado }}</td>
+                        <td>{{ chamado.status_Chamado }}</td>
+                        <td>{{ chamado.dataAbertura.strftime("%d/%m/%Y %H:%M") }}</td>
                         <td>
                             <button class="btn btn-secondary btn-sm">Ver detalhes</button>
                             <button class="btn btn-secondary btn-sm">Atender</button>

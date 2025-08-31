@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import urllib.parse
 from models import db, Usuario, Chamado, Interacao
+from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
 
 # Flask
 app = Flask(__name__)
@@ -21,12 +22,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % par
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
+# Rotas
 @app.route('/')
 def index():
     return render_template('login.html')
 
+
 @app.route('/login', methods=['POST'])
 def login():
+    form_login = LoginForm()
     data = request.json or request.form  # aceita JSON ou FORM
 
     if not data.get('email') or not data.get('senha'):
@@ -43,7 +47,7 @@ def login():
                 "id": usuario.id,
                 "nome": usuario.nome,
                 "email": usuario.email,
-                "tipo": usuario.tipo
+                "cargo": usuario.cargo
             }
         }), 200
 
@@ -52,7 +56,6 @@ def login():
 
 @app.route('/home')
 def home():
-    # Se o usuário não estiver logado, redireciona para login
     if 'usuario_nome' not in session:
         return render_template('login.html', mensagem="Faça login para continuar")
 
@@ -69,18 +72,18 @@ def chamado():
             return jsonify({"mensagem": "Dados inválidos"}), 400
 
         chamado = Chamado(
-            titulo=data.get("titulo"),
-            descricao=data.get("descricao"),
-            categoria=data.get("categoria"),
-            usuario_id=data.get("usuario_id"),
-            prioridade=data.get("prioridade", "baixa")
+            titulo_Chamado=data.get("titulo"),
+            descricao_Chamado=data.get("descricao"),
+            categoria_Chamado=data.get("categoria"),
+            solicitanteID=data.get("usuario_id"),
+            prioridade_Chamado=data.get("prioridade", "baixa")
         )
         db.session.add(chamado)
         db.session.commit()
 
         return jsonify({
             "mensagem": "Chamado registrado com sucesso!",
-            "chamado_id": chamado.id
+            "chamado_id": chamado.chamado_ID
         }), 201
 
 @app.route('/ver-chamado')
@@ -89,6 +92,42 @@ def ver_chamado():
     nome_usuario = session.get('usuario_nome', 'Usuário')
     return render_template('Verchamado.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
+@app.route('/ger_usuarios')
+def ger_usuarios():
+    lista_usuarios = Usuario.query.all()
+    nome_usuario = session.get('usuario_nome', 'Usuário')
+    return render_template('ger_usuarios.html', usuarios=lista_usuarios, nome_usuario=nome_usuario)
+
+@app.route('/criar_usuario', methods=['POST'])  
+def criar_usuario():
+    nome = request.form.get('nome')
+    email = request.form.get('email')
+    telefone = request.form.get('telefone')
+    setor = request.form.get('setor')
+    cargo = request.form.get('cargo')  
+    senha = request.form.get('senha')
+
+    if not all([nome, email, telefone, setor, cargo, senha]):
+        return jsonify({"mensagem": "Dados inválidos"}), 400
+
+    novo_usuario = Usuario(
+        nome=nome,
+        email=email,
+        telefone=telefone,
+        setor=setor,
+        cargo=cargo,
+        senha=senha
+    )
+    db.session.add(novo_usuario)
+    db.session.commit()
+    return jsonify({"mensagem": "Usuário criado com sucesso!"}), 201
+
+
+@app.route('/triagem')
+def triagem():
+    lista_chamados = Chamado.query.all()
+    nome_usuario = session.get('usuario_nome', 'Usuário')
+    return render_template('triagem.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
 if __name__ == '__main__':
     with app.app_context():
