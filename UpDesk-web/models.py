@@ -8,7 +8,7 @@ class Usuario(db.Model):
     __tablename__ = 'Usuario'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
     telefone = db.Column(db.String(15))
     setor = db.Column(db.String(10))
     cargo = db.Column(db.String(50), nullable=False)
