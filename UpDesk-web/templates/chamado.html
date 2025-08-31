@@ -106,7 +106,7 @@
 
         <input type="number" id="usuario_id" placeholder="ID do usuário" required>
 
-        <button onclick="buscarSolucaoIA()">Buscar Solução com IA</button>
+        <button type="button" onclick="buscarSolucaoIA(event)">Buscar Solução com IA</button>
 
         <a href="/home" class="voltar">Voltar</a>
 
@@ -114,11 +114,12 @@
     </div>
 
     <script>
-        async function buscarSolucaoIA() {
+        async function buscarSolucaoIA(event) {
+            if (event) event.preventDefault();
             const titulo = document.getElementById('titulo').value;
             const descricao = document.getElementById('descricao').value;
             const categoria = document.getElementById('categoria').value;
-            const usuario_id = document.getElementById('usuario_id').value;
+            const usuario_id = parseInt(document.getElementById('usuario_id').value, 10);
             const mensagem = document.getElementById('mensagem');
 
             const chamado = {

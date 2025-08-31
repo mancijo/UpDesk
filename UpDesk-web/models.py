@@ -9,12 +9,10 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(255), nullable=False)
-    senha = db.Column(db.String(30))
+    telefone = db.Column(db.String(15))
     setor = db.Column(db.String(10))
-    tipo = db.Column(
-        db.String(20),
-        nullable=False
-    )  # Usuaio, N1, N2, Triagem, Supervisor
+    cargo = db.Column(db.String(50), nullable=False)
+    senha = db.Column(db.String(30))
 
     # Relacionamentos
     chamados_solicitados = db.relationship(
