@@ -272,7 +272,32 @@ document.getElementById('formCriarUsuario').addEventListener('submit', async fun
     alert('Erro ao criar usuário!');
   }
 });
-</script>
+
+function abrirModalExcluir(id, nome, email) {
+  document.getElementById('modalUsuarioId').textContent = id;
+  document.getElementById('modalUsuarioNome').textContent = nome;
+  document.getElementById('modalUsuarioEmail').textContent = email;
+  var modal = new bootstrap.Modal(document.getElementById('modalExcluirUsuario'));
+  modal.show();
+
+  // Remove event listener anterior para evitar múltiplos binds
+  const btn = document.getElementById('btnConfirmarExcluir');
+  const novoBtn = btn.cloneNode(true);
+  btn.parentNode.replaceChild(novoBtn, btn);
+
+  novoBtn.addEventListener('click', async function() {
+    const response = await fetch(`/excluir_usuario/${id}`, {
+      method: 'POST'
+    });
+    if (response.ok) {
+      modal.hide();
+      window.location.reload();
+    } else {
+      alert('Erro ao excluir usuário!');
+    }
+  });
+}
+  </script>
 </body>
 
 </html>

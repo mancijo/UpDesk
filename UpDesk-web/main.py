@@ -129,6 +129,16 @@ def triagem():
     nome_usuario = session.get('usuario_nome', 'Usuário')
     return render_template('triagem.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
+@app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
+def excluir_usuario(usuario_id):
+    usuario = Usuario.query.get(usuario_id)
+    if not usuario:
+        return jsonify({'mensagem': 'Usuário não encontrado'}), 404
+    db.session.delete(usuario)
+    db.session.commit()
+    return jsonify({'mensagem': 'Usuário excluído com sucesso!'})
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
