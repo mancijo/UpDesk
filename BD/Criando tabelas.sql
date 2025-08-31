@@ -1,10 +1,10 @@
-CREATE TABLE Usuario (
-    user_ID INT identity(1,1) PRIMARY KEY,
+/*CREATE TABLE Usuario (
+    id INT identity(1,1) PRIMARY KEY,
     nome VARCHAR(100) not null,
     email VARCHAR(255) not null,
     senha VARCHAR(30),
     setor VARCHAR(10),
-    user_type varchar(20) not null check (user_type IN ('Usuaio','N1','N2', 'Triagem', 'Supervisor'))
+    tipo varchar(20) not null check (user_type IN ('Usuaio','N1','N2', 'Triagem', 'Supervisor'))
 );
 
 CREATE TABLE Chamado (
@@ -57,4 +57,18 @@ CREATE TABLE Base_de_Conhecimento (
     procedimento_Status varchar(20) default 'Aberto' check (procedimento_Status in ('Draft', 'Published', 'Retired')),
     procedimento_dataAbertura datetime default current_timestamp,
     procedimento_dateLastMod datetime default null
-);
+);*/
+
+/*CREATE TABLE Interacoes (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    chamado_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    mensagem TEXT NOT NULL,
+    data_criacao DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT FK_Interacoes_Chamado FOREIGN KEY (chamado_id)
+        REFERENCES Chamado(chamado_ID),
+
+    CONSTRAINT FK_Interacoes_Usuario FOREIGN KEY (usuario_id)
+        REFERENCES Usuario(id)
+);*/
