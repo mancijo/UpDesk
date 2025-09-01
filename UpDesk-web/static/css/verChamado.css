@@ -1,0 +1,35 @@
+body {
+    background-color: #DCE0E6;
+}
+
+.card {
+    padding: 10px 40px;
+}
+
+.voltarBtn {
+    width: 100px;
+    text-align: center;
+}
+
+.colAcoes {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+h2 {
+    margin: 20px;
+    text-align: center;
+}
+
+#searchUser input{
+    background-color: #DCE0E6;
+    width: 260px;
+}
+
+.editarUsuarioBtn {
+    background-color: #567EBB;
+}
+
+.editarUsuarioBtn:hover {
+    background-color: #2B4C7E;
+}

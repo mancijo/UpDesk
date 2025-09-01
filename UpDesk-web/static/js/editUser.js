@@ -4,8 +4,6 @@ const openCreateUserModal = (e) => {
     modal.show();
 }
 
-let IDtoEdit = 0;
-
 const openEditUserModal = (e) => {
     e.preventDefault();
     IDtoEdit = e.target.key
@@ -13,32 +11,55 @@ const openEditUserModal = (e) => {
     modal.show();
 }
 
-const editUser = () => {
-    
-}
-
-let usuarioIdParaExcluir = null;
-
 function abrirModalExcluir(id, nome, email) {
-    usuarioIdParaExcluir = id;
     document.getElementById('modalUsuarioId').textContent = id;
     document.getElementById('modalUsuarioNome').textContent = nome;
     document.getElementById('modalUsuarioEmail').textContent = email;
     var modal = new bootstrap.Modal(document.getElementById('modalExcluirUsuario'));
     modal.show();
+
+    // Remove event listener anterior para evitar múltiplos binds
+    const btn = document.getElementById('btnConfirmarExcluir');
+    const novoBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(novoBtn, btn);
+
+    novoBtn.addEventListener('click', async function () {
+        const response = await fetch(`/excluir_usuario/${id}`, {
+            method: 'POST'
+        });
+        if (response.ok) {
+            modal.hide();
+            window.location.reload();
+        } else {
+            alert('Erro ao excluir usuário!');
+        }
+    });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('btnConfirmarExcluir').onclick = function () {
-        // Aqui você pode fazer a requisição para excluir o usuário
-        // Exemplo usando fetch:
-        fetch(`/excluir_usuario/${usuarioIdParaExcluir}`, { method: 'POST' })
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    alert('Erro ao excluir usuário.');
-                }
-            });
-    };
+document.getElementById('formCriarUsuario').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+
+    const response = await fetch(form.action, {
+        method: 'POST',
+        body: data
+    });
+
+    if (response.ok) {
+        // Fecha o modal de criar usuário, se estiver usando
+        var modalCriar = bootstrap.Modal.getInstance(document.getElementById('modalCriarUsuario'));
+        if (modalCriar) modalCriar.hide();
+
+        // Mostra o modal de sucesso
+        var modalSucesso = new bootstrap.Modal(document.getElementById('modalSucesso'));
+        modalSucesso.show();
+
+        // Opcional: recarrega a lista de usuários após fechar o modal de sucesso
+        document.getElementById('modalSucesso').addEventListener('hidden.bs.modal', function () {
+            window.location.reload();
+        }, { once: true });
+    } else {
+        alert('Erro ao criar usuário!');
+    }
 });
