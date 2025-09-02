@@ -82,8 +82,12 @@ CREATE TABLE Analista_TI (
 -- DROP TABLE Analista_Triagem
 
 /*CREATE TABLE Abre (
-);*/
-);*/
+    fk_Usuario_user_ID INT,
+    fk_Chamado_atendenteID INT,
+    fk_Chamado_chamado_ID INT,
+    fk_Chamado_solicitanteID INT,
+    fk_Chamado_chatID INT
+);
 
 CREATE TABLE Aprova_e_Transfere (
     fk_Analista_Triagem_triagem_ID INT,
