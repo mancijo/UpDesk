@@ -64,6 +64,7 @@ class Chamado(db.Model):
 
     def __repr__(self):
         return f"<Chamado {self.titulo_Chamado} - {self.status_Chamado}>"
+    
 
 
 # Modelo de Interações
@@ -81,4 +82,6 @@ class Interacao(db.Model):
 
     def __repr__(self):
         return f"<Interacao Chamado={self.chamado_id} Usuario={self.usuario_id}>"
+    
+
     

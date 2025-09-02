@@ -35,7 +35,10 @@
     <div class="cards">
       <div class="card">
         <h4>Chamados Abertos</h4>
-        <span>15</span>
+          {% for chamados in chamado %}
+            <span>{{ chamados|length }}</span>
+          {% endfor %} 
+        
       </div>
       <div class="card">
         <h4>Chamados em Triagem</h4>
