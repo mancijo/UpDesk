@@ -108,3 +108,7 @@ CREATE TABLE Consulta_Base_de_Conhecimento_IA_Analista_Triagem_TI__N1_N2_ (
     fk_Analista_Triagem_triagem_ID INT,
     fk_TI__N1_N2__ti_ID INT
 );*/
+
+-- DROP TABLE Usuarios
+
+-- DROP TABLE Chamados
