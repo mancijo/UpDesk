@@ -4,12 +4,30 @@ const openCreateUserModal = (e) => {
     modal.show();
 }
 
-const openEditUserModal = (e) => {
-    e.preventDefault();
-    IDtoEdit = e.target.key
+const openEditUserModal = (button) => {
+    const IDtoEdit = button.getAttribute("data-id");
+    const nome = button.getAttribute("data-nome") || "";
+    const email = button.getAttribute("data-email") || "";
+    const telefone = button.getAttribute("data-telefone") || "";
+    const setor = button.getAttribute("data-setor") || "";
+    const cargo = button.getAttribute("data-cargo") || "";
+
+    // Preenche os campos do modal de edição
+    document.getElementById("edit-nome").value = nome;
+    document.getElementById("edit-email").value = email;
+    document.getElementById("edit-telefone").value = telefone;
+    document.getElementById("edit-setor").value = setor;
+    document.getElementById("edit-cargo").value = cargo;
+
+    // senha sempre em branco
+    document.getElementById("edit-senha").value = "";
+
+    document.getElementById("formEditarUsuario").action = `/editar_usuario/${IDtoEdit}`;
+
     var modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
     modal.show();
-}
+};
+
 
 function abrirModalExcluir(id, nome, email) {
     document.getElementById('modalUsuarioId').textContent = id;

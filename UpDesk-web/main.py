@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 import urllib.parse
 from models import db, Usuario, Chamado, Interacao
 from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
+import pytest 
+
 
 # Flask
 app = Flask(__name__)
@@ -53,6 +55,11 @@ def login():
 
     return jsonify({"mensagem": "Email ou senha incorretos"}), 401
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return render_template('login.html', mensagem="Você saiu com sucesso do sistema.")
+
 
 @app.route('/home')
 def home():
@@ -85,6 +92,8 @@ def chamado():
             "mensagem": "Chamado registrado com sucesso!",
             "chamado_id": chamado.chamado_ID
         }), 201
+    
+
 
 @app.route('/ver-chamado')
 def ver_chamado():
@@ -122,6 +131,32 @@ def criar_usuario():
     db.session.commit()
     return jsonify({"mensagem": "Usuário criado com sucesso!"}), 201
 
+@app.route('/editar_usuario/<int:usuario_id>', methods=['POST'])
+def editar_usuario(usuario_id):
+    usuario = Usuario.query.get(usuario_id)
+    if not usuario:
+        return jsonify({'mensagem': 'Usuário não encontrado'}), 404
+    
+    nome = request.form.get('nome')
+    email = request.form.get('email')
+    telefone = request.form.get('telefone')
+    setor = request.form.get('setor')
+    cargo = request.form.get('cargo')
+    senha =  request.form.get('senha')
+    if not all([nome, email, telefone, setor, cargo, senha]):
+        return jsonify({"mensagem": "Dados inválidos"}), 400
+    
+    usuario.nome = nome
+    usuario.email = email
+    usuario.telefone = telefone
+    usuario.setor = setor
+    usuario.cargo = cargo
+    usuario.senha = senha
+
+    db.session.commit()
+    return jsonify({'mensagem': 'Usuário atualizado com sucesso!'})
+
+
 
 @app.route('/triagem')
 def triagem():
@@ -137,6 +172,7 @@ def excluir_usuario(usuario_id):
     db.session.delete(usuario)
     db.session.commit()
     return jsonify({'mensagem': 'Usuário excluído com sucesso!'})
+
 
 
 if __name__ == '__main__':
