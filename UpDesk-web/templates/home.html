@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard Supervisor - UpDesk</title>
-  <link rel="stylesheet" href="../static/css/home.css"/>
+  <link rel="stylesheet" href="../static/css/home.css" />
 </head>
 
 <body>
-
+  <div class="w-full h-full blur-sm"></div>
   <nav class="navbar">
     <div class="logo">UpDesk</div>
 
@@ -35,7 +35,10 @@
     <div class="cards">
       <div class="card">
         <h4>Chamados Abertos</h4>
-        <span>15</span>
+          {% for chamados in chamado %}
+            <span>{{ chamados|length }}</span>
+          {% endfor %} 
+        
       </div>
       <div class="card">
         <h4>Chamados em Triagem</h4>

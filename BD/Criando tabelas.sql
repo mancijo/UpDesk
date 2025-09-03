@@ -71,4 +71,44 @@ CREATE TABLE Base_de_Conhecimento (
 
     CONSTRAINT FK_Interacoes_Usuario FOREIGN KEY (usuario_id)
         REFERENCES Usuario(id)
+);
+
+CREATE TABLE Analista_TI (
+    ti_Nome VARCHAR(100),
+    ti_ID INT identity(1000,1) PRIMARY KEY not null,
+	fk_IA_ia_ID INT
+); */
+
+-- DROP TABLE Analista_Triagem
+
+/*CREATE TABLE Abre (
+    fk_Usuario_user_ID INT,
+    fk_Chamado_atendenteID INT,
+    fk_Chamado_chamado_ID INT,
+    fk_Chamado_solicitanteID INT,
+    fk_Chamado_chatID INT
+);
+
+CREATE TABLE Aprova_e_Transfere (
+    fk_Analista_Triagem_triagem_ID INT,
+    fk_TI__N1_N2__ti_ID INT
+);
+
+CREATE TABLE Atende (
+    fk_TI__N1_N2__ti_ID INT,
+    fk_Chamado_atendenteID INT,
+    fk_Chamado_chamado_ID INT,
+    fk_Chamado_solicitanteID INT,
+    fk_Chamado_chatID INT
+);
+
+CREATE TABLE Consulta_Base_de_Conhecimento_IA_Analista_Triagem_TI__N1_N2_ (
+    fk_Base_de_Conhecimento_procedimento_ID INT,
+    fk_IA_ia_ID INT,
+    fk_Analista_Triagem_triagem_ID INT,
+    fk_TI__N1_N2__ti_ID INT
 );*/
+
+-- DROP TABLE Usuarios
+
+-- DROP TABLE Chamados
