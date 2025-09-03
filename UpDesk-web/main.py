@@ -6,7 +6,6 @@ from models import db, Usuario, Chamado, Interacao
 from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
 import os
 from werkzeug.utils import secure_filename
-import pytest
 
 # Flask
 app = Flask(__name__)
@@ -178,7 +177,7 @@ def editar_usuario(usuario_id):
 
 @app.route('/triagem')
 def triagem():
-    lista_chamados = Chamado..query.all()
+    lista_chamados = Chamado.query.all()
     nome_usuario = session.get('usuario_nome', 'Usuário')
     return render_template('triagem.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
