@@ -1,4 +1,4 @@
-    /* ====== Fonte e fundo ====== */
+/* ====== Fonte e fundo ====== */
     body {
       font-family: "Inter", sans-serif;
       background-color: #DFE2E8;
@@ -13,18 +13,19 @@
       padding: 15px 40px;
       display: flex;
       align-items: center;
+      justify-content: space-between; /* Changed from flex-start */
       position: relative;
       flex-wrap: wrap;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
     .logo {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 22px;
-      font-weight: bold;
-      color: #2B4C7E;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 22px;
+        font-weight: bold;
+        color: #2B4C7E;
     }
 
     .nav-links {
@@ -45,9 +46,18 @@
       border-bottom: 2px solid #1f3960;
     }
 
+    /* ====== Hamburger Menu ====== */
+    .hamburger {
+        display: none;
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: #2B4C7E;
+        cursor: pointer;
+    }
+
     /* ====== Dropdown do usuário ====== */
     .user-menu {
-      margin-left: auto;
       position: relative;
     }
 
@@ -202,6 +212,28 @@
     }
 
     /* ====== Responsividade ====== */
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            position: absolute;
+            top: 60px; /* Adjust as needed */
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-menu.active .nav-links {
+            display: flex;
+        }
+
+        .hamburger {
+            display: block;
+        }
+    }
+
     @media (max-width: 500px) {
       body {
         padding: 10px;
@@ -219,31 +251,21 @@
       }
 
       nav.navbar {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row; /* Changed from column */
+        align-items: center;
         gap: 10px;
-      }
-
-      .nav-links {
-        flex-direction: column;
-        width: 100%;
-      }
-
-      .nav-links a {
-        padding: 10px 0;
       }
 
       .logo {
         position: static;
         transform: none;
-        text-align: center;
-        width: 100%;
-        margin-bottom: 10px;
+        text-align: left;
+        width: auto;
+        margin-bottom: 0;
       }
 
       .user-menu {
         margin-left: 0;
-        margin-top: 10px;
+        margin-top: 0;
       }
     }
-  

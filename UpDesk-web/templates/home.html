@@ -4,30 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard Supervisor - UpDesk</title>
-  <link rel="stylesheet" href="../static/css/home.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
 </head>
 
 <body>
   <div class="w-full h-full blur-sm"></div>
-  <nav class="navbar">
-    <div class="logo">UpDesk</div>
-
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/chamado">Chamados</a>
-      <a href="/ger-usuarios">Usuários</a>
-      <a href="/triagem">Triagem</a>
-    </div>
-
-    <div class="user-menu">
-      <button class="user-btn" id="userBtn" aria-haspopup="true" aria-expanded="false">{{ nome_usuario }}</button>
-      <div class="dropdown" id="userDropdown">
-        <a href="/perfil">Meu Perfil</a>
-        <a href="/meus-chamados">Meus Chamados</a>
-        <a href="/logout">Sair</a>
-      </div>
-    </div>
-  </nav> <!-- Dropdown do usuário -->
+  {% include 'navbar.html' %}
 
   <div class="dashboard">
     <h2>Olá, Bem-vindo, {{ nome_usuario }}!</h2>
@@ -35,19 +17,19 @@
     <div class="cards">
       <div class="card">
         <h4>Chamados Abertos</h4>
-        <span>15</span>
+        <span>{{ chamados_abertos }}</span>
       </div>
       <div class="card">
         <h4>Chamados em Triagem</h4>
-        <span>15</span>
+        <span>{{ chamados_em_triagem }}</span>
       </div>
       <div class="card">
         <h4>Chamados com Solução IA</h4>
-        <span>15</span>
+        <span>{{ chamados_solucao_ia }}</span>
       </div>
       <div class="card">
         <h4>Chamados Finalizados</h4>
-        <span>15</span>
+        <span>{{ chamados_finalizados }}</span>
       </div>
     </div>
 
@@ -63,25 +45,7 @@
     </footer>
   </div>
 
-  <script>
-    // Toggle dropdown do usuário
-    const userBtn = document.getElementById('userBtn');
-    const userDropdown = document.getElementById('userDropdown');
-
-    userBtn.addEventListener('click', () => {
-      const isExpanded = userBtn.getAttribute('aria-expanded') === 'true';
-      userDropdown.style.display = isExpanded ? 'none' : 'flex';
-      userBtn.setAttribute('aria-expanded', !isExpanded);
-    });
-
-    // Fechar dropdown clicando fora
-    document.addEventListener('click', (e) => {
-      if (!userBtn.contains(e.target) && !userDropdown.contains(e.target)) {
-        userDropdown.style.display = 'none';
-        userBtn.setAttribute('aria-expanded', false);
-      }
-    });
-  </script>
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 
 </body>
 
