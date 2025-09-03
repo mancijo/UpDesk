@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../static/css/verChamado.css">
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../static/js/editUser.js"></script>
+  <script src="../static/js/managUser.js"></script>
 </head>
 
 <body>
@@ -113,7 +113,7 @@
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <form id="formEditarUsuario" method="post" action="/editar">
+          <form id="formEditarUsuario" method="post" action="/editar_usuario">
             <div class="modal-header">
               <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar usuário</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
@@ -121,27 +121,27 @@
             <div class="modal-body">
               <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" required>
+                <input type="text" class="form-control" id="edit-nome" name="nome" required>
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="edit-email" name="email" required>
               </div>
               <div class="mb-3">
                 <label for="telefone" class="form-label">Telefone</label>
-                <input type="text" class="form-control" id="telefone" name="telefone" required>
+                <input type="text" class="form-control" id="edit-telefone" name="telefone" required>
               </div>
               <div class="mb-3">
                 <label for="setor" class="form-label">Setor</label>
-                <input type="text" class="form-control" id="setor" name="setor" required>
+                <input type="text" class="form-control" id="edit-setor" name="setor" required>
               </div>
               <div class="mb-3">
                 <label for="cargo" class="form-label">Cargo</label>
-                <input type="text" class="form-control" id="cargo" name="cargo" required>
+                <input type="text" class="form-control" id="edit-cargo" name="cargo" required>
               </div>
               <div class="mb-3">
                 <label for="senha" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="senha" name="senha" required>
+                <input type="password" class="form-control" id="edit-senha" name="senha" required>
               </div>
             </div>
             <div class="modal-footer">
@@ -151,7 +151,8 @@
           </form>
         </div>
       </div>
-    </div> <!-- Modal Edit Usr -->
+    </div>
+    <!-- Modal Edit Usr -->
 
     <table class="table table-bordered table-striped">
       <thead>
@@ -175,18 +176,23 @@
 
           </td>
           <td class="colAcoes">
-            <button 
-              type="button" 
-              class="btn btn-outline-danger"
+            <button type="button" class="btn btn-outline-danger"
               onclick="abrirModalExcluir('{{ usuario.id }}', '{{ usuario.nome }}', '{{ usuario.email }}')">Excluir
               usuário
             </button>
             <button 
               type="button" 
               class="btn btn-primary editarUsuarioBtn"
-              key="{{usuario.id}}"
-              onclick="openEditUserModal(e)"
+              data-id="{{ usuario.id }}"
+              data-nome="{{ usuario.nome }}"
+              data-email="{{ usuario.email }}"
+              data-telefone="{{ usuario.telefone }}"
+              data-setor="{{ usuario.setor }}"
+              data-cargo="{{ usuario.cargo }}"
+              onclick="openEditUserModal(this)" 
             >Editar usuário</button>
+
+
           </td>
 
         </tr>
@@ -197,7 +203,8 @@
         {% endfor %}
       </tbody>
     </table>
-    <button class="btn btn-secondary btn-sm voltarBtn" onclick="window.location.href='/home'" type="button">Voltar</button>
+    <button class="btn btn-secondary btn-sm voltarBtn" onclick="window.location.href='/home'"
+      type="button">Voltar</button>
 
   </div> <!-- Tabela Usr -->
 
