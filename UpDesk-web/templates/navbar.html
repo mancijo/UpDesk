@@ -37,15 +37,13 @@
                 <font style="vertical-align: inherit;">Monitoramento de chamados</font>
               </font>
             </a>
-          </li>
-
-        </ul>
-        <button class="btn btn-outline-danger" type="submit"><a href="{{ url_for('index') }}"
-            style="text-decoration: none; color: inherit">
-            <font style="vertical-align: inherit;">
-              <font style="vertical-align: inherit;">Sair</font>
-            </font>
-          </a></button>
+          </ul>
+          <div class="d-flex align-items-center">
+            <span class="me-3">Usuário: {{ nome_usuario }}</span>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-danger" style="text-decoration: none; color: inherit;">
+              Sair
+            </a>
+          </div>
       </div>
     </div>
   </nav>
