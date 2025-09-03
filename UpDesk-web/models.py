@@ -28,7 +28,7 @@ class Usuario(db.Model):
     )
 
     def __repr__(self):
-        return f"<Usuario {self.nome} - {self.tipo}>"
+        return f"<Usuario {self.nome} - {self.cargo}>"
 
 # Modelo de Chamado
 class Chamado(db.Model):

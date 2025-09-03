@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify, render_template, session
+from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import urllib.parse
 from models import db, Usuario, Chamado, Interacao
 from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
-import pytest 
-
+import os
+from werkzeug.utils import secure_filename
 
 # Flask
 app = Flask(__name__)
@@ -67,39 +67,56 @@ def home():
         return render_template('login.html', mensagem="Faça login para continuar")
 
     nome_usuario = session.get('usuario_nome')
-    return render_template('home.html', nome_usuario=nome_usuario)
+    chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
+    chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
+    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Solução IA'
+    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Finalizados'
+
+    return render_template('home.html', 
+                           nome_usuario=nome_usuario, 
+                           chamados_abertos=chamados_abertos,
+                           chamados_em_triagem=chamados_em_triagem,
+                           chamados_solucao_ia=chamados_solucao_ia,
+                           chamados_finalizados=chamados_finalizados)
 
 @app.route('/chamado', methods=['GET', 'POST'])
 def chamado():
-    if request.method == 'GET':
-        return render_template('chamado.html')
-    else:
-        data = request.json or request.form
-        if not data:
-            return jsonify({"mensagem": "Dados inválidos"}), 400
+    form = chamadoForm()
+    if 'usuario_nome' not in session:
+        return render_template('login.html', mensagem="Faça login para continuar")
+    nome_usuario = session.get('usuario_nome')
 
-        chamado = Chamado(
-            titulo_Chamado=data.get("titulo"),
-            descricao_Chamado=data.get("descricao"),
-            categoria_Chamado=data.get("categoria"),
-            solicitanteID=data.get("usuario_id"),
-            prioridade_Chamado=data.get("prioridade", "baixa")
+    if form.validate_on_submit():
+        titulo = form.titulo.data
+        descricao = form.descricao.data
+        afetado = form.afetado.data
+        prioridade = form.prioridade.data
+        anexo = form.anexo.data
+
+        filename = None
+        if anexo:
+            filename = secure_filename(anexo.filename)
+            anexo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        novo_chamado = Chamado(
+            titulo_Chamado=titulo,
+            descricao_Chamado=descricao,
+            categoria_Chamado=afetado, # Assuming 'afetado' is the category
+            solicitanteID=session.get('usuario_id'),
+            prioridade_Chamado=prioridade,
+            anexo_Chamado=filename.encode() if filename else None
         )
-        db.session.add(chamado)
+        db.session.add(novo_chamado)
         db.session.commit()
+        return redirect(url_for('ver_chamado'))
 
-        return jsonify({
-            "mensagem": "Chamado registrado com sucesso!",
-            "chamado_id": chamado.chamado_ID
-        }), 201
-    
-
+    return render_template('chamado.html', form=form, nome_usuario=nome_usuario)
 
 @app.route('/ver-chamado')
 def ver_chamado():
     lista_chamados = Chamado.query.all()
     nome_usuario = session.get('usuario_nome', 'Usuário')
-    return render_template('Verchamado.html', chamados=lista_chamados, nome_usuario=nome_usuario)
+    return render_template('verChamado.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
 @app.route('/ger_usuarios')
 def ger_usuarios():
@@ -107,13 +124,13 @@ def ger_usuarios():
     nome_usuario = session.get('usuario_nome', 'Usuário')
     return render_template('ger_usuarios.html', usuarios=lista_usuarios, nome_usuario=nome_usuario)
 
-@app.route('/criar_usuario', methods=['POST'])  
+@app.route('/criar_usuario', methods=['POST'])
 def criar_usuario():
     nome = request.form.get('nome')
     email = request.form.get('email')
     telefone = request.form.get('telefone')
     setor = request.form.get('setor')
-    cargo = request.form.get('cargo')  
+    cargo = request.form.get('cargo')
     senha = request.form.get('senha')
 
     if not all([nome, email, telefone, setor, cargo, senha]):
