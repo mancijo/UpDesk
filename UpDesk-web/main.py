@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = 'chave-secreta'
+app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 # Conexão RDS SQL Server
 params = urllib.parse.quote_plus(
@@ -107,7 +108,7 @@ def chamado():
             solicitanteID=session.get('usuario_id'),
             prioridade_Chamado=prioridade,
             anexo_Chamado=filename.encode() if filename else None
-        )
+        ) # Removed the comma here
         db.session.add(novo_chamado)
         db.session.commit()
         return redirect(url_for('ver_chamado'))
