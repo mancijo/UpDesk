@@ -81,3 +81,29 @@ document.getElementById('formCriarUsuario').addEventListener('submit', async fun
         alert('Erro ao criar usuário!');
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.querySelector('#searchUser input[name="q"]');
+  const tableRows = document.querySelectorAll('table tbody tr');
+
+  searchInput.addEventListener('input', function() {
+    const query = searchInput.value.toLowerCase();
+
+    tableRows.forEach(row => {
+      // Se for a linha "Nenhum usuario encontrado", sempre mostra
+      if (row.querySelector('td[colspan]')) {
+        row.style.display = '';
+        return;
+      }
+      const cells = row.querySelectorAll('td');
+      let found = false;
+      cells.forEach(cell => {
+        if (cell.textContent.toLowerCase().includes(query)) {
+          found = true;
+        }
+      });
+      row.style.display = found ? '' : 'none';
+    });
+  });
+});
