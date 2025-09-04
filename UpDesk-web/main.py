@@ -7,13 +7,13 @@ from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
 import os
 from werkzeug.utils import secure_filename
 
-# Flask
+# Configuração do Flask
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = 'chave-secreta'
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
-# Conexão RDS SQL Server
+# Conexão com o banco de dados SQL Server (RDS)
 params = urllib.parse.quote_plus(
     "Driver={ODBC Driver 17 for SQL Server};"
     "Server=updesk-sql.cfgiaog68n7i.sa-east-1.rds.amazonaws.com,1433;"
@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % par
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-# Rotas
+# Definição das Rotas
 @app.route('/')
 def index():
     if 'usuario_nome' in session:
@@ -69,25 +69,32 @@ def home():
     if 'usuario_nome' not in session:
         return redirect(url_for('index'))
 
-    nome_usuario = session.get('usuario_nome')
-    chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
-    chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
-    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Solução IA'
-    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Finalizados'
-
-    return render_template('home.html', 
-                           nome_usuario=nome_usuario, 
-                           chamados_abertos=chamados_abertos,
-                           chamados_em_triagem=chamados_em_triagem,
-                           chamados_solucao_ia=chamados_solucao_ia,
-                           chamados_finalizados=chamados_finalizados)
+    current_user = {
+        'name': session.get('usuario_nome')
+    }
+    
+    ticket_stats = {
+        'open': Chamado.query.filter_by(status_Chamado='Aberto').count(),
+        'in_triage': Chamado.query.filter_by(status_Chamado='Em Atendimento').count(),
+        'ai_solution': Chamado.query.filter_by(status_Chamado='Resolvido').count(),
+        'finished': Chamado.query.filter_by(status_Chamado='Resolvido').count()
+    }
+    
+    return render_template(
+        'home.html', 
+        user=current_user, 
+        stats=ticket_stats
+    )
 
 @app.route('/chamado', methods=['GET', 'POST'])
 def chamado():
     form = chamadoForm()
     if 'usuario_nome' not in session:
         return render_template('login.html', mensagem="Faça login para continuar")
-    nome_usuario = session.get('usuario_nome')
+    
+    user = {
+        'name': session.get('usuario_nome')
+    }
 
     if form.validate_on_submit():
         titulo = form.titulo.data
@@ -113,19 +120,23 @@ def chamado():
         db.session.commit()
         return redirect(url_for('ver_chamado'))
 
-    return render_template('chamado.html', form=form, nome_usuario=nome_usuario)
+    return render_template('chamado.html', form=form, user=user)
 
 @app.route('/ver-chamado')
 def ver_chamado():
     lista_chamados = Chamado.query.all()
-    nome_usuario = session.get('usuario_nome', 'Usuário')
-    return render_template('verChamado.html', chamados=lista_chamados, nome_usuario=nome_usuario)
+    user = {
+        'name': session.get('usuario_nome', 'Usuário')
+    }
+    return render_template('verChamado.html', chamados=lista_chamados, user=user)
 
 @app.route('/ger_usuarios')
 def ger_usuarios():
     lista_usuarios = Usuario.query.all()
-    nome_usuario = session.get('usuario_nome', 'Usuário')
-    return render_template('ger_usuarios.html', usuarios=lista_usuarios, nome_usuario=nome_usuario)
+    user = {
+        'name': session.get('usuario_nome', 'Usuário')
+    }
+    return render_template('ger_usuarios.html', usuarios=lista_usuarios, user=user)
 
 @app.route('/criar_usuario', methods=['POST'])
 def criar_usuario():
@@ -181,8 +192,10 @@ def editar_usuario(usuario_id):
 @app.route('/triagem')
 def triagem():
     lista_chamados = Chamado.query.all()
-    nome_usuario = session.get('usuario_nome', 'Usuário')
-    return render_template('triagem.html', chamados=lista_chamados, nome_usuario=nome_usuario)
+    user = {
+        'name': session.get('usuario_nome', 'Usuário')
+    }
+    return render_template('triagem.html', chamados=lista_chamados, user=user)
 
 @app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
 def excluir_usuario(usuario_id):
@@ -192,6 +205,35 @@ def excluir_usuario(usuario_id):
     db.session.delete(usuario)
     db.session.commit()
     return jsonify({'mensagem': 'Usuário excluído com sucesso!'})
+
+@app.route('/perfil')
+def perfil():
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+    
+    usuario = Usuario.query.get(session['usuario_id'])
+    if not usuario:
+        return redirect(url_for('index'))
+
+    # For consistency, we pass a dictionary.
+    user = {
+        'name': usuario.nome,
+        'email': usuario.email,
+        'cargo': usuario.cargo,
+        'setor': usuario.setor,
+        'telefone': usuario.telefone
+    }
+    return render_template('perfil.html', user=user)
+
+@app.route('/meus-chamados')
+def meus_chamados():
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+    
+    # Placeholder for user's tickets
+    # You would typically query Chamado where solicitanteID is session['usuario_id']
+    return "<h1>Meus Chamados (Página em construção)</h1>"
+
 
 
 

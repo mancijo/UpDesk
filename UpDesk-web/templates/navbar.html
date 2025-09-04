@@ -1,22 +1,22 @@
 <nav class="navbar">
-  <link rel="stylesheet" href="/static/css/navbar.css">
-    <div class="logo">UpDesk</div>
-    <button class="hamburger" id="hamburger">&#9776;</button>
-    <div class="nav-menu" id="nav-menu">
-        <div class="nav-links">
-          <a href="/home">Home</a>
-          <a href="/chamado">Chamados</a>
-          <a href="/ger-usuarios">Usuários</a>
-          <a href="/triagem">Triagem</a>
-        </div>
+  <div class="container-fluid">
+    <div class="nav-links d-none d-lg-flex">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+        <a class="nav-link" href="{{ url_for('chamado') }}">Chamados</a>
+        <a class="nav-link" href="{{ url_for('ger_usuarios') }}">Usuários</a>
+        <a class="nav-link" href="{{ url_for('triagem') }}">Triagem</a>
     </div>
-
-    <div class="user-menu">
-      <button class="user-btn" id="userBtn" aria-haspopup="true" aria-expanded="false">{{ nome_usuario }}</button>
-      <div class="dropdown" id="userDropdown">
-        <a href="/perfil">Meu Perfil</a>
-        <a href="/meus-chamados">Meus Chamados</a>
-        <a href="/logout">Sair</a>
-      </div>
+    <a class="navbar-brand logo" href="{{ url_for('home') }}">UpDesk</a>
+    <div class="dropdown">
+      <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ user.name }}
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('meus_chamados') }}">Meus Chamados</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
