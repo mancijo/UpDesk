@@ -1,52 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard Supervisor - UpDesk</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+    <meta charset="UTF-8">
+    <title>Dashboard - UpDesk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS is still useful for other components and utilities if needed -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
 </head>
-
 <body>
-  <div class="w-full h-full blur-sm"></div>
-  {% include 'navbar.html' %}
 
-  <div class="dashboard">
-    <h2>Olá, Bem-vindo, {{ nome_usuario }}!</h2>
+    {% include 'navbar.html' %}
 
-    <div class="cards">
-      <div class="card">
-        <h4>Chamados Abertos</h4>
-        <span>{{ chamados_abertos }}</span>
-      </div>
-      <div class="card">
-        <h4>Chamados em Triagem</h4>
-        <span>{{ chamados_em_triagem }}</span>
-      </div>
-      <div class="card">
-        <h4>Chamados com Solução IA</h4>
-        <span>{{ chamados_solucao_ia }}</span>
-      </div>
-      <div class="card">
-        <h4>Chamados Finalizados</h4>
-        <span>{{ chamados_finalizados }}</span>
-      </div>
+    <div class="dashboard">
+        <h2>Olá, Bem-vindo, {{ user.name }}!</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h4>Chamados Abertos</h4>
+                <span>{{ stats.open }}</span>
+            </div>
+            <div class="card">
+                <h4>Chamados em Triagem</h4>
+                <span>{{ stats.in_triage }}</span>
+            </div>
+            <div class="card">
+                <h4>Chamados com Solução IA</h4>
+                <span>{{ stats.ai_solution }}</span>
+            </div>
+            <div class="card">
+                <h4>Chamados Finalizados</h4>
+                <span>{{ stats.finished }}</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="{{ url_for('chamado') }}" class="action-btn">Abrir Chamado</a>
+            <a href="{{ url_for('ver_chamado') }}" class="action-btn">Monitoramento de Chamados</a>
+            <a href="{{ url_for('ger_usuarios') }}" class="action-btn">Gerenciar Usuário</a>
+            <a href="{{ url_for('triagem') }}" class="action-btn">Painel da Triagem</a>
+        </div>
+
+        <footer>
+            UpDesk - Sistema de Gerenciamento de Chamados com IA
+        </footer>
     </div>
 
-    <div class="actions">
-      <button class="action-btn" onclick="location.href='/chamado'">Abrir Chamado</button>
-      <button class="action-btn" onclick="location.href='/ver-chamado'">Monitoramento de Chamados</button>
-      <button class="action-btn" onclick="location.href='/ger_usuarios'">Gerenciar Usuário</button>
-      <button class="action-btn" onclick="location.href='/triagem'">Painel da Triagem</button>
-    </div>
-
-    <footer>
-      UpDesk - Sistema de Gerenciamento de Chamados com IA
-    </footer>
-  </div>
-
-  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous"></script>
 
 </body>
-
 </html>
