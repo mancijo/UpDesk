@@ -15,42 +15,43 @@
         <h2 class="titulo">Abertura do chamado</h2>
 
         <form action="{{ url_for('chamado') }}" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
             <div class="form-group">
-                <label for="titulo">Titulo/Categorização do chamado</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Digite o titulo do chamado" required>
+                {{ form.titulo.label(for="titulo") }}
+                {{ form.titulo(id="titulo", placeholder="Digite o titulo do chamado", required=true) }}
             </div>
 
             <div class="form-group">
-                <label for="descricao">Descrição do chamado</label>
-                <textarea id="descricao" name="descricao" placeholder="Digite a descrição do chamado" rows="4" required></textarea>
+                {{ form.descricao.label(for="descricao") }}
+                {{ form.descricao(id="descricao", placeholder="Digite a descrição do chamado", rows=4, required=true) }}
             </div>
 
             <div class="form-group">
-                <label for="afetado">Quem esse chamado afeta?</label>
-                <select id="afetado" name="afetado">
-                    <option value="" disabled selected>selecione uma opção</option>
-                    <option value="Eu">Somente eu</option>
-                    <option value="Meu setor">Meu setor</option>
-                    <option value="Empresa ao todo">Empresa ao todo</option>
-                </select>
+                {{ form.afetado.label(for="afetado") }}
+                {{ form.afetado(id="afetado") }}
+            </div>
+
+            <div class="form-group" style="display: none;">
+                {{ form.prioridade.label }}
+                {{ form.prioridade(value='Media') }}
             </div>
 
             <div class="form-group">
-                <label for="anexo">Adicionar Anexo</label>
+                {{ form.anexo.label(for="anexo") }}
                 <div class="file-input-wrapper">
-                    <input type="file" id="anexo" name="anexo">
+                    {{ form.anexo(id="anexo") }}
                     <button type="button" class="btn-browse">Procurar</button>
                 </div>
             </div>
 
             <div class="form-buttons">
-                <button type="submit" class="btn-submit">Buscar solução com IA</button>
+                {{ form.submit(class="btn-submit") }}
                 <a href="/home" class="btn-back">Voltar</a>
             </div>
         </form>
     </div>
 
-    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chamado.js') }}"></script>
 </body>
 
 </html>
