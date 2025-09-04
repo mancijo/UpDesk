@@ -27,6 +27,8 @@ db.init_app(app)
 # Rotas
 @app.route('/')
 def index():
+    if 'usuario_nome' in session:
+        return redirect(url_for('home'))
     return render_template('login.html')
 
 
@@ -58,13 +60,13 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return render_template('login.html', mensagem="Você saiu com sucesso do sistema.")
+    return redirect(url_for('index'))
 
 
 @app.route('/home')
 def home():
     if 'usuario_nome' not in session:
-        return render_template('login.html', mensagem="Faça login para continuar")
+        return redirect(url_for('index'))
 
     nome_usuario = session.get('usuario_nome')
     chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
