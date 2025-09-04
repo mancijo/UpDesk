@@ -25,7 +25,7 @@ class EditarUsuarioForm(FlaskForm):
 class chamadoForm(FlaskForm):
     titulo = StringField('Titulo', validators=[DataRequired(), Length(min=5, max=100)])
     descricao = StringField('Descrição', validators=[DataRequired(), Length(min=10)])
-    afetado = SelectField('Quem esse chamado afeta', choices=[], validators=[DataRequired()])
+    afetado = SelectField('Quem esse chamado afeta', choices=[('Eu', 'Somente eu'), ('Meu setor', 'Meu setor'), ('Empresa ao todo', 'Empresa ao todo')], validators=[DataRequired()])
     prioridade = StringField('Prioridade', validators=[DataRequired(), Length(min=3, max=20)])
     anexo = FileField('Adicionar Anexo', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'xls', 'xlsx'])])
     submit = SubmitField('Buscar solução com a IA')
