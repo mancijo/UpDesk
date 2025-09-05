@@ -1,0 +1,62 @@
+/* ====== Navbar ====== */
+nav.navbar .container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 15px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  min-height: 70px;
+}
+
+.navbar-brand.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2B4C7E !important;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: #2B4C7E;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (min-width: 992px) {
+    .navbar-brand.logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Other styles for dropdown and button remain the same */
+.dropdown-menu .dropdown-item {
+    padding: 12px 20px;
+    color: #2B4C7E;
+    font-weight: 500;
+}
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #2B4C7E;
+    color: white;
+}
+.navbar .dropdown .btn-outline-secondary {
+    border-color: #2B4C7E;
+    color: #2B4C7E;
+    border-radius: 12px;
+}
+.navbar .dropdown .btn-outline-secondary:hover,
+.navbar .dropdown .btn-outline-secondary:focus {
+    background-color: #2B4C7E;
+    color: white;
+}
