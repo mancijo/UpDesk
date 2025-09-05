@@ -16,7 +16,7 @@
     <div class="form-container dashboard">
         <h2 class="titulo">Abertura do chamado</h2>
 
-        <form action="{{ url_for('chamado') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ form_action or url_for('chamado') }}" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.titulo.label(for="titulo") }}
@@ -35,7 +35,7 @@
 
             <div class="form-group" style="display: none;">
                 {{ form.prioridade.label }}
-                {{ form.prioridade(value='Media') }}
+                {{ form.prioridade(value='Baixa') }}
             </div>
 
             <div class="form-group">

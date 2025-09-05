@@ -6,20 +6,59 @@ from models import db, Usuario, Chamado, Interacao
 from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
 import os
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
+import google.generativeai as genai
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+# --- Integração com a API de IA (Gemini) ---
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+if not gemini_api_key:
+    print("\nERRO CRÍTICO: A variável de ambiente 'GEMINI_API_KEY' não foi encontrada.")
+    print("Por favor, adicione a linha GEMINI_API_KEY='sua_chave_aqui' ao seu arquivo .env e reinicie o servidor.\n")
+else:
+    try:
+        genai.configure(api_key=gemini_api_key)
+    except Exception as e:
+        print(f"Erro ao configurar a API do Gemini. Verifique sua GEMINI_API_KEY no arquivo .env: {e}")
+
+def buscar_solucao_com_ia(titulo, descricao):
+    """
+    Busca uma solução para um problema técnico usando a API do Google Gemini.
+    """
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        prompt = f"""Aja como um especialista de suporte técnico de TI (Nível 1). Um usuário está relatando o seguinte problema:
+        - Título do Chamado: "{titulo}"
+        - Descrição do Problema: "{descricao}"
+        Forneça uma solução clara e em formato de passo a passo para um usuário final. A resposta deve ser direta e fácil de entender. Se não tiver certeza, sugira coletar mais informações que poderiam ajudar no diagnóstico."""
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        print(f"Erro ao contatar a API do Gemini: {e}")
+        return "Não foi possível obter uma sugestão da IA no momento. Por favor, prossiga com a abertura do chamado."
+# --------------------------------
 
 # Configuração do Flask
 app = Flask(__name__)
 CORS(app)
-app.config['SECRET_KEY'] = 'chave-secreta'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'uma-chave-secreta-padrao')
 app.config['UPLOAD_FOLDER'] = './static/uploads'
 
-# Conexão com o banco de dados SQL Server (RDS)
+# Conexão com o banco de dados usando variáveis de ambiente
+db_driver = os.getenv('DB_DRIVER')
+db_server = os.getenv('DB_SERVER')
+db_database = os.getenv('DB_DATABASE')
+db_uid = os.getenv('DB_UID')
+db_pwd = os.getenv('DB_PWD')
+
 params = urllib.parse.quote_plus(
-    "Driver={ODBC Driver 17 for SQL Server};"
-    "Server=updesk-sql.cfgiaog68n7i.sa-east-1.rds.amazonaws.com,1433;"
-    "Database=UpDesk;"
-    "UID=adminsql;"
-    "PWD=Skatenaveia123*;"
+    f"Driver={{{db_driver}}};"
+    f"Server={db_server};"
+    f"Database={db_database};"
+    f"UID={db_uid};"
+    f"PWD={{{db_pwd}}};"
 )
 app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,8 +67,6 @@ db.init_app(app)
 # Definição das Rotas
 @app.route('/')
 def index():
-    if 'usuario_nome' in session:
-        return redirect(url_for('home'))
     return render_template('login.html')
 
 
@@ -96,31 +133,55 @@ def chamado():
         'name': session.get('usuario_nome')
     }
 
+    return render_template('chamado.html', form=form, user=user, form_action=url_for('buscar_solucao_ia'))
+
+@app.route('/buscar_solucao_ia', methods=['POST'])
+def buscar_solucao_ia():
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+    
+    form = chamadoForm()
     if form.validate_on_submit():
-        titulo = form.titulo.data
-        descricao = form.descricao.data
-        afetado = form.afetado.data
-        prioridade = form.prioridade.data
-        anexo = form.anexo.data
+        # Simula a chamada da IA
+        solucao_sugerida = buscar_solucao_com_ia(form.titulo.data, form.descricao.data)
 
-        filename = None
-        if anexo:
-            filename = secure_filename(anexo.filename)
-            anexo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # Armazena os dados do chamado e a solução na sessão
+        session['chamado_temporario'] = {
+            'titulo': form.titulo.data,
+            'descricao': form.descricao.data,
+            'afetado': form.afetado.data,
+            'prioridade': form.prioridade.data,
+            'solucao_sugerida': solucao_sugerida
+        }
+        user = {
+            'name': session.get('usuario_nome')
+        }
+        return render_template('solucao_ia.html', solucao=solucao_sugerida, user=user)
+    
+    # Se o formulário não for válido, redireciona de volta
+    # e exibe os erros de validação.
+    user = {
+        'name': session.get('usuario_nome')
+    }
+    return render_template('chamado.html', form=form, user=user, form_action=url_for('buscar_solucao_ia'))
 
-        novo_chamado = Chamado(
-            titulo_Chamado=titulo,
-            descricao_Chamado=descricao,
-            categoria_Chamado=afetado, # Assuming 'afetado' is the category
-            solicitanteID=session.get('usuario_id'),
-            prioridade_Chamado=prioridade,
-            anexo_Chamado=filename.encode() if filename else None
-        ) # Removed the comma here
-        db.session.add(novo_chamado)
-        db.session.commit()
-        return redirect(url_for('ver_chamado'))
+@app.route('/confirmar_abertura_chamado', methods=['POST'])
+def confirmar_abertura_chamado():
+    if 'usuario_id' not in session or 'chamado_temporario' not in session:
+        return redirect(url_for('index'))
 
-    return render_template('chamado.html', form=form, user=user)
+    dados_chamado = session.pop('chamado_temporario', None)
+    novo_chamado = Chamado(
+        titulo_Chamado=dados_chamado['titulo'],
+        descricao_Chamado=dados_chamado['descricao'],
+        categoria_Chamado=dados_chamado['afetado'],
+        solicitanteID=session['usuario_id'],
+        prioridade_Chamado=dados_chamado['prioridade'],
+        solucaoSugerida=dados_chamado['solucao_sugerida']
+    )
+    db.session.add(novo_chamado)
+    db.session.commit()
+    return redirect(url_for('ver_chamado'))
 
 @app.route('/ver-chamado')
 def ver_chamado():
@@ -215,7 +276,7 @@ def perfil():
     if not usuario:
         return redirect(url_for('index'))
 
-    # For consistency, we pass a dictionary.
+    
     user = {
         'name': usuario.nome,
         'email': usuario.email,
@@ -230,11 +291,7 @@ def meus_chamados():
     if 'usuario_id' not in session:
         return redirect(url_for('index'))
     
-    # Placeholder for user's tickets
-    # You would typically query Chamado where solicitanteID is session['usuario_id']
     return "<h1>Meus Chamados (Página em construção)</h1>"
-
-
 
 
 if __name__ == '__main__':
