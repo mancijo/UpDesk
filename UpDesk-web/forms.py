@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
+from flask_wtf.file import FileField, FileAllowed
 
 class CriarUsuarioForm(FlaskForm):
     nome = StringField('Nome de Usuário', validators=[DataRequired(), Length(min=3, max=25)])
@@ -9,7 +10,7 @@ class CriarUsuarioForm(FlaskForm):
     setor = StringField('Setor', validators=[DataRequired(), Length(min=2, max=50)])
     cargo = StringField('cargo', validators=[DataRequired(), Length(min=2, max=50)])
     senha = PasswordField('Senha', validators=[DataRequired(), Length(min=6)])
-    confirma_senha = PasswordField('Confirme a Senha', validators=[DataRequired(), EqualTo('password')])
+    confirma_senha = PasswordField('Confirme a Senha', validators=[DataRequired(), EqualTo('senha')])
     submit = SubmitField('Cadastrar')
 
 class EditarUsuarioForm(FlaskForm):
@@ -24,8 +25,9 @@ class EditarUsuarioForm(FlaskForm):
 class chamadoForm(FlaskForm):
     titulo = StringField('Titulo', validators=[DataRequired(), Length(min=5, max=100)])
     descricao = StringField('Descrição', validators=[DataRequired(), Length(min=10)])
-    afetado = SelectField('Quem esse chamado afeta', choices=[], validators=[DataRequired()])
+    afetado = SelectField('Quem esse chamado afeta', choices=[('Eu', 'Somente eu'), ('Meu setor', 'Meu setor'), ('Empresa ao todo', 'Empresa ao todo')], validators=[DataRequired()])
     prioridade = StringField('Prioridade', validators=[DataRequired(), Length(min=3, max=20)])
+    anexo = FileField('Adicionar Anexo', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'xls', 'xlsx'])])
     submit = SubmitField('Buscar solução com a IA')
 
 class LoginForm(FlaskForm):
@@ -33,8 +35,7 @@ class LoginForm(FlaskForm):
     senha = PasswordField('Senha', validators=[DataRequired()])
     Submit =  SubmitField('Login')
 
-senha = PasswordField('Senha', validators=[DataRequired(), Length(min=6)])
-confirma_senha = PasswordField('Confirme a Senha', validators=[DataRequired(), EqualTo('senha')])
+
     
 
 
