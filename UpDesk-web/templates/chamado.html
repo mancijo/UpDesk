@@ -4,155 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Abrir Chamado - UpDesk</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: "Abel", sans-serif;
-            background-color: #DFE2E8 !important;
-            padding: 40px;
-
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 30px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px #aaa;
-        }
-
-        input,
-        textarea,
-        select,
-        button {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            background: #DFE3EA;
-        }
-
-        button {
-            display: inline-block;
-            height: 40px;
-            width: 100%;
-            border-radius: 50px !important;
-            border: 1px solid #000;
-            background: #2B4C7E;
-            color: white;
-            cursor: pointer;
-            margin: 10px 0;
-        }
-
-        button:hover {
-            background-color: #1a3d6b;
-        }
-
-        .voltar {
-            text-align: center;
-            text-decoration: none;
-            display: block;
-            background: #DFE2E8;
-            color: #000;
-            border: 1px solid #000;
-            border-radius: 50px;
-            padding: 10px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .voltar:hover {
-            background-color: #c0c4cc;
-
-        }
-
-        #mensagem {
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .titulo {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #000000;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chamado.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
 </head>
 
 <body>
     {% include 'navbar.html' %}
 
-    <div class="form-container">
-        <h2 class="titulo">Abertura do Chamado</h2>
+    <div class="form-container dashboard">
+        <h2 class="titulo">Abertura do chamado</h2>
 
-        <p>Título / Categorização do chamado</p>
-        <input type="text" id="titulo" placeholder="Título" required>
+        <form action="{{ url_for('chamado') }}" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.titulo.label(for="titulo") }}
+                {{ form.titulo(id="titulo", placeholder="Digite o titulo do chamado", required=true) }}
+            </div>
 
-        <p>Descrição do chamado</p>
-        <textarea id="descricao" placeholder="Descreva o problema..." rows="4" required></textarea>
+            <div class="form-group">
+                {{ form.descricao.label(for="descricao") }}
+                {{ form.descricao(id="descricao", placeholder="Digite a descrição do chamado", rows=4, required=true) }}
+            </div>
 
-        <p>Quem esse chamado afeta?</p>
-        <select id="categoria">
-            <option value="Eu">Somente eu</option>
-            <option value="Meu setor">Meu setor</option>
-            <option value="Empresa ao todo">Empresa ao todo</option>
-        </select>
+            <div class="form-group">
+                {{ form.afetado.label(for="afetado") }}
+                {{ form.afetado(id="afetado") }}
+            </div>
 
-        <input type="number" id="usuario_id" placeholder="ID do usuário" required>
+            <div class="form-group" style="display: none;">
+                {{ form.prioridade.label }}
+                {{ form.prioridade(value='Media') }}
+            </div>
 
-        <button type="button" onclick="buscarSolucaoIA(event)">Buscar Solução com IA</button>
+            <div class="form-group">
+                {{ form.anexo.label(for="anexo") }}
+                <div class="file-input-wrapper">
+                    {{ form.anexo(id="anexo") }}
+                    <button type="button" class="btn-browse">Procurar</button>
+                </div>
+            </div>
 
-        <a href="/home" class="voltar">Voltar</a>
-
-        <p id="mensagem"></p>
+            <div class="form-buttons">
+                {{ form.submit(class="btn-submit") }}
+                <a href="/home" class="btn-back">Voltar</a>
+            </div>
+        </form>
     </div>
 
-    <script>
-        async function buscarSolucaoIA(event) {
-            if (event) event.preventDefault();
-            const titulo = document.getElementById('titulo').value;
-            const descricao = document.getElementById('descricao').value;
-            const categoria = document.getElementById('categoria').value;
-            const usuario_id = parseInt(document.getElementById('usuario_id').value, 10);
-            const mensagem = document.getElementById('mensagem');
-
-            const chamado = {
-                titulo,
-                descricao,
-                categoria,
-                usuario_id
-            };
-
-            const resposta = await fetch("http://localhost:5000/chamado", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(chamado)
-            });
-
-            const dados = await resposta.json();
-
-            if (resposta.ok) {
-                mensagem.style.color = "green";
-                mensagem.innerText = "Chamado aberto com sucesso!";
-                // Limpar os campos
-                document.getElementById('titulo').value = '';
-                document.getElementById('descricao').value = '';
-                document.getElementById('categoria').value = 'Eu';
-                document.getElementById('usuario_id').value = '';
-            } else {
-                mensagem.style.color = "red";
-                mensagem.innerText = dados.mensagem || "Erro ao abrir chamado.";
-            }
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/chamado.js') }}"></script>
 </body>
 
 </html>
