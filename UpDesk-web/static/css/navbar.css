@@ -1,4 +1,7 @@
-/* ====== Navbar ====== */
+.navbar {
+    height: 70px;
+}
+
 nav.navbar .container-fluid {
   display: flex;
   justify-content: space-between;
