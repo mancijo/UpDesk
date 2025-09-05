@@ -3,7 +3,7 @@ body {
 }
 
 .card {
-    padding: 10px 40px;
+    padding: 40px 40px;
 }
 
 .voltarBtn {
@@ -33,3 +33,5 @@ h2 {
 .editarUsuarioBtn:hover {
     background-color: #2B4C7E;
 }
+
+/* Inline styles from verChamado.html */
