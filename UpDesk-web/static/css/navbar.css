@@ -1,62 +1,105 @@
 /* ====== Navbar ====== */
-nav.navbar .container-fluid {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 15px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  z-index: 1000;
-  min-height: 70px;
-}
+    nav.navbar {
+      background-color: #ffffff;
+      color: #2B4C7E;
+      padding: 15px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Changed from flex-start */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      box-sizing: border-box;
+    }
 
-.navbar-brand.logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: #2B4C7E !important;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-}
-
-.nav-links a {
-  color: #2B4C7E;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-@media (min-width: 992px) {
-    .navbar-brand.logo {
+    .logo {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+        font-size: 22px;
+        font-weight: bold;
+        color: #2B4C7E;
     }
-}
 
-/* Other styles for dropdown and button remain the same */
-.dropdown-menu .dropdown-item {
-    padding: 12px 20px;
-    color: #2B4C7E;
-    font-weight: 500;
-}
-.dropdown-menu .dropdown-item:hover,
-.dropdown-menu .dropdown-item:focus {
-    background-color: #2B4C7E;
-    color: white;
-}
-.navbar .dropdown .btn-outline-secondary {
-    border-color: #2B4C7E;
-    color: #2B4C7E;
-    border-radius: 12px;
-}
-.navbar .dropdown .btn-outline-secondary:hover,
-.navbar .dropdown .btn-outline-secondary:focus {
-    background-color: #2B4C7E;
-    color: white;
-}
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #2B4C7E;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s, border-bottom 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #1f3960;
+      border-bottom: 2px solid #1f3960;
+    }
+
+    /* ====== Hamburger Menu ====== */
+    .hamburger {
+        display: none;
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: #2B4C7E;
+        cursor: pointer;
+    }
+
+     /* ====== Dropdown do usuário ====== */
+    .user-menu {
+      position: relative;
+    }
+
+     .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: white;
+      border: 1px solid #2B4C7E;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      min-width: 160px;
+      z-index: 1000;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .dropdown a {
+      padding: 12px 20px;
+      color: #2B4C7E;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+
+    .dropdown a:hover {
+      background-color: #2B4C7E;
+      color: white;
+    }
+
+    /* ====== Botão do usuário ====== */
+
+    .user-btn {
+      background-color: white;
+      border: 1px solid #2B4C7E;
+      border-radius: 12px;
+      padding: 8px 16px;
+      color: #2B4C7E;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .user-btn:hover {
+      background-color: #2B4C7E;
+      color: white;
+    }
