@@ -34,4 +34,34 @@ h2 {
     background-color: #2B4C7E;
 }
 
-/* Inline styles from verChamado.html */
+.tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem; 
+    flex-wrap: wrap; 
+}
+
+/* Responsividade para ocultar colunas em telas menores que 992px */
+@media (max-width: 992px) {
+    th.col-id,
+    td.col-id,
+    th.col-cargo,
+    td.col-cargo,
+    th.col-status,
+    td.col-status {
+        display: none !important;
+    }
+}
+@media (max-width: 600px) {
+    th.col-email,
+    td.col-email {
+        display: none !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .tools {
+        flex-direction: column;
+    }
+}
