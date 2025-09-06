@@ -16,10 +16,10 @@ class CriarUsuarioForm(FlaskForm):
 class EditarUsuarioForm(FlaskForm):
     nome = StringField('nome', validators=[DataRequired(), Length(min=3, max=25)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    telefone = StringField('Telefone', validators=[DataRequired(), Length(min=10, max=15)])
+    telefone = StringField('Telefone', validators=[Length(min=2, max=15)])
     setor = StringField('Setor', validators=[DataRequired(), Length(min=2, max=50)])
     cargo = StringField('cargo', validators=[DataRequired(), Length(min=2, max=50)])
-    senha = PasswordField('Senha', validators=[DataRequired(), Length(min=6)])
+    senha = PasswordField('Nova Senha (deixe em branco para não alterar)', validators=[Length(min=6)])
     submit = SubmitField('Editar')
 
 class chamadoForm(FlaskForm):
@@ -37,5 +37,3 @@ class LoginForm(FlaskForm):
 
 
     
-
-
