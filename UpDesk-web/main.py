@@ -222,28 +222,27 @@ def criar_usuario():
 
 @app.route('/editar_usuario/<int:usuario_id>', methods=['POST'])
 def editar_usuario(usuario_id):
-    usuario = Usuario.query.get(usuario_id)
-    if not usuario:
-        return jsonify({'mensagem': 'Usuário não encontrado'}), 404
-    
-    nome = request.form.get('nome')
-    email = request.form.get('email')
-    telefone = request.form.get('telefone')
-    setor = request.form.get('setor')
-    cargo = request.form.get('cargo')
-    senha =  request.form.get('senha')
-    if not all([nome, email, telefone, setor, cargo, senha]):
-        return jsonify({"mensagem": "Dados inválidos"}), 400
-    
-    usuario.nome = nome
-    usuario.email = email
-    usuario.telefone = telefone
-    usuario.setor = setor
-    usuario.cargo = cargo
-    usuario.senha = senha
+    usuario = Usuario.query.get_or_404(usuario_id)
+    form = EditarUsuarioForm()
 
-    db.session.commit()
-    return jsonify({'mensagem': 'Usuário atualizado com sucesso!'})
+    # O campo de senha não é obrigatório na edição, a menos que se queira alterar.
+    # Se o campo senha estiver vazio, removemos o validador para não dar erro.
+    if not form.senha.data:
+        form.senha.validators = []
+
+    if form.validate_on_submit():
+        usuario.nome = form.nome.data
+        usuario.email = form.email.data
+        usuario.telefone = form.telefone.data
+        usuario.setor = form.setor.data
+        usuario.cargo = form.cargo.data
+        if form.senha.data: # Só atualiza a senha se uma nova for fornecida
+            usuario.senha = form.senha.data # Lembre-se de hashear a senha!
+        db.session.commit()
+        return jsonify({'mensagem': 'Usuário atualizado com sucesso!'}), 200
+
+    erros = {campo: erro[0] for campo, erro in form.errors.items()}
+    return jsonify({"mensagem": "Dados inválidos", "erros": erros}), 400
 
 
 
