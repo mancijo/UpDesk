@@ -1,6 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import pytz
 
+def get_sao_paulo_time():
+    """
+    Retorna a data e hora atuais no fuso horário de São Paulo.
+    """
+    sao_paulo_tz = pytz.timezone("America/Sao_Paulo")
+    return datetime.now(sao_paulo_tz)
 db = SQLAlchemy()
 
 # Modelo de Usuário
@@ -45,7 +52,7 @@ class Chamado(db.Model):
         db.String(20),
         default="Aberto"
     )  # Aberto, Em Atendimento, Resolvido, Transferido, Agendado
-    dataAbertura = db.Column(db.DateTime, default=datetime.utcnow)
+    dataAbertura = db.Column(db.DateTime, default=get_sao_paulo_time)
     dataUltimaModificacao = db.Column(db.DateTime)
     solucaoSugerida = db.Column(db.String(255))
     solucaoAplicada = db.Column(db.String(255))
@@ -75,7 +82,7 @@ class Interacao(db.Model):
     chamado_id = db.Column(db.Integer, db.ForeignKey("Chamado.chamado_ID"), nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey("Usuario.id"), nullable=False)
     mensagem = db.Column(db.Text, nullable=False)
-    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    data_criacao = db.Column(db.DateTime, default=get_sao_paulo_time)
 
     chamado = db.relationship("Chamado")
     usuario = db.relationship("Usuario")
