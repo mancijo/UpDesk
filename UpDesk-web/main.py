@@ -194,34 +194,31 @@ def ver_chamado():
 @app.route('/ger_usuarios')
 def ger_usuarios():
     lista_usuarios = Usuario.query.all()
+    form_criar = CriarUsuarioForm()
     user = {
         'name': session.get('usuario_nome', 'Usuário')
     }
-    return render_template('ger_usuarios.html', usuarios=lista_usuarios, user=user)
+    return render_template('ger_usuarios.html', usuarios=lista_usuarios, user=user, form_criar=form_criar)
 
 @app.route('/criar_usuario', methods=['POST'])
 def criar_usuario():
-    nome = request.form.get('nome')
-    email = request.form.get('email')
-    telefone = request.form.get('telefone')
-    setor = request.form.get('setor')
-    cargo = request.form.get('cargo')
-    senha = request.form.get('senha')
-
-    if not all([nome, email, telefone, setor, cargo, senha]):
-        return jsonify({"mensagem": "Dados inválidos"}), 400
-
-    novo_usuario = Usuario(
-        nome=nome,
-        email=email,
-        telefone=telefone,
-        setor=setor,
-        cargo=cargo,
-        senha=senha
-    )
-    db.session.add(novo_usuario)
-    db.session.commit()
-    return jsonify({"mensagem": "Usuário criado com sucesso!"}), 201
+    form = CriarUsuarioForm()
+    if form.validate_on_submit():
+        novo_usuario = Usuario(
+            nome=form.nome.data,
+            email=form.email.data,
+            telefone=form.telefone.data,
+            setor=form.setor.data,
+            cargo=form.cargo.data,
+            senha=form.senha.data # Lembre-se de hashear a senha em produção!
+        )
+        db.session.add(novo_usuario)
+        db.session.commit()
+        return jsonify({"mensagem": "Usuário criado com sucesso!"}), 201
+    
+    # Coleta os erros de validação para retornar no JSON
+    erros = {campo: erro[0] for campo, erro in form.errors.items()}
+    return jsonify({"mensagem": "Dados inválidos", "erros": erros}), 400
 
 @app.route('/editar_usuario/<int:usuario_id>', methods=['POST'])
 def editar_usuario(usuario_id):
