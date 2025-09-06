@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\UpDesk.csproj": {}
+    "C:\\Users\\TeonDesk\\Desktop\\UpDesk\\UpDesk_C#\\UpDesk.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\UpDesk.csproj": {
+    "C:\\Users\\TeonDesk\\Desktop\\UpDesk\\UpDesk_C#\\UpDesk.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\UpDesk.csproj",
+        "projectUniqueName": "C:\\Users\\TeonDesk\\Desktop\\UpDesk\\UpDesk_C#\\UpDesk.csproj",
         "projectName": "UpDesk",
-        "projectPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\UpDesk.csproj",
-        "packagesPath": "C:\\Users\\Mateus Teodoro\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk_C#\\obj\\",
+        "projectPath": "C:\\Users\\TeonDesk\\Desktop\\UpDesk\\UpDesk_C#\\UpDesk.csproj",
+        "packagesPath": "C:\\Users\\TeonDesk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TeonDesk\\Desktop\\UpDesk\\UpDesk_C#\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Mateus Teodoro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TeonDesk\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
