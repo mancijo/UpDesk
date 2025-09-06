@@ -54,30 +54,82 @@ function abrirModalExcluir(id, nome, email) {
     });
 }
 
-document.getElementById('formCriarUsuario').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const form = e.target;
-    const data = new FormData(form);
+document.addEventListener('DOMContentLoaded', function() {
+  const formEditarUsuario = document.getElementById('formEditarUsuario');
+  if (formEditarUsuario) {
+    formEditarUsuario.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const usuarioId = form.getAttribute('action').split('/').pop();
 
-    const response = await fetch(form.action, {
+      const response = await fetch(form.action, {
         method: 'POST',
         body: data
-    });
+      });
 
-    if (response.ok) {
-        // Fecha o modal de criar usuário, se estiver usando
+      if (response.ok) {
+        // Fecha o modal de edição
+        var modalEditar = bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario'));
+        if (modalEditar) modalEditar.hide();
+
+        // Recarrega a página para atualizar a lista
+        window.location.reload();
+      } else {
+        alert('Erro ao editar usuário!');
+      }
+    });
+  }
+
+  // Botão de criar usuário
+  const formCriarUsuario = document.getElementById('formCriarUsuario');
+  if (formCriarUsuario) {
+    formCriarUsuario.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data
+      });
+
+      if (response.ok) {
         var modalCriar = bootstrap.Modal.getInstance(document.getElementById('modalCriarUsuario'));
         if (modalCriar) modalCriar.hide();
 
-        // Mostra o modal de sucesso
         var modalSucesso = new bootstrap.Modal(document.getElementById('modalSucesso'));
         modalSucesso.show();
 
-        // Opcional: recarrega a lista de usuários após fechar o modal de sucesso
         document.getElementById('modalSucesso').addEventListener('hidden.bs.modal', function () {
-            window.location.reload();
+          window.location.reload();
         }, { once: true });
-    } else {
+      } else {
         alert('Erro ao criar usuário!');
-    }
+      }
+    });
+  }
+
+  // Filtro de pesquisa
+  const searchInput = document.querySelector('#searchUser input[name="q"]');
+  const tableRows = document.querySelectorAll('table tbody tr');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const query = searchInput.value.toLowerCase();
+      tableRows.forEach(row => {
+        if (row.querySelector('td[colspan]')) {
+          row.style.display = '';
+          return;
+        }
+        const cells = row.querySelectorAll('td');
+        let found = false;
+        cells.forEach(cell => {
+          if (cell.textContent.toLowerCase().includes(query)) {
+            found = true;
+          }
+        });
+        row.style.display = found ? '' : 'none';
+      });
+    });
+  }
 });

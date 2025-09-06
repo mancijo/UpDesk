@@ -1,0 +1,67 @@
+body {
+    background-color: #DCE0E6;
+}
+
+.card {
+    padding: 40px 40px;
+}
+
+.voltarBtn {
+    width: 100px;
+    text-align: center;
+}
+
+.colAcoes {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+h2 {
+    margin: 20px;
+    text-align: center;
+}
+
+#searchUser input{
+    background-color: #DCE0E6;
+    width: 260px;
+}
+
+.editarUsuarioBtn {
+    background-color: #567EBB;
+}
+
+.editarUsuarioBtn:hover {
+    background-color: #2B4C7E;
+}
+
+.tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem; 
+    flex-wrap: wrap; 
+}
+
+/* Responsividade para ocultar colunas em telas menores que 992px */
+@media (max-width: 992px) {
+    th.col-id,
+    td.col-id,
+    th.col-cargo,
+    td.col-cargo,
+    th.col-status,
+    td.col-status {
+        display: none !important;
+    }
+}
+@media (max-width: 600px) {
+    th.col-email,
+    td.col-email {
+        display: none !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .tools {
+        flex-direction: column;
+    }
+}
