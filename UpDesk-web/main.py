@@ -64,7 +64,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % par
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-# Definição das Rotas
+# Rotas
 @app.route('/')
 def index():
     return render_template('login.html')
@@ -106,22 +106,18 @@ def home():
     if 'usuario_nome' not in session:
         return redirect(url_for('index'))
 
-    current_user = {
-        'name': session.get('usuario_nome')
-    }
-    
-    ticket_stats = {
-        'open': Chamado.query.filter_by(status_Chamado='Aberto').count(),
-        'in_triage': Chamado.query.filter_by(status_Chamado='Em Atendimento').count(),
-        'ai_solution': Chamado.query.filter_by(status_Chamado='Resolvido').count(),
-        'finished': Chamado.query.filter_by(status_Chamado='Resolvido').count()
-    }
-    
-    return render_template(
-        'home.html', 
-        user=current_user, 
-        stats=ticket_stats
-    )
+    nome_usuario = session.get('usuario_nome')
+    chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
+    chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
+    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Solução IA'
+    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Finalizados'
+
+    return render_template('home.html', 
+                           nome_usuario=nome_usuario, 
+                           chamados_abertos=chamados_abertos,
+                           chamados_em_triagem=chamados_em_triagem,
+                           chamados_solucao_ia=chamados_solucao_ia,
+                           chamados_finalizados=chamados_finalizados)
 
 @app.route('/chamado', methods=['GET', 'POST'])
 def chamado():
@@ -186,18 +182,14 @@ def confirmar_abertura_chamado():
 @app.route('/ver-chamado')
 def ver_chamado():
     lista_chamados = Chamado.query.all()
-    user = {
-        'name': session.get('usuario_nome', 'Usuário')
-    }
-    return render_template('verChamado.html', chamados=lista_chamados, user=user)
+    nome_usuario = session.get('usuario_nome', 'Usuário')
+    return render_template('verChamado.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
 @app.route('/ger_usuarios')
 def ger_usuarios():
     lista_usuarios = Usuario.query.all()
-    user = {
-        'name': session.get('usuario_nome', 'Usuário')
-    }
-    return render_template('ger_usuarios.html', usuarios=lista_usuarios, user=user)
+    nome_usuario = session.get('usuario_nome', 'Usuário')
+    return render_template('ger_usuarios.html', usuarios=lista_usuarios, nome_usuario=nome_usuario)
 
 @app.route('/criar_usuario', methods=['POST'])
 def criar_usuario():
@@ -253,10 +245,8 @@ def editar_usuario(usuario_id):
 @app.route('/triagem')
 def triagem():
     lista_chamados = Chamado.query.all()
-    user = {
-        'name': session.get('usuario_nome', 'Usuário')
-    }
-    return render_template('triagem.html', chamados=lista_chamados, user=user)
+    nome_usuario = session.get('usuario_nome', 'Usuário')
+    return render_template('triagem.html', chamados=lista_chamados, nome_usuario=nome_usuario)
 
 @app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
 def excluir_usuario(usuario_id):
