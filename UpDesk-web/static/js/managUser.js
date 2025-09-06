@@ -78,6 +78,13 @@ document.getElementById('formCriarUsuario').addEventListener('submit', async fun
             window.location.reload();
         }, { once: true });
     } else {
-        alert('Erro ao criar usuário!');
+        const errorData = await response.json();
+        let errorMessage = 'Erro ao criar usuário!\n';
+        if (errorData.erros) {
+            for (const field in errorData.erros) {
+                errorMessage += `- ${field}: ${errorData.erros[field]}\n`;
+            }
+        }
+        alert(errorMessage);
     }
 });
