@@ -66,11 +66,62 @@
 
         <div class="bottom-bar">
             <button class="btn" onclick="window.location.href='/home'">Página inicial</button>
-            <button class="btn btn-gestao">Relatório Gestão </button>
+            <button class="btn btn-gestao" data-bs-toggle="modal" data-bs-target="#modalRelatorio">Relatório Gestão</button>
         </div>
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous"></script>
+    <!-- Modal de Relatório de Gestão -->
+    <div class="modal fade" id="modalRelatorio" tabindex="-1" aria-labelledby="modalRelatorioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formRelatorio" action="{{ url_for('gerar_relatorio_pdf') }}" method="GET" target="_blank">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalRelatorioLabel">Gerar Relatório de Gestão</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="intervalo" class="form-label">Intervalo de Tempo</label>
+                            <select class="form-select" id="intervalo" name="intervalo">
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="30" selected>Últimos 30 dias</option>
+                                <option value="90">Últimos 3 meses</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Filtrar por Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="todos">Todos</option>
+                                <option value="Aberto">Aberto</option>
+                                <option value="Em Atendimento">Em Atendimento</option>
+                                <option value="Resolvido">Resolvido</option>
+                                <option value="Transferido">Transferido</option>
+                                <option value="Agendado">Agendado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Exportar para PDF</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Opcional: esconde o modal após o submit para o PDF abrir em nova aba sem travar a tela.
+        const formRelatorio = document.getElementById('formRelatorio');
+        if (formRelatorio) {
+            formRelatorio.addEventListener('submit', function () {
+                const modalRelatorio = bootstrap.Modal.getInstance(document.getElementById('modalRelatorio'));
+                if (modalRelatorio) {
+                    modalRelatorio.hide();
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
