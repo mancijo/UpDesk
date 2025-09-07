@@ -1,13 +1,15 @@
-from flask import Flask, request, jsonify, render_template, session, redirect, url_for
+from flask import Flask, request, jsonify, render_template, session, redirect, url_for, make_response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import urllib.parse
-from models import db, Usuario, Chamado, Interacao
+from models import db, Usuario, Chamado, Interacao, get_sao_paulo_time
 from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
 import os
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import google.generativeai as genai
+from datetime import datetime, timedelta
+from fpdf import FPDF
 
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -185,6 +187,9 @@ def confirmar_abertura_chamado():
 
 @app.route('/ver-chamado')
 def ver_chamado():
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+        
     lista_chamados = Chamado.query.all()
     user = {
         'name': session.get('usuario_nome', 'Usuário')
@@ -300,6 +305,70 @@ def meus_chamados():
     
     return "<h1>Meus Chamados (Página em construção)</h1>"
 
+@app.route('/relatorio/pdf')
+def gerar_relatorio_pdf():
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+
+    # Pega os parâmetros da URL
+    intervalo_dias = int(request.args.get('intervalo', 30))
+    status_filtro = request.args.get('status', 'todos')
+
+    # Calcula a data de início
+    data_inicio = get_sao_paulo_time() - timedelta(days=intervalo_dias)
+
+    # Monta a query
+    query = Chamado.query.filter(Chamado.dataAbertura >= data_inicio)
+    if status_filtro != 'todos':
+        query = query.filter(Chamado.status_Chamado == status_filtro)
+
+    chamados = query.order_by(Chamado.dataAbertura.desc()).all()
+
+    # --- Geração do PDF ---
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 20)
+
+    # Título
+    pdf.cell(0, 10, 'Relatorio de Gestão de Chamados', 0, 1, 'C')
+    pdf.ln(5)
+
+    # Subtítulo com filtros
+    pdf.set_font('Arial', '', 10)
+    filtro_texto = f"Periodo: Ultimos {intervalo_dias} dias | Status: {status_filtro.capitalize() }"
+    pdf.cell(0, 10, filtro_texto, 0, 1, 'C')
+    pdf.ln(10)
+
+    # Cabeçalho da Tabela
+    pdf.set_font('Arial', 'B', 10)
+    pdf.cell(15, 10, 'ID', 1)
+    pdf.cell(70, 10, 'Titulo', 1)
+    pdf.cell(30, 10, 'Status', 1)
+    pdf.cell(35, 10, 'Data Abertura', 1)
+    pdf.cell(35, 10, 'Solicitante', 1)
+    pdf.ln()
+
+    # Dados da Tabela
+    pdf.set_font('Arial', '', 9)
+    for chamado in chamados:
+        # Trata caracteres especiais para fontes padrão (latin-1)
+        titulo = chamado.titulo_Chamado[:40].encode('latin-1', 'replace').decode('latin-1')
+        solicitante_nome = 'N/A'
+        if chamado.solicitante:
+            solicitante_nome = chamado.solicitante.nome[:20].encode('latin-1', 'replace').decode('latin-1')
+
+        pdf.cell(15, 10, str(chamado.chamado_ID), 1)
+        pdf.cell(70, 10, titulo, 1)
+        pdf.cell(30, 10, chamado.status_Chamado, 1)
+        pdf.cell(35, 10, chamado.dataAbertura.strftime("%d/%m/%Y"), 1)
+        pdf.cell(35, 10, solicitante_nome, 1)
+        pdf.ln()
+
+    # A saída de pdf.output() é um bytearray, que precisa ser convertido para bytes para o response.
+    response = make_response(bytes(pdf.output()))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=relatorio_chamados_{datetime.now().strftime("%Y%m%d")}.pdf'
+    return response
 
 if __name__ == '__main__':
     with app.app_context():
