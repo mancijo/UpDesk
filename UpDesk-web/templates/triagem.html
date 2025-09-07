@@ -140,7 +140,7 @@
                     <div>{{ chamado.dataAbertura.strftime("%d/%m/%Y") }}</div>
                     <div class="ticket-actions text-end">
                         <button class="btn">Visualizar Chamado</button>
-                        <button class="btn">Transferir Chamado</button>
+                        <a class="btn" href="{{ url_for('transferir_chamado', chamado_id=chamado.chamado_ID) }}">Transferir Chamado</a>
                     </div>
                 </div>
                 {% else %}

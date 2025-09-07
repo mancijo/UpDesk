@@ -254,6 +254,17 @@ def triagem():
     }
     return render_template('triagem.html', chamados=lista_chamados, user=user)
 
+@app.route('/transferir_chamado/<int:chamado_id>')
+def transferir_chamado(chamado_id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+
+    chamado = Chamado.query.get_or_404(chamado_id)
+    user = {
+        'name': session.get('usuario_nome', 'Usuário')
+    }
+    return render_template('transferir_chamado.html', chamado=chamado, user=user)
+
 @app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
 def excluir_usuario(usuario_id):
     usuario = Usuario.query.get(usuario_id)
