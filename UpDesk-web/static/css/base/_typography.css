@@ -1,0 +1,54 @@
+/* static/css/base/_typography.css */
+
+body {
+  font-family: var(--fonte-principal);
+  font-size: var(--fonte-tamanho-base);
+  line-height: 1.6;
+  color: var(--cor-texto-principal);
+  background-color: var(--cor-fundo-principal);
+  padding-top: 50px; /* Adjusted this value based on the actual height of your navbar */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fonte-principal);
+  color: var(--cor-primaria);
+  margin-top: 0;
+  margin-bottom: var(--espaco-s);
+}
+
+h1 {
+  font-size: var(--fonte-tamanho-h1);
+}
+
+h2 {
+  font-size: var(--fonte-tamanho-h2);
+}
+
+h3 {
+  font-size: var(--fonte-tamanho-h3);
+}
+
+h4 {
+  font-size: var(--fonte-tamanho-h4);
+}
+
+h5 {
+  font-size: var(--fonte-tamanho-h5);
+}
+
+h6 {
+  font-size: var(--fonte-tamanho-h6);
+}
+
+p {
+  margin-bottom: var(--espaco-s);
+}
+
+a {
+  color: var(--cor-primaria);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

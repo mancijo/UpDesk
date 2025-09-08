@@ -1,52 +1,77 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard Supervisor - UpDesk</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
-</head>
+{% block title %}Dashboard - UpDesk{% endblock %}
 
-<body>
-  <div class="w-full h-full blur-sm"></div>
-  {% include 'navbar.html' %}
+{% block body %}
+<div class="container-fluid pt-3"> <!-- Changed container to container-fluid -->
 
-  <div class="dashboard">
-    <h2>Olá, Bem-vindo, {{ nome_usuario }}!</h2>
+  <div class="row g-4">
 
-    <div class="cards">
-      <div class="card">
-        <h4>Chamados Abertos</h4>
-        <span>{{ chamados_abertos }}</span>
-      </div>
-      <div class="card">
-        <h4>Chamados em Triagem</h4>
-        <span>{{ chamados_em_triagem }}</span>
-      </div>
-      <div class="card">
-        <h4>Chamados com Solução IA</h4>
-        <span>{{ chamados_solucao_ia }}</span>
-      </div>
-      <div class="card">
-        <h4>Chamados Finalizados</h4>
-        <span>{{ chamados_finalizados }}</span>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary">
+            <i class="bi bi-folder-open me-2"></i>Chamados Abertos
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_abertos }}</span>
+        </div>
       </div>
     </div>
 
-    <div class="actions">
-      <button class="action-btn" onclick="location.href='/chamado'">Abrir Chamado</button>
-      <button class="action-btn" onclick="location.href='/ver-chamado'">Monitoramento de Chamados</button>
-      <button class="action-btn" onclick="location.href='/ger_usuarios'">Gerenciar Usuário</button>
-      <button class="action-btn" onclick="location.href='/triagem'">Painel da Triagem</button>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary">
+            <i class="bi bi-hourglass-split me-2"></i>Chamados em Triagem
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_em_triagem }}</span>
+        </div>
+      </div>
     </div>
 
-    <footer>
-      UpDesk - Sistema de Gerenciamento de Chamados com IA
-    </footer>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary">
+            <i class="bi bi-robot me-2"></i>Chamados com Solução IA
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_solucao_ia }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary">
+            <i class="bi bi-check-circle me-2"></i>Chamados Finalizados
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_finalizados }}</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  <div class="row g-4 mt-3">
+    
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/chamado" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Abrir Chamado</a>
+    </div>
 
-</body>
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/ver-chamado" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Monitoramento de Chamados</a>
+    </div>
 
-</html>
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/ger_usuarios" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Gerenciar Usuário</a>
+    </div>
+    
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/triagem" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Painel da Triagem</a>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -286,5 +286,9 @@ def meus_chamados():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+            print("Database tables created successfully (or already exist).")
+        except Exception as e:
+            print(f"\nCRITICAL ERROR: Failed to connect to or initialize the database. Details: {e}\n")
     app.run(debug=True)

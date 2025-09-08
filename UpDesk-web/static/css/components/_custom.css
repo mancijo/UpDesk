@@ -1,0 +1,31 @@
+/* /static/css/components/_custom.css */
+
+/* Ajusta o card para ter as bordas arredondadas que você quer */
+.custom-card {
+  border-radius: 15px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: var(--cor-fundo-claro) !important; /* Force white background */
+}
+
+/* Efeito de "levantar" no hover que não vem por padrão */
+.custom-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; /* Aumenta a sombra no hover */
+}
+
+/* Ajusta o botão para ter as bordas arredondadas e o efeito de hover */
+.custom-btn {
+  border-radius: 15px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.custom-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.message { /* Moved from _login-page.css */
+    margin-top: var(--espaco-s);
+    text-align: center;
+    color: var(--cor-perigo);
+}

@@ -1,22 +1,30 @@
-<nav class="navbar">
-  <link rel="stylesheet" href="/static/css/navbar.css">
-    <div class="logo">UpDesk</div>
-    <button class="hamburger" id="hamburger">&#9776;</button>
-    <div class="nav-menu" id="nav-menu">
-        <div class="nav-links">
-          <a href="/home">Home</a>
-          <a href="/chamado">Chamados</a>
-          <a href="/ger-usuarios">Usuários</a>
-          <a href="/triagem">Triagem</a>
-        </div>
-    </div>
+<!-- /templates/navbar.html -->
+<nav class="navbar navbar-expand-lg border-bottom">
+  <div class="container-fluid navbar-grid">
+    
+    <!-- Logo -->
+    <a class="navbar-brand logo fw-bold" href="{{ url_for('home') }}">UpDesk</a>
 
-    <div class="user-menu">
-      <button class="user-btn" id="userBtn" aria-haspopup="true" aria-expanded="false">{{ nome_usuario }}</button>
-      <div class="dropdown" id="userDropdown">
-        <a href="/perfil">Meu Perfil</a>
-        <a href="/meus-chamados">Meus Chamados</a>
-        <a href="/logout">Sair</a>
+    <!-- Navigation Links & User Dropdown -->
+    <div class="navbar-grid__right d-flex align-items-center">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ session.get('usuario_nome', 'Usuário') }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownButton">
+          <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+          <li><a class="dropdown-item" href="{{ url_for('meus_chamados') }}">Meus Chamados</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
+        </ul>
+      </div>
+
+      <div class="navbar-nav-custom">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+        <a class="nav-link" href="{{ url_for('ver_chamado') }}">Ver Chamados</a>
+        <a class="nav-link" href="{{ url_for('triagem') }}">Triagem</a>
       </div>
     </div>
-  </nav>
+
+  </div>
+</nav>

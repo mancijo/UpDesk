@@ -1,0 +1,84 @@
+/* static/css/components/_ger-usuarios-page.css */
+
+.user-page__container {
+  width: 90%;
+  max-width: 1400px;
+  margin: var(--espaco-l, 32px) auto;
+}
+
+.user-page__title {
+  text-align: center;
+  margin-bottom: var(--espaco-l, 32px);
+  color: var(--cor-primaria, #2B4C7E);
+  margin-top: var(--espaco-m, 20px); /* Added from gerUsuarios.css */
+}
+
+.user-page__tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--espaco-s, 1rem); /* Adapted from gerUsuarios.css */
+  flex-wrap: wrap;
+  gap: var(--espaco-s, 16px);
+}
+
+.user-page__search-form {
+  display: flex;
+  gap: var(--espaco-s, 16px);
+}
+
+/* Styles from gerUsuarios.css */
+body { /* Consider moving to a more global place like _typography.css */
+    background-color: var(--cor-fundo-principal, #DCE0E6);
+}
+
+.card { /* Consider moving to _card.css */
+    padding: var(--espaco-xl, 40px) var(--espaco-xl, 40px);
+}
+
+.voltarBtn {
+    width: 100px;
+    text-align: center;
+}
+
+.colAcoes {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#searchUser input{
+    background-color: var(--cor-fundo-principal, #DCE0E6);
+    width: 260px;
+}
+
+.editarUsuarioBtn { /* Consider moving to _button.css */
+    background-color: #567EBB; /* Specific color, consider adding to variables */
+}
+
+.editarUsuarioBtn:hover { /* Consider moving to _button.css */
+    background-color: var(--cor-primaria, #2B4C7E);
+}
+
+/* Responsividade para ocultar colunas em telas menores que 992px */
+@media (max-width: 992px) {
+    th.col-id,
+    td.col-id,
+    th.col-cargo,
+    td.col-cargo,
+    th.col-status,
+    td.col-status {
+        display: none !important;
+    }
+}
+@media (max-width: 600px) {
+    th.col-email,
+    td.col-email {
+        display: none !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .user-page__tools { /* Changed from .tools */
+        flex-direction: column;
+    }
+}

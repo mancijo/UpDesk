@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil - UpDesk{% endblock %}
+
+{% block body %}
+<div class="perfil-page__container">
+    <div class="perfil-page__card">
+        <div class="perfil-page__avatar">
+            <i class="bi bi-person-fill"></i>
+        </div>
+        <h2 class="perfil-page__name">{{ user.name }}</h2>
+        <div class="perfil-page__info">
+            <p class="perfil-page__info-item"><strong>Email:</strong> {{ user.email }}</p>
+            <p class="perfil-page__info-item"><strong>Cargo:</strong> {{ user.cargo }}</p>
+            <p class="perfil-page__info-item"><strong>Setor:</strong> {{ user.setor }}</p>
+            <p class="perfil-page__info-item"><strong>Telefone:</strong> {{ user.telefone }}</p>
+        </div>
+        <div class="perfil-page__actions">
+            <a href="/home" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
