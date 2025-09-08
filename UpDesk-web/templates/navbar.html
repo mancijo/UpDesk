@@ -1,22 +1,27 @@
-<nav class="navbar">
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
   <div class="container-fluid">
-    <div class="nav-links d-none d-lg-flex">
-        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-        <a class="nav-link" href="{{ url_for('chamado') }}">Chamados</a>
-        <a class="nav-link" href="{{ url_for('ger_usuarios') }}">Usuários</a>
-        <a class="nav-link" href="{{ url_for('triagem') }}">Triagem</a>
-    </div>
     <a class="navbar-brand logo" href="{{ url_for('home') }}">UpDesk</a>
-    <div class="dropdown">
-      <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        {{ user.name }}
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('meus_chamados') }}">Meus Chamados</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('chamado') }}">Abrir Chamado</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('ger_usuarios') }}">Usuários</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('triagem') }}">Triagem</a></li>
       </ul>
+      <div class="dropdown">
+        <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ user.name }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+          <li><a class="dropdown-item" href="{{ url_for('meus_chamados') }}">Meus Chamados</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
