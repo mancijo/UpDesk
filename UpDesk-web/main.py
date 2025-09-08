@@ -189,21 +189,50 @@ def confirmar_abertura_chamado():
 def ver_chamado():
     if 'usuario_id' not in session:
         return redirect(url_for('index'))
-        
-    lista_chamados = Chamado.query.all()
+
+    # Pega os parâmetros de filtro e busca da URL
+    search_query = request.args.get('q', '')
+    status_filtro = request.args.get('status', 'Todos')
+
+    query = Chamado.query
+
+    if search_query:
+        # Filtra chamados cujo título contenha o termo de busca
+        search_term = f"%{search_query}%"
+        query = query.filter(Chamado.titulo_Chamado.ilike(search_term))
+
+    if status_filtro and status_filtro != 'Todos':
+        query = query.filter(Chamado.status_Chamado == status_filtro)
+
+    lista_chamados = query.order_by(Chamado.dataAbertura.desc()).all()
     user = {
         'name': session.get('usuario_nome', 'Usuário')
     }
-    return render_template('verChamado.html', chamados=lista_chamados, user=user)
+    return render_template('verChamado.html', chamados=lista_chamados, user=user, search_query=search_query, status_filtro=status_filtro)
 
 @app.route('/ger_usuarios')
 def ger_usuarios():
-    lista_usuarios = Usuario.query.all()
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+
+    # Pega o termo de busca da URL (ex: /ger_usuarios?q=mateus)
+    search_query = request.args.get('q', '')
+
+    query = Usuario.query
+    if search_query:
+        # Filtra usuários cujo nome ou email contenham o termo de busca (case-insensitive)
+        search_term = f"%{search_query}%"
+        query = query.filter(db.or_(
+            Usuario.nome.ilike(search_term),
+            Usuario.email.ilike(search_term)
+        ))
+
+    lista_usuarios = query.all()
     form_criar = CriarUsuarioForm()
     user = {
         'name': session.get('usuario_nome', 'Usuário')
     }
-    return render_template('ger_usuarios.html', usuarios=lista_usuarios, user=user, form_criar=form_criar)
+    return render_template('ger_usuarios.html', usuarios=lista_usuarios, user=user, form_criar=form_criar, search_query=search_query)
 
 @app.route('/criar_usuario', methods=['POST'])
 def criar_usuario():
