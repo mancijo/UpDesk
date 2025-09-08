@@ -43,8 +43,9 @@
     <h2 class="text-center">Gerenciamento de usuários</h2>
 
     <div class="tools mb-3">
-      <form class="d-flex m-2" method="get" action="" id="searchUser">
-        <input class="form-control" type="search" name="q" placeholder="Pesquisar usuário" aria-label="Pesquisar">
+      <form class="d-flex m-2" method="get" action="{{ url_for('ger_usuarios') }}" id="searchUser">
+        <input class="form-control" type="search" name="q" placeholder="Pesquisar por nome ou e-mail..." aria-label="Pesquisar" value="{{ search_query or '' }}">
+        <button class="btn btn-outline-secondary ms-2" type="submit">Buscar</button>
       </form>
 
       <button class="btn btn-success m-2" onclick="openCreateUserModal(event)">Criar usuário</button>
