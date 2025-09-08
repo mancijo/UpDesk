@@ -1,0 +1,177 @@
+/* /static/css/components/_home-page.css */
+
+h2 {
+  text-align: center;
+  color: var(--cor-primaria); /* Using variable */
+  margin-top: var(--espaco-m); /* Using variable */
+}
+
+/* ====== Fonte e fundo ====== */
+/* Removed body styles from here, they should be in _typography.css */
+
+/* ====== Dashboard ====== */
+.dashboard {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--espaco-m) 0; /* Using variable */
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-l); /* Using variable */
+}
+
+/* ====== Cards ====== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--espaco-m); /* Using variable */
+  width: 100%;
+  align-items: stretch;
+  margin-top: var(--espaco-xl); /* Using variable */
+}
+
+.card {
+  background: var(--cor-fundo-claro); /* Changed to white */
+  border-radius: var(--raio-borda-grande); /* Using variable */
+  padding: var(--espaco-m); /* Using variable */
+  box-shadow: var(--sombra-discreta); /* Using variable */
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+  border: 1px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-intensa); /* Using variable */
+  border: 1px solid var(--cor-primaria)20; /* Using variable */
+}
+
+.card h4 {
+  margin-bottom: var(--espaco-s); /* Using variable */
+  color: var(--cor-primaria); /* Using variable */
+  display: flex; /* Added flex for icon alignment */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon and text horizontally */
+}
+
+.card h4 i {
+    font-size: 1.5rem; /* Adjust icon size */
+    color: var(--cor-primaria); /* Icon color */
+}
+
+.card span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fonte-tamanho-xl); /* Using variable */
+  font-weight: var(--fonte-peso-bold); /* Using variable */
+  height: 90px;
+  color: var(--cor-primaria); /* Using variable */
+}
+
+/* ====== Botões ====== */
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--espaco-m); /* Using variable */
+  width: 100%;
+  /* Removed margin-top: var(--espaco-xl); */ /* Rely on Bootstrap's mt-3 on the row */
+  justify-content: center;
+  justify-items: center;
+}
+
+.action-btn {
+  background-color: var(--cor-primaria); /* Using variable */
+  color: var(--cor-texto-claro); /* Using variable */
+  border: none;
+  padding: var(--espaco-m); /* Using variable */
+  font-size: var(--fonte-tamanho-m); /* Using variable */
+  border-radius: var(--raio-borda-grande); /* Using variable */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-xs); /* Using variable */
+  box-shadow: var(--sombra-padrao); /* Using variable */
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  width: 100%;
+  max-width: 300px;
+}
+
+.action-btn:hover {
+  background-color: var(--cor-primaria-escura); /* Using variable */
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-intensa); /* Using variable */
+}
+
+.action-btn:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* ====== Footer ====== */
+footer {
+  margin-top: var(--espaco-xl); /* Using variable */
+  text-align: center;
+  font-size: var(--fonte-tamanho-s); /* Using variable */
+  color: var(--cor-texto-secundario); /* Using variable */
+  padding: var(--espaco-s) 0; /* Using variable */
+}
+
+/* ====== Responsividade ====== */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        background-color: var(--cor-fundo-claro); /* Using variable */
+        position: absolute;
+        top: 60px; /* Adjust as needed */
+        left: 0;
+        box-shadow: var(--sombra-padrao); /* Using variable */
+    }
+
+    .nav-menu.active .nav-links {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+
+@media (max-width: 500px) {
+  body {
+    padding: var(--espaco-xs); /* Using variable */
+  }
+
+  .card span {
+    height: 80px;
+    font-size: var(--fonte-tamanho-l); /* Using variable */
+  }
+
+  .action-btn {
+    padding: var(--espaco-s); /* Using variable */
+    font-size: var(--fonte-tamanho-s); /* Using variable */
+    width: 100%;
+  }
+
+  nav.navbar {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--espaco-xs); /* Using variable */
+  }
+
+  .logo {
+    position: static;
+    transform: none;
+    text-align: left;
+    width: auto;
+    margin-bottom: 0;
+  }
+
+  .user-menu {
+    margin-left: 0;
+    margin-top: 0;
+  }
+}

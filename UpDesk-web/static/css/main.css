@@ -1,0 +1,29 @@
+/*
+ * ARQUIVO PRINCIPAL DE ESTILOS - UP DESK
+ * --------------------------------------
+ * Este arquivo não contém estilos diretos.
+ * Sua única função é importar os módulos na ordem correta.
+*/
+
+/* 1. Base (Sempre primeiro!) */
+@import url('./base/_variables.css');
+@import url('./base/_typography.css');
+@import url('./base/_bootstrap-overrides.css'); /* Importante: depois das variáveis, antes dos componentes */
+
+/* 2. Componentes Globais (Os blocos de construção) */
+@import url('./components/_button.css');
+@import url('./components/_card.css');
+@import url('./components/_dropdown.css');
+@import url('./components/_form.css');
+@import url('./components/_navbar.css');
+@import url('./components/_table.css');
+@import url('./components/_footer.css');
+@import url('./components/_custom.css');
+
+/* 3. Layouts de Páginas Específicas */
+@import url('./components/_home-page.css');
+@import url('./components/_chamado-page.css');
+@import url('./components/_ger-usuarios-page.css');
+@import url('./components/_perfil-page.css');
+@import url('./components/_ver-chamado-page.css');
+@import url('./components/_login-page.css');
