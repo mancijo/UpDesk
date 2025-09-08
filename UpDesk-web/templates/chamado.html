@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Abrir Chamado - UpDesk</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chamado.css') }}">
-</head>
+{% block title %}Abrir Chamado - UpDesk{% endblock %}
 
-<body>
-    {% include 'navbar.html' %}
+{% block head %}
+    
+{% endblock %}
 
-    <div class="form-container">
-        <h2 class="titulo">Abertura do chamado</h2>
+{% block body %}
+    <div class="chamado-page__container">
+        <h2 class="chamado-page__title">Abertura do chamado</h2>
 
         <form action="{{ form_action or url_for('chamado') }}" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
@@ -50,8 +46,8 @@
             </div>
         </form>
     </div>
+{% endblock %}
 
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/chamado.js') }}"></script>
-</body>
-
-</html>
+{% endblock %}
