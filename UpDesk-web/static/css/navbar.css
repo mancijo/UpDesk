@@ -60,3 +60,10 @@ nav.navbar .container-fluid {
     background-color: #2B4C7E;
     color: white;
 }
+
+.navbar-nav .nav-link.active {
+    font-weight: bold; /* Deixa o texto em negrito */
+    color: #0d6efd !important; /* Força a cor azul do Bootstrap */
+    border-bottom: 3px solid #0d6efd; /* Adiciona um sublinhado azul */
+    padding-bottom: 5px; /* Pequeno ajuste para o sublinhado não colar no texto */
+  }

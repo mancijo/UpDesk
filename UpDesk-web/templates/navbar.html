@@ -6,10 +6,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('chamado') }}">Abrir Chamado</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('ger_usuarios') }}">Usuários</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('triagem') }}">Triagem</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'chamado' %}active{% endif %}" href="{{ url_for('chamado') }}">Abrir Chamado</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'ger_usuarios' %}active{% endif %}" href="{{ url_for('ger_usuarios') }}">Usuários</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'triagem' %}active{% endif %}" href="{{ url_for('triagem') }}">Triagem</a></li>
       </ul>
       <div class="dropdown">
         <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
