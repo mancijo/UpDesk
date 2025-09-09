@@ -9,7 +9,7 @@ O UpDesk propõe uma solução inovadora com **inteligência artificial integrad
 
 ## Casos de usos
 
-### [Clique aqui para casos de usos]([https://github.com/mancijo/UpDesk/tree/main/Dev%20planning](https://github.com/mancijo/UpDesk/blob/main/Dev%20planning/casosDeUso.md))
+### [Clique aqui para casos de usos](https://github.com/mancijo/UpDesk/blob/main/Dev%20planning/casosDeUso.md)
 
 ---
 ## 📋 Backlog do Produto
@@ -19,23 +19,13 @@ O UpDesk propõe uma solução inovadora com **inteligência artificial integrad
 ---
 
 ## 📅 Cronograma de Evolução
-- **Etapa 1** → Levantamento de requisitos e modelagem inicial 
-- **Etapa 2** → Protótipos em baixa, média e alta fidelidade (Figma) 
-- **Etapa 3** → Implementação da interface web e modelagem do banco
-- **Etapa 4** → Implementação do sistema Desktop e Android
+
+### [Clique aqui para cronograma]()
 
 ---
 
 ## 📊 Cronograma de Sprints
 Este documento detalha o cronograma do projeto, dividindo as tarefas por semana e por time (Desenvolvimento Web e ServerSide).
-
-| Data | Time | Tarefas |
-| :--- | :--- | :--- |
-| **19/08/2025** | **Desenvolvimento Web (Front-End)** | **Kaique**: Implementação da tela de login.<br>**Mariozan**: Implementação da tela inicial para o supervisor.<br>**Filipe**: Desenvolvimento do card de perfil.<br>**Andrei**: Desenvolvimento do card para chamados enviados. |
-| | **ServerSide (Back-End)** | **Jonatas**: Desenvolvimento do CRUD (Create, Read, Update, Delete) para o chat, utilizando MySQL.<br>**Matheus**: Desenvolvimento do CRUD para perfis, utilizando MySQL. |
-| **26/08/2025** | **Desenvolvimento Web (Front-End)** | Desenvolvimento do card para editar perfis.<br>Desenvolvimento do card de confirmação para excluir usuário.<br>Desenvolvimento do card de confirmação de identidade.<br>Implementação da tela de gerenciamento de usuários.<br>Desenvolvimento do formulário de abertura de chamado.<br>Implementação da tela de solução sugerida pela IA (Up Desk).<br>Implementação da tela de chamado resolvido (Up Desk). |
-| | **ServerSide (Back-End)** | Definição da estrutura JSON da API.<br>Desenvolvimento do servidor de requisições.<br>Implementação da validação de login. |
-| **02/09/2025** | **Desenvolvimento Web (Front-End)** | Desenvolvimento do painel de triagem.<br>Desenvolvimento do card de dados do chamado.<br>Desenvolvimento do card de dados do chamado na triagem.<br>Desenvolvimento do card para aprovar ações da IA.<br>Desenvolvimento do card de prioridade do chamado.<br>Desenvolvimento do card de confirmação de transferência de chamado.<br>Desenvolvimento do card de feedback de transferência de chamado.<br>Implementação do painel de visualização de chamados.<br>Desenvolvimento do card de informações dos chamados. |
 
 ### [Clique aqui para o cronograma](https://github.com/mancijo/UpDesk/blob/main/Dev%20planning/sprintPlanning.md) 
 
@@ -75,14 +65,8 @@ Este documento reúne:
 ---
 
 ## ✅ DoR (Definition of Ready)
-Critérios que devem estar prontos antes que uma história entre em desenvolvimento:
 
-| Necessidade (User Story) | Funcionalidade (Definition) |
-| :--- | :--- |
-| "Preciso controlar os acessos ao sistema e restringir o que cada um pode mexer" | gerenciamento de usuários |
-| "Seria bom um sistema automatizado que auxilie nos atendimentos" | Suporte com IA |
-| "Gostaria de uma interface para que eu possa acessar tanto no PC, celular ou no navegador" | Aplicação web, Desktop e Android |
-| "Quero poder acessar históricos de chamados" | banco de dados em nuvem/interface de chamados |
+### [Clique aqui para o cronograma](https://github.com/mancijo/UpDesk/blob/fixDependencies/Dev%20planning/DOR.md) 
 
 ---
 
