@@ -299,6 +299,65 @@ def transferir_chamado(chamado_id):
     }
     return render_template('transferir_chamado.html', chamado=chamado, user=user)
 
+@app.route('/atender_chamado/<int:chamado_id>')
+def atender_chamado(chamado_id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+
+    chamado = Chamado.query.get_or_404(chamado_id)
+    user = {
+        'name': session.get('usuario_nome', 'Usuário')
+    }
+    return render_template('atender_chamado.html', chamado=chamado, user=user)
+
+@app.route('/encerrar_chamado/<int:chamado_id>', methods=['POST'])
+def encerrar_chamado(chamado_id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('index'))
+
+    chamado = Chamado.query.get_or_404(chamado_id)
+    chamado.status_Chamado = 'Resolvido' # Ou 'Finalizado', dependendo do seu fluxo
+    db.session.commit()
+    return redirect(url_for('ver_chamado'))
+
+@app.route('/api/chamado/<int:chamado_id>/mensagens', methods=['GET'])
+def get_mensagens(chamado_id):
+    if 'usuario_id' not in session:
+        return jsonify({"erro": "Não autorizado"}), 401
+
+    interacoes = Interacao.query.filter_by(chamado_id=chamado_id).order_by(Interacao.data_criacao.asc()).all()
+    
+    mensagens = []
+    for interacao in interacoes:
+        mensagens.append({
+            'id': interacao.id,
+            'mensagem': interacao.mensagem,
+            'data_criacao': interacao.data_criacao.strftime('%d/%m/%Y %H:%M'),
+            'usuario_id': interacao.usuario_id,
+            'usuario_nome': interacao.usuario.nome
+        })
+    
+    return jsonify(mensagens)
+
+@app.route('/api/chamado/<int:chamado_id>/mensagens', methods=['POST'])
+def post_mensagem(chamado_id):
+    if 'usuario_id' not in session:
+        return jsonify({"erro": "Não autorizado"}), 401
+
+    data = request.json
+    if not data or 'mensagem' not in data or not data['mensagem'].strip():
+        return jsonify({"erro": "Mensagem inválida"}), 400
+
+    nova_interacao = Interacao(
+        chamado_id=chamado_id,
+        usuario_id=session['usuario_id'],
+        mensagem=data['mensagem']
+    )
+    db.session.add(nova_interacao)
+    db.session.commit()
+
+    return jsonify({"mensagem": "Mensagem enviada com sucesso!"}), 201
+
 @app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
 def excluir_usuario(usuario_id):
     usuario = Usuario.query.get(usuario_id)
