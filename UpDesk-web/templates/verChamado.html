@@ -165,7 +165,7 @@
                                 data-status="{{ chamado.status_Chamado }}"
                                 data-categoria="{{ chamado.categoria_Chamado }}"
                                 data-descricao="{{ chamado.descricao_Chamado }}">Ver detalhes</button>
-                            <button class="btn btn-secondary btn-sm">Atender</button>
+                            <a href="{{ url_for('atender_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-primary btn-sm">Atender</a>
                         </td>
                     </tr>
                     {% else %}
