@@ -21,3 +21,14 @@
 .btn-login:hover {
     background-color: var(--cor-primaria-escura);
 }
+
+/* Ajusta o botão para ter as bordas arredondadas e o efeito de hover */
+.custom-btn {
+  border-radius: 15px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.custom-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}

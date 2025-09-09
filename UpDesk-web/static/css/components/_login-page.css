@@ -36,3 +36,9 @@ body {
     object-fit: contain; /* Ensure image scales properly */
     margin-bottom: var(--espaco-m);
 }
+
+.message { /* Moved from _login-page.css */
+    margin-top: var(--espaco-s);
+    text-align: center;
+    color: var(--cor-perigo);
+}
