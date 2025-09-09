@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for, make_response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import urllib.parse
 from models import db, Usuario, Chamado, Interacao, get_sao_paulo_time
 from forms import CriarUsuarioForm, EditarUsuarioForm, chamadoForm, LoginForm
 import os
-from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import google.generativeai as genai
 from datetime import datetime, timedelta
@@ -65,6 +66,7 @@ params = urllib.parse.quote_plus(
 app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+migrate = Migrate(app, db) # Inicializa o Flask-Migrate
 
 # Definição das Rotas
 @app.route('/')
@@ -74,14 +76,14 @@ def index():
 
 @app.route('/login', methods=['POST'])
 def login():
-    form_login = LoginForm()
-    data = request.json or request.form  # aceita JSON ou FORM
+    data = request.get_json()
 
-    if not data.get('email') or not data.get('senha'):
-        return jsonify({"mensagem": "Dados inválidos"}), 400
+    # Validação básica dos dados recebidos
+    if not data or not data.get('email') or not data.get('senha'):
+        return jsonify({"mensagem": "Email e senha são obrigatórios."}), 400
 
-    usuario = Usuario.query.filter_by(email=data['email']).first()
-    if usuario and usuario.senha == data['senha']:
+    usuario = Usuario.query.filter_by(email=data['email'], ativo=True).first()
+    if usuario and check_password_hash(usuario.senha, data['senha']):
         session['usuario_nome'] = usuario.nome
         session['usuario_id'] = usuario.id  # Armazena o ID do usuário na sessão
 
@@ -218,7 +220,7 @@ def ger_usuarios():
     # Pega o termo de busca da URL (ex: /ger_usuarios?q=mateus)
     search_query = request.args.get('q', '')
 
-    query = Usuario.query
+    query = Usuario.query.filter_by(ativo=True)
     if search_query:
         # Filtra usuários cujo nome ou email contenham o termo de busca (case-insensitive)
         search_term = f"%{search_query}%"
@@ -244,7 +246,7 @@ def criar_usuario():
             telefone=form.telefone.data,
             setor=form.setor.data,
             cargo=form.cargo.data,
-            senha=form.senha.data # Lembre-se de hashear a senha em produção!
+            senha=generate_password_hash(form.senha.data)
         )
         db.session.add(novo_usuario)
         db.session.commit()
@@ -271,7 +273,7 @@ def editar_usuario(usuario_id):
         usuario.setor = form.setor.data
         usuario.cargo = form.cargo.data
         if form.senha.data: # Só atualiza a senha se uma nova for fornecida
-            usuario.senha = form.senha.data # Lembre-se de hashear a senha!
+            usuario.senha = generate_password_hash(form.senha.data)
         db.session.commit()
         return jsonify({'mensagem': 'Usuário atualizado com sucesso!'}), 200
 

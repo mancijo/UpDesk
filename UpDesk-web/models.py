@@ -17,9 +17,10 @@ class Usuario(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     telefone = db.Column(db.String(15))
-    setor = db.Column(db.String(10))
+    setor = db.Column(db.String(50))
     cargo = db.Column(db.String(50), nullable=False)
-    senha = db.Column(db.String(30))
+    senha = db.Column(db.String(255))
+    ativo = db.Column(db.Boolean, default=True, nullable=False)
 
     # Relacionamentos
     chamados_solicitados = db.relationship(
@@ -44,7 +45,7 @@ class Chamado(db.Model):
     atendenteID = db.Column(db.Integer, db.ForeignKey("Usuario.id"))
     solicitanteID = db.Column(db.Integer, db.ForeignKey("Usuario.id"))
     titulo_Chamado = db.Column(db.String(255), nullable=False)
-    descricao_Chamado = db.Column(db.String(400), nullable=False)
+    descricao_Chamado = db.Column(db.Text, nullable=False)
     categoria_Chamado = db.Column(db.String(100), nullable=False)
     prioridade_Chamado = db.Column(db.String(15), nullable=False)
     anexo_Chamado = db.Column(db.LargeBinary)
@@ -54,8 +55,8 @@ class Chamado(db.Model):
     )  # Aberto, Em Atendimento, Resolvido, Transferido, Agendado
     dataAbertura = db.Column(db.DateTime, default=get_sao_paulo_time)
     dataUltimaModificacao = db.Column(db.DateTime)
-    solucaoSugerida = db.Column(db.String(255))
-    solucaoAplicada = db.Column(db.String(255))
+    solucaoSugerida = db.Column(db.Text)
+    solucaoAplicada = db.Column(db.Text)
 
     # Relacionamentos
     solicitante = db.relationship(
