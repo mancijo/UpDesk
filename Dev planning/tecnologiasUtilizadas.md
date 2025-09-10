@@ -1,0 +1,6 @@
+- **Backend**: Python
+- **Banco de Dados**: MYSQL Server  
+- **Frontend**: HTML, CSS, JavaScript  
+- **Protótipos**: Figma  
+- **Versionamento**: GitHub  
+- **Metodologia**: Scrum  
