@@ -1,0 +1,75 @@
+/* /static/css/components/_dropdown.css */
+
+/* O container geral do dropdown, para posicionamento */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* O botão que o usuário clica */
+.dropdown__button {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-s);
+  background-color: transparent;
+  color: var(--cor-primaria);
+  border: 1px solid var(--cor-primaria);
+  border-radius: var(--raio-borda-s);
+  padding: var(--espaco-s) var(--espaco-m);
+  font-family: var(--fonte-principal);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown__button:hover {
+  background-color: var(--cor-primaria);
+  color: var(--cor-texto-branco);
+}
+
+.dropdown__button svg {
+  transition: transform 0.2s ease;
+}
+
+/* Gira a seta quando o menu está aberto */
+.dropdown__button[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* O menu que é mostrado/escondido */
+.dropdown__menu {
+  display: none; /* Escondido por padrão, controlado por JS */
+  position: absolute;
+  top: 120%; /* Posição abaixo do botão */
+  right: 0;
+  background-color: var(--cor-surface);
+  min-width: 180px;
+  border-radius: var(--raio-borda-s);
+  box-shadow: var(--sombra-intensa);
+  z-index: 100;
+  overflow: hidden; /* Garante que os itens internos respeitem o raio da borda */
+}
+
+/* Os itens/links dentro do menu */
+.dropdown__item {
+  display: block;
+  width: 100%;
+  padding: var(--espaco-s) var(--espaco-m);
+  color: var(--cor-texto-secundario);
+  text-decoration: none;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.dropdown__item:hover {
+  background-color: var(--cor-primaria);
+  color: var(--cor-texto-branco);
+}
+
+/* Uma linha divisória (opcional) */
+.dropdown__divider {
+  height: 1px;
+  margin: var(--espaco-s) 0;
+  background-color: #e0e0e0;
+}

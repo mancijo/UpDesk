@@ -1,0 +1,66 @@
+/* static/css/base/_variables.css */
+
+:root {
+  /* Cores */
+  --cor-primaria: #2C3E50; /* Updated to Dark navy blue */
+  --cor-primaria-escura: #1E3A60; /* Keep as is, or adjust based on new primary */
+  --cor-secundaria: #6c757d;
+  --cor-sucesso: #28a745;
+  --cor-perigo: #dc3545;
+  --cor-aviso: #ffc107;
+  --cor-info: #17a2b8;
+
+  --cor-fundo-principal: #F4F6F8; /* Updated to Light gray */
+  --cor-fundo-claro: #FFFFFF; /* Keep as white for cards */
+  --cor-fundo-cinza: #F9F9F9;
+  --cor-fundo-hover: #F5F5F5;
+
+  --cor-texto-principal: #343a40;
+  --cor-texto-secundario: #888888;
+  --cor-texto-escuro: #333;
+  --cor-texto-claro: #FFFFFF; /* White text for dark backgrounds */
+
+  --cor-borda: #EEE;
+  --cor-borda-foco: #80bdff;
+  --cor-borda-erro: #dc3545;
+
+  /* Espaçamentos */
+  --espaco-xs: 8px;
+  --espaco-s: 16px;
+  --espaco-m: 24px;
+  --espaco-l: 32px;
+  --espaco-xl: 40px;
+
+  /* Tipografia */
+  --fonte-principal: 'Inter', sans-serif; /* Updated font */
+  --fonte-tamanho-base: 16px;
+  --fonte-tamanho-s: 14px;
+  --fonte-tamanho-m: 16px;
+  --fonte-tamanho-l: 20px;
+  --fonte-tamanho-xl: 28px;
+  --fonte-tamanho-h1: 2.5rem;
+  --fonte-tamanho-h2: 2rem;
+  --fonte-tamanho-h3: 1.75rem;
+  --fonte-tamanho-h4: 1.5rem;
+  --fonte-tamanho-h5: 1.25rem;
+  --fonte-tamanho-h6: 1rem;
+  --fonte-peso-leve: 300;
+  --fonte-peso-normal: 400;
+  --fonte-peso-medio: 500;
+  --fonte-peso-semi-bold: 600;
+  --fonte-peso-bold: 700;
+
+  /* Raio de Borda */
+  --raio-borda: 0.25rem;
+  --raio-borda-s: 0.125rem;
+  --raio-borda-m: 0.375rem;
+  --raio-borda-l: 0.5rem;
+  --raio-borda-xl: 1rem;
+  --raio-borda-grande: 15px;
+  --raio-borda-pílula: 50rem;
+
+  /* Sombras */
+  --sombra-padrao: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --sombra-discreta: 0 1px 8px rgba(0, 0, 0, 0.08);
+  --sombra-intensa: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
