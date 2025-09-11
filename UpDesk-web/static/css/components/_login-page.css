@@ -1,0 +1,44 @@
+/* static/css/components/_login-page.css */
+
+body {
+    font-family: var(--fonte-principal);
+    background: var(--cor-primaria);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Use min-height for better responsiveness */
+    margin: 0; /* Remove default body margin */
+}
+
+.login-card { /* Renamed from .container */
+    width: 480px;
+    max-width: 90%; /* Added max-width for responsiveness */
+    padding: var(--espaco-l); /* Use spacing variable */
+    background: var(--cor-fundo-claro);
+    box-shadow: var(--sombra-intensa);
+    border-radius: var(--raio-borda-grande);
+    display: flex; /* Use flexbox for internal layout */
+    flex-direction: column;
+    align-items: center;
+    gap: var(--espaco-m); /* Space between elements */
+}
+
+.login-card__title { /* Specific h2 style for login page */
+    text-align: center;
+    color: var(--cor-primaria);
+    margin-bottom: var(--espaco-m);
+    font-size: var(--fonte-tamanho-h2);
+}
+
+.logo {
+    width: 150px; /* Adjusted size for better visual balance */
+    height: 150px;
+    object-fit: contain; /* Ensure image scales properly */
+    margin-bottom: var(--espaco-m);
+}
+
+.message { /* Moved from _login-page.css */
+    margin-top: var(--espaco-s);
+    text-align: center;
+    color: var(--cor-perigo);
+}

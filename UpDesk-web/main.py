@@ -68,7 +68,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 migrate = Migrate(app, db) # Inicializa o Flask-Migrate
 
-# Definição das Rotas
+# Rotas
 @app.route('/')
 def index():
     return render_template('login.html')
@@ -110,22 +110,18 @@ def home():
     if 'usuario_nome' not in session:
         return redirect(url_for('index'))
 
-    current_user = {
-        'name': session.get('usuario_nome')
-    }
-    
-    ticket_stats = {
-        'open': Chamado.query.filter_by(status_Chamado='Aberto').count(),
-        'in_triage': Chamado.query.filter_by(status_Chamado='Em Atendimento').count(),
-        'ai_solution': Chamado.query.filter_by(status_Chamado='Resolvido').count(),
-        'finished': Chamado.query.filter_by(status_Chamado='Resolvido').count()
-    }
-    
-    return render_template(
-        'home.html', 
-        user=current_user, 
-        stats=ticket_stats
-    )
+    nome_usuario = session.get('usuario_nome')
+    chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
+    chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
+    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Solução IA'
+    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Finalizados'
+
+    return render_template('home.html', 
+                           nome_usuario=nome_usuario, 
+                           chamados_abertos=chamados_abertos,
+                           chamados_em_triagem=chamados_em_triagem,
+                           chamados_solucao_ia=chamados_solucao_ia,
+                           chamados_finalizados=chamados_finalizados)
 
 @app.route('/chamado', methods=['GET', 'POST'])
 def chamado():
@@ -462,5 +458,9 @@ def gerar_relatorio_pdf():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+            print("Database tables created successfully (or already exist).")
+        except Exception as e:
+            print(f"\nCRITICAL ERROR: Failed to connect to or initialize the database. Details: {e}\n")
     app.run(debug=True)
