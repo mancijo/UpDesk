@@ -1,27 +1,29 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+<!-- /templates/navbar.html -->
+<nav class="navbar navbar-expand-lg border-bottom">
   <div class="container-fluid">
-    <a class="navbar-brand logo" href="{{ url_for('home') }}">UpDesk</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'chamado' %}active{% endif %}" href="{{ url_for('chamado') }}">Abrir Chamado</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'ger_usuarios' %}active{% endif %}" href="{{ url_for('ger_usuarios') }}">Usuários</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'triagem' %}active{% endif %}" href="{{ url_for('triagem') }}">Triagem</a></li>
-      </ul>
-      <div class="dropdown">
-        <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          {{ user.name }}
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
-          <li><a class="dropdown-item" href="{{ url_for('meus_chamados') }}">Meus Chamados</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
-        </ul>
-      </div>
+    
+    <!-- Navigation Links (Left) -->
+    <div class="navbar-nav me-auto"> <!-- Use Bootstrap's navbar-nav and me-auto to push right -->
+      <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+      <a class="nav-link" href="{{ url_for('ver_chamado') }}">Ver Chamados</a>
+      <a class="nav-link" href="{{ url_for('triagem') }}">Triagem</a>
     </div>
+
+    <!-- Logo (Center) -->
+    <a class="navbar-brand mx-auto" href="{{ url_for('home') }}">UpDesk</a> <!-- mx-auto to center -->
+
+    <!-- User Dropdown (Right) -->
+    <div class="dropdown ms-auto"> <!-- ms-auto to push left -->
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ session.get('usuario_nome', 'Usuário') }}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownButton">
+        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('meus_chamados') }}">Meus Chamados</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
+      </ul>
+    </div>
+
   </div>
 </nav>
