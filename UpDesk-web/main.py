@@ -252,7 +252,7 @@ def criar_usuario():
         db.session.commit()
         return jsonify({"mensagem": "Usuário criado com sucesso!"}), 201
     
-    # Coleta os erros de validação para retornar no JSON
+    
     erros = {campo: erro[0] for campo, erro in form.errors.items()}
     return jsonify({"mensagem": "Dados inválidos", "erros": erros}), 400
 
@@ -261,8 +261,7 @@ def editar_usuario(usuario_id):
     usuario = Usuario.query.get_or_404(usuario_id)
     form = EditarUsuarioForm()
 
-    # O campo de senha não é obrigatório na edição, a menos que se queira alterar.
-    # Se o campo senha estiver vazio, removemos o validador para não dar erro.
+    
     if not form.senha.data:
         form.senha.validators = []
 

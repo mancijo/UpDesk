@@ -88,3 +88,34 @@ document.getElementById('formCriarUsuario').addEventListener('submit', async fun
         alert(errorMessage);
     }
 });
+
+document.getElementById('formEditarUsuario').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+
+    const response = await fetch(form.action, {
+        method: 'POST',
+        body: data
+    });
+
+    if (response.ok) {
+        // Fecha o modal de edição
+        var modalEditar = bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario'));
+        if (modalEditar) modalEditar.hide();
+
+        // Mostra o modal de sucesso
+        var modalSucesso = new bootstrap.Modal(document.getElementById('modalSucesso'));
+        document.getElementById('modalSucessoBody').textContent = 'Usuário atualizado com sucesso!';
+        modalSucesso.show();
+
+        // Recarrega a página após fechar o modal de sucesso
+        document.getElementById('modalSucesso').addEventListener('hidden.bs.modal', function () {
+            window.location.reload();
+        }, { once: true });
+    } else {
+        const errorData = await response.json();
+        const errorMessage = errorData.mensagem || 'Ocorreu um erro ao editar o usuário.';
+        alert(errorMessage);
+    }
+});
