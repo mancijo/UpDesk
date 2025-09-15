@@ -1,6 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timezone
+import pytz
 
+def get_sao_paulo_time():
+    """
+    Retorna a data e hora atuais no fuso horário de São Paulo.
+    """
+    sao_paulo_tz = pytz.timezone("America/Sao_Paulo")
+    return datetime.now(sao_paulo_tz)
 db = SQLAlchemy()
 
 # Modelo de Usuário
@@ -10,9 +17,10 @@ class Usuario(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     telefone = db.Column(db.String(15))
-    setor = db.Column(db.String(10))
+    setor = db.Column(db.String(50))
     cargo = db.Column(db.String(50), nullable=False)
-    senha = db.Column(db.String(30))
+    senha = db.Column(db.String(255))
+    ativo = db.Column(db.Boolean, default=True, nullable=False)
 
     # Relacionamentos
     chamados_solicitados = db.relationship(
@@ -37,7 +45,7 @@ class Chamado(db.Model):
     atendenteID = db.Column(db.Integer, db.ForeignKey("Usuario.id"))
     solicitanteID = db.Column(db.Integer, db.ForeignKey("Usuario.id"))
     titulo_Chamado = db.Column(db.String(255), nullable=False)
-    descricao_Chamado = db.Column(db.String(400), nullable=False)
+    descricao_Chamado = db.Column(db.Text, nullable=False)
     categoria_Chamado = db.Column(db.String(100), nullable=False)
     prioridade_Chamado = db.Column(db.String(15), nullable=False)
     anexo_Chamado = db.Column(db.LargeBinary)
@@ -45,10 +53,10 @@ class Chamado(db.Model):
         db.String(20),
         default="Aberto"
     )  # Aberto, Em Atendimento, Resolvido, Transferido, Agendado
-    dataAbertura = db.Column(db.DateTime, default=datetime.utcnow)
+    dataAbertura = db.Column(db.DateTime, default=get_sao_paulo_time)
     dataUltimaModificacao = db.Column(db.DateTime)
-    solucaoSugerida = db.Column(db.String(255))
-    solucaoAplicada = db.Column(db.String(255))
+    solucaoSugerida = db.Column(db.Text)
+    solucaoAplicada = db.Column(db.Text)
 
     # Relacionamentos
     solicitante = db.relationship(
@@ -75,7 +83,7 @@ class Interacao(db.Model):
     chamado_id = db.Column(db.Integer, db.ForeignKey("Chamado.chamado_ID"), nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey("Usuario.id"), nullable=False)
     mensagem = db.Column(db.Text, nullable=False)
-    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    data_criacao = db.Column(db.DateTime, default=get_sao_paulo_time)
 
     chamado = db.relationship("Chamado")
     usuario = db.relationship("Usuario")
