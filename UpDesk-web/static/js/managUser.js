@@ -104,32 +104,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('modalSucesso').addEventListener('hidden.bs.modal', function () {
           window.location.reload();
         }, { once: true });
-      } else {
-        alert('Erro ao criar usuário!');
-      }
-    });
-  }
-
-  // Filtro de pesquisa
-  const searchInput = document.querySelector('#searchUser input[name="q"]');
-  const tableRows = document.querySelectorAll('table tbody tr');
-  if (searchInput) {
-    searchInput.addEventListener('input', function() {
-      const query = searchInput.value.toLowerCase();
-      tableRows.forEach(row => {
-        if (row.querySelector('td[colspan]')) {
-          row.style.display = '';
-          return;
+    } else {
+        const errorData = await response.json();
+        let errorMessage = 'Erro ao criar usuário!\n';
+        if (errorData.erros) {
+            for (const field in errorData.erros) {
+                errorMessage += `- ${field}: ${errorData.erros[field]}\n`;
+            }
         }
-        const cells = row.querySelectorAll('td');
-        let found = false;
-        cells.forEach(cell => {
-          if (cell.textContent.toLowerCase().includes(query)) {
-            found = true;
-          }
-        });
-        row.style.display = found ? '' : 'none';
-      });
-    });
-  }
+        alert(errorMessage);
+    }
 });
