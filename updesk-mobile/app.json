@@ -3,6 +3,7 @@
     "name": "updesk-mobile",
     "slug": "updesk-mobile",
     "version": "1.0.0",
+    "scheme": "your-app-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
