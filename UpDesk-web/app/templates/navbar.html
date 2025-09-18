@@ -4,13 +4,13 @@
     
     <!-- Navigation Links (Left) -->
     <div class="navbar-nav me-auto"> <!-- Use Bootstrap's navbar-nav and me-auto to push right -->
-      <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-      <a class="nav-link" href="{{ url_for('ver_chamado') }}">Ver Chamados</a>
-      <a class="nav-link" href="{{ url_for('triagem') }}">Triagem</a>
+      <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
+      <a class="nav-link" href="{{ url_for('chamados.ver_chamados') }}">Ver Chamados</a>
+      <a class="nav-link" href="{{ url_for('chamados.triagem') }}">Triagem</a>
     </div>
 
     <!-- Logo (Center) -->
-    <a class="navbar-brand mx-auto" href="{{ url_for('home') }}">UpDesk</a> <!-- mx-auto to center -->
+    <a class="navbar-brand mx-auto" href="{{ url_for('main.home') }}">UpDesk</a> <!-- mx-auto to center -->
 
     <!-- User Dropdown (Right) -->
     <div class="dropdown ms-auto"> <!-- ms-auto to push left -->
@@ -18,10 +18,10 @@
         {{ session.get('usuario_nome', 'Usuário') }}
       </button>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownButton">
-        <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('meus_chamados') }}">Meus Chamados</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('usuarios.perfil') }}">Meu Perfil</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('chamados.ver_chamados') }}">Meus Chamados</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
       </ul>
     </div>
 

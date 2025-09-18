@@ -1,4 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
+from .extensions import db
 from datetime import datetime, timezone
 import pytz
 
@@ -8,7 +8,6 @@ def get_sao_paulo_time():
     """
     sao_paulo_tz = pytz.timezone("America/Sao_Paulo")
     return datetime.now(sao_paulo_tz)
-db = SQLAlchemy()
 
 # Modelo de Usuário
 class Usuario(db.Model):
