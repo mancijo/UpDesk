@@ -3,7 +3,7 @@ async function fazerLogin() {
     const senha = document.getElementById('senha').value;
     const mensagem = document.getElementById('mensagem');
 
-    const resposta = await fetch('/login', {
+    const resposta = await fetch('/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

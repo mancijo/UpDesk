@@ -56,19 +56,19 @@
   <div class="row g-4 mt-3">
     
     <div class="col-12 col-md-6 col-lg-3">
-      <a href="/chamado" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Abrir Chamado</a>
+      <a href="{{ url_for('chamados.abrir_chamado') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Abrir Chamado</a>
     </div>
 
     <div class="col-12 col-md-6 col-lg-3">
-      <a href="/ver-chamado" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Monitoramento de Chamados</a>
+      <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Monitoramento de Chamados</a>
     </div>
 
     <div class="col-12 col-md-6 col-lg-3">
-      <a href="/ger_usuarios" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Gerenciar Usuário</a>
+      <a href="{{ url_for('usuarios.ger_usuarios') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Gerenciar Usuário</a>
     </div>
     
     <div class="col-12 col-md-6 col-lg-3">
-      <a href="/triagem" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Painel da Triagem</a>
+      <a href="{{ url_for('chamados.triagem') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Painel da Triagem</a>
     </div>
 
   </div>
