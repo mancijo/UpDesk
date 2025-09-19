@@ -12,6 +12,7 @@ const Card = ({ children }: { children: React.ReactNode }) => {
 
 const styles = StyleSheet.create({
   card: {
+    width: '80%',
     backgroundColor: 'white',
     borderRadius: 5, // sm rounding
     padding: 16,
