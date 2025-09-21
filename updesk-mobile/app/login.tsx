@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+} from 'react-native';
 import Card from '../components/Card';
+import { useAuth, User } from '../context/AuthContext';
+import { router, useRouter } from 'expo-router';
 
-// NOTE: Replace with your actual backend URL. 
-// For Android emulators, 10.0.2.2 points to the host machine's localhost.
-const API_URL = 'exp://192.168.10.2:8081';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -12,78 +20,59 @@ const LoginScreen = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-   const handleLogin = async () => {
+  const { login } = useAuth();
+
+  const handleLogin = () => {
+    const userData: User= {
+      ID: '123', 
+      nome: 'Nome do Usuário', 
+      telefone: '11987654321', 
+      email: email, 
+      setor: 'TI', 
+      cargo: 'Desenvolvedor', 
+    };
+
+    login(userData);
+    router.replace('/menu');
     
-   }
 
-  // const handleLogin = async () => {
-  //   if (!email || !password) {
-  //     setError('Email e senha são obrigatórios.');
-  //     return;
-  //   }
 
-  //   setIsLoading(true);
-  //   setError('');
-
-  //   try {
-  //     const response = await fetch(`${API_URL}/login`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         email: email,
-  //         senha: password,
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (response.ok) {
-  //       Alert.alert('Login Bem-Sucedido', data.mensagem);
-  //       // TODO: Navigate to the home screen and store user data/token
-  //       console.log('Login successful:', data.usuario);
-  //     } else {
-  //       setError(data.mensagem || 'Ocorreu um erro no login.');
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //     setError('Não foi possível conectar ao servidor. Verifique o endereço da API e sua conexão.');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
       <View style={styles.centeredView}>
         <Card>
           <Text style={styles.title}>Login</Text>
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
-          
+
           <TextInput
             style={styles.input}
             placeholder="Email"
-            placeholderTextColor="#606D80" 
+            placeholderTextColor="#606D80"
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
             keyboardType="email-address"
           />
-          
+
           <TextInput
             style={styles.input}
             placeholder="Senha"
-            placeholderTextColor="#606D80" 
+            placeholderTextColor="#606D80"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
           />
-          
-          <TouchableOpacity style={[styles.button, isLoading && styles.buttonDisabled]} onPress={handleLogin} disabled={isLoading}>
+
+          <TouchableOpacity
+            style={[styles.button, isLoading && styles.buttonDisabled]}
+            onPress={handleLogin}
+            disabled={isLoading}
+          >
             {isLoading ? (
               <ActivityIndicator color="#FFFFFF" />
             ) : (
@@ -99,7 +88,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#DCE0E6', // light gray
+    backgroundColor: '#FFF', 
   },
   centeredView: {
     flex: 1,
