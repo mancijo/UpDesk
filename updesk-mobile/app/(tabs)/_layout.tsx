@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import HeaderLogo from '../../components/HeaderLogo';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 export default function TabsLayout() {
   return (
@@ -10,7 +11,6 @@ export default function TabsLayout() {
         headerTitle: () => <HeaderLogo/>,
         headerTitleAlign: 'center',
         headerShadowVisible: false,
-
       }}
     >
       <Tabs.Screen
@@ -21,11 +21,26 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="abrirChamado"
-        options={{
+        name="chamado"
+        options={({ route }) => ({
           title: 'Abrir Chamado',
           tabBarIcon: ({ color, size }) => <Feather name="plus-circle" size={size} color={color} />,
-        }}
+          tabBarStyle: ((route) => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? 'abrirChamado';
+            if (routeName === 'solucaoIA') {
+              return { display: 'none' };
+            }
+            return {};
+          })(route),
+        })}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            // Prevent default action
+            e.preventDefault();
+            // Navigate to the initial route of the 'chamado' stack
+            navigation.navigate('chamado', { screen: 'abrirChamado' });
+          },
+        })}
       />
       <Tabs.Screen
         name="verChamados"

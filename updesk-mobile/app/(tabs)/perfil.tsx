@@ -10,6 +10,7 @@ export default function PerfilScreen() {
       <Card>
         <Text style={styles.text}>Nome: {user?.nome}</Text>
         <Text style={styles.text}>Email: {user?.email}</Text>
+        <Text style={styles.text}>Telefone: {user?.telefone}</Text>
         <Text style={styles.text}>Setor: {user?.setor}</Text>
         <Text style={styles.text}>Cargo: {user?.cargo}</Text>
       </Card>
