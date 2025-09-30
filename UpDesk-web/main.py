@@ -43,61 +43,70 @@ def buscar_solucao_com_ia(titulo, descricao):
         return "Não foi possível obter uma sugestão da IA no momento. Por favor, prossiga com a abertura do chamado."
 # --------------------------------
 
-# Configuração do Flask
-app = Flask(__name__)
-CORS(app)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'uma-chave-secreta-padrao')
-app.config['UPLOAD_FOLDER'] = './static/uploads'
+app = Flask(__name__) # Mantemos uma instância global para compatibilidade com os testes
+migrate = Migrate()
 
-# Conexão com o banco de dados usando variáveis de ambiente
-db_driver = os.getenv('DB_DRIVER')
-db_server = os.getenv('DB_SERVER')
-db_database = os.getenv('DB_DATABASE')
-db_uid = os.getenv('DB_UID')
-db_pwd = os.getenv('DB_PWD')
+def create_app(config_overrides=None):
+    """Cria e configura uma instância da aplicação Flask."""
+    app = Flask(__name__)
+    CORS(app)
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'uma-chave-secreta-padrao')
+    app.config['UPLOAD_FOLDER'] = './static/uploads'
 
-params = urllib.parse.quote_plus(
-    f"Driver={{{db_driver}}};"
-    f"Server={db_server};"
-    f"Database={db_database};"
-    f"UID={db_uid};"
-    f"PWD={{{db_pwd}}};"
-)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
-migrate = Migrate(app, db) # Inicializa o Flask-Migrate
+    # Conexão com o banco de dados usando variáveis de ambiente
+    db_driver = os.getenv('DB_DRIVER')
+    db_server = os.getenv('DB_SERVER')
+    db_database = os.getenv('DB_DATABASE')
+    db_uid = os.getenv('DB_UID')
+    db_pwd = os.getenv('DB_PWD')
+
+    if not all([db_driver, db_server, db_database, db_uid, db_pwd]):
+        print("\nAVISO: Variáveis de ambiente do banco de dados não estão completamente configuradas no .env. Usando SQLite em memória.")
+        app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
+    else:
+        params = urllib.parse.quote_plus(
+            f"Driver={{{db_driver}}};"
+            f"Server={db_server};"
+            f"Database={db_database};"
+            f"UID={db_uid};"
+            f"PWD={{{db_pwd}}};"
+        )
+        app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    if config_overrides:
+        app.config.update(config_overrides)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    # Registrar Blueprints e outras extensões aqui, se necessário
+
+    return app
 
 # Rotas
 @app.route('/')
 def index():
     return render_template('login.html')
 
-
-@app.route('/login', methods=['POST'])
-def login():
+@app.route('/auth/session-login', methods=['POST'])
+def session_login():
+    """
+    Endpoint para criar a sessão do usuário no Flask após a autenticação
+    ter sido validada pela API externa (C#).
+    """
     data = request.get_json()
-
-    # Validação básica dos dados recebidos
-    if not data or not data.get('email') or not data.get('senha'):
-        return jsonify({"mensagem": "Email e senha são obrigatórios."}), 400
-
-    usuario = Usuario.query.filter_by(email=data['email'], ativo=True).first()
-    if usuario and check_password_hash(usuario.senha, data['senha']):
-        session['usuario_nome'] = usuario.nome
-        session['usuario_id'] = usuario.id  # Armazena o ID do usuário na sessão
-
-        return jsonify({
-            "mensagem": "Login realizado com sucesso!",
-            "usuario": {
-                "id": usuario.id,
-                "nome": usuario.nome,
-                "email": usuario.email,
-                "cargo": usuario.cargo
-            }
-        }), 200
-
-    return jsonify({"mensagem": "Email ou senha incorretos"}), 401
+    if not data or not data.get('id') or not data.get('nome'):
+        return jsonify({"mensagem": "Dados de usuário inválidos para criar sessão."}), 400
+    
+    # Armazena os dados do usuário na sessão do Flask
+    session['usuario_id'] = data['id']
+    session['usuario_nome'] = data['nome']
+    session['usuario_email'] = data.get('email')
+    session['usuario_cargo'] = data.get('cargo')
+    
+    return jsonify({"mensagem": "Sessão criada com sucesso!"}), 200
 
 @app.route('/logout')
 def logout():
@@ -107,14 +116,12 @@ def logout():
 
 @app.route('/home')
 def home():
-    if 'usuario_nome' not in session:
-        return redirect(url_for('index'))
 
     nome_usuario = session.get('usuario_nome')
     chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
     chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
-    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Solução IA'
-    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count() # NOTE: Assuming 'Resolvido' maps to 'Finalizados'
+    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido').count() 
+    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count() 
 
     return render_template('home.html', 
                            nome_usuario=nome_usuario, 
@@ -456,11 +463,13 @@ def gerar_relatorio_pdf():
     response.headers['Content-Disposition'] = f'inline; filename=relatorio_chamados_{datetime.now().strftime("%Y%m%d")}.pdf'
     return response
 
+def setup_database(app_instance):
+    """Cria as tabelas do banco de dados se não existirem."""
+    with app_instance.app_context():
+        db.create_all()
+
 if __name__ == '__main__':
+    app = create_app()
     with app.app_context():
-        try:
-            db.create_all()
-            print("Database tables created successfully (or already exist).")
-        except Exception as e:
-            print(f"\nCRITICAL ERROR: Failed to connect to or initialize the database. Details: {e}\n")
+        setup_database(app)
     app.run(debug=True)
