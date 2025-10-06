@@ -2,8 +2,8 @@
 
 :root {
   /* Cores */
-  --cor-primaria: #2B4C7E; /* Updated to Dark navy blue */
-  --cor-primaria-escura: #1E3A60; /* Keep as is, or adjust based on new primary */
+  --cor-primaria: #2B4C70; /* Azul escuro principal, padronizado a partir do design da página de login. */
+  --cor-primaria-escura: #1E3A60; /* Variação mais escura para efeitos como hover em botões. */
   --cor-secundaria: #6c757d;
   --cor-sucesso: #28a745;
   --cor-perigo: #dc3545;
@@ -32,7 +32,7 @@
   --espaco-xl: 40px;
 
   /* Tipografia */
-  --fonte-principal: 'Inter', sans-serif; /* Updated font */
+  --fonte-principal: 'Roboto', sans-serif; /* Fonte principal da aplicação */
   --fonte-tamanho-base: 16px;
   --fonte-tamanho-s: 14px;
   --fonte-tamanho-m: 16px;

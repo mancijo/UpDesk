@@ -129,7 +129,7 @@
             <div class="col-lg-8 mb-4">
                 <div class="main-card">
                     <h5 class="card-title-custom">Chat de Atendimento</h5>
-                    <div class="chat-container">
+                    <div class="chat-container" data-chamado-id="{{ chamado.chamado_ID }}" data-user-id="{{ session['usuario_id'] }}">
                         <div class="chat-messages" id="chat-messages">
                             <!-- Mensagens serão carregadas aqui via JS -->
                             <div class="text-center p-5">
@@ -171,9 +171,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const chamadoId = {{ chamado.chamado_ID }};
-            const currentUserId = {{ session['usuario_id'] }};
+                document.addEventListener('DOMContentLoaded', function() {
+            const chamadoId = {{ chamado.chamado_ID|tojson }};
+            const currentUserId = {{ session['usuario_id']|tojson }};
             const chatMessages = document.getElementById('chat-messages');
             const form = document.getElementById('form-enviar-mensagem');
             const input = document.getElementById('input-mensagem');
