@@ -2,25 +2,7 @@
 
 /* Styling now handled by Bootstrap classes and .custom-btn */
 
-.btn-login {
-    display: flex;
-    width: 125px;
-    height: 36px;
-    padding: var(--espaco-xs) var(--espaco-m); /* Adjusted padding to match input */
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: var(--raio-borda-pílula);
-    border: 1px solid var(--cor-borda);
-    background: var(--cor-primaria);
-    color: var(--cor-texto-claro);
-    cursor: pointer; /* Add cursor pointer for better UX */
-    transition: background-color 0.3s ease; /* Smooth transition for hover */
-}
 
-.btn-login:hover {
-    background-color: var(--cor-primaria-escura);
-}
 
 /* Ajusta o botão para ter as bordas arredondadas e o efeito de hover */
 .custom-btn {
