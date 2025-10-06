@@ -1,3 +1,13 @@
+"""
+Arquivo de Ambiente do Alembic (Flask-Migrate)
+
+Responsabilidade:
+- Este arquivo é o script de configuração que o Alembic executa ao rodar um comando de migração.
+- Sua principal função é conectar o Alembic ao banco de dados da aplicação Flask e fornecer a ele
+  os metadados dos modelos (de `app/models.py`) para que ele possa detectar alterações no esquema.
+- É um arquivo majoritariamente gerado automaticamente e raramente precisa de edição manual, a não ser
+  para configurações avançadas de migração.
+"""
 import logging
 from logging.config import fileConfig
 

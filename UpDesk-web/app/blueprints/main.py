@@ -1,15 +1,27 @@
 
 from flask import Blueprint, render_template, session, redirect, url_for
 from app.models import Chamado
+from app.forms import LoginForm
 
 bp = Blueprint('main', __name__)
 
 @bp.route('/')
 def index():
+    """
+    Renderiza a página de login ou redireciona para a home se o usuário já estiver logado.
+
+    - Verifica se o 'usuario_id' existe na sessão para determinar se o usuário está autenticado.
+    - Instancia o LoginForm (de forms.py) e o passa para o template 'login.html'.
+      Isso permite que o template renderize o formulário com os campos, validações e 
+      proteção CSRF definidos no backend.
+    """
     # Se o usuário já estiver logado, redireciona para a home
     if 'usuario_id' in session:
         return redirect(url_for('main.home'))
-    return render_template('login.html')
+    
+    # Cria uma instância do formulário de login para ser usada no template
+    form = LoginForm()
+    return render_template('login.html', form=form)
 
 @bp.route('/home')
 def home():

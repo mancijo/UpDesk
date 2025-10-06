@@ -1,3 +1,11 @@
+"""
+Definição dos Formulários da Aplicação
+
+Responsabilidade:
+- Centralizar a definição de todos os formulários usados no projeto utilizando a biblioteca Flask-WTF.
+- Cada classe representa um formulário, definindo seus campos, tipos e regras de validação (validators).
+- A integração com o Flask-WTF garante a segurança contra ataques CSRF.
+"""
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
@@ -31,8 +39,18 @@ class chamadoForm(FlaskForm):
     submit = SubmitField('Buscar solução com a IA')
 
 class LoginForm(FlaskForm):
+    """
+    Formulário de autenticação do usuário.
+    Usado na página de login para capturar e validar as credenciais.
+    """
+    # Campo de Email: Requer que seja preenchido e que tenha um formato de email válido.
+    # O nome da variável "Email" com "E" maiúsculo é como foi definido e deve ser usado no template.
     Email = StringField('Email', validators=[DataRequired(), Email()])
+    
+    # Campo de Senha: Requer que seja preenchido.
     senha = PasswordField('Senha', validators=[DataRequired()])
+    
+    # Botão de Submit: Texto que aparecerá no botão.
     Submit =  SubmitField('Login')
 
 
