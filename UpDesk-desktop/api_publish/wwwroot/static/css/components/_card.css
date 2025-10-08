@@ -1,0 +1,14 @@
+/* /static/css/components/_card.css */
+
+/* Ajusta o card para ter as bordas arredondadas que você quer */
+.custom-card {
+  border-radius: 15px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: var(--cor-fundo-claro) !important; /* Force white background */
+}
+
+/* Efeito de "levantar" no hover que não vem por padrão */
+.custom-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; /* Aumenta a sombra no hover */
+}

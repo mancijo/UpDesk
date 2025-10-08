@@ -7,7 +7,7 @@
     "start": "electron .",
     "prebuild": "taskkill /im UpDesk.api.Web.exe /f || exit 0",
     "prepublish-api": "if exist api_publish ( rd /s /q api_publish )",
-    "publish-api": "dotnet publish ../UpDesk.api/UpDesk.api.Web -c Release -o ./api_publish",
+    "publish-api": "dotnet publish ../UpDesk.api/UpDesk.api.Web -c Release -o ./api_publish && xcopy wwwroot api_publish\\wwwroot /E /I /Y",
     "build": "npm run publish-api && electron-builder"
   },
   "keywords": [],
@@ -17,7 +17,7 @@
     "electron-log": "^5.1.5"
   },
   "devDependencies": {
-    "electron": "^31.0.2",
+    "electron": "^29.1.5",
     "electron-builder": "^24.13.3"
   },
   "build": {

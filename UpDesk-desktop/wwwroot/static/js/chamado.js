@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if(forceCreateBtn) {
         forceCreateBtn.addEventListener('click', () => {
-            // Simula o clique no botão de submit original para reaproveitar a lógica
-            chamadoForm.querySelector('button[type="submit"]').click();
+            document.getElementById('submit-chamado').click();
         });
     }
 });
@@ -28,13 +27,90 @@ async function handleFormSubmit(event) {
     const submitButton = form.querySelector('button[type="submit"]');
     const errorMessageDiv = document.getElementById('error-message');
 
-    submitButton.disabled = true;
-    submitButton.textContent = 'Enviando...';
+    const titulo = document.getElementById('titulo').value;
+    const descricao = document.getElementById('descricao').value;
+
+    if (titulo.toLowerCase().trim() === 'comeram minha marmita') {
+        alert('Isso não é uma categoria de chamado, fale com seu supervisor');
+        return;
+    }
+
+    if (titulo.length < 10) {
+        errorMessageDiv.textContent = 'O título deve ter no mínimo 10 caracteres.';
+        errorMessageDiv.classList.remove('d-none');
+        return;
+    }
+
+    if (descricao.length < 20) {
+        errorMessageDiv.textContent = 'A descrição deve ter no mínimo 20 caracteres.';
+        errorMessageDiv.classList.remove('d-none');
+        return;
+    }
+
+    if (titulo.toLowerCase().trim() === 'teste') {
+        errorMessageDiv.textContent = 'O título não pode ser "Teste". Por favor, forneça um título mais descritivo.';
+        errorMessageDiv.classList.remove('d-none');
+        return;
+    }
+
+    if (descricao.toLowerCase().trim() === 'teste') {
+        errorMessageDiv.textContent = 'A descrição não pode ser "Teste". Por favor, forneça uma descrição mais detalhada.';
+        errorMessageDiv.classList.remove('d-none');
+        return;
+    }
+
+    if (!hasVowels(titulo)) {
+        errorMessageDiv.textContent = 'O título parece ser inválido. Por favor, verifique.';
+        errorMessageDiv.classList.remove('d-none');
+        return;
+    }
+
+    if (!hasVowels(descricao)) {
+        errorMessageDiv.textContent = 'A descrição parece ser inválida. Por favor, verifique.';
+        errorMessageDiv.classList.remove('d-none');
+        return;
+    }
+
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Enviando...';
+    }
     errorMessageDiv.classList.add('d-none');
 
-    const formData = new FormData(form);
+    // Manually construct the DTO to ensure correct property names (PascalCase)
+    const payload = {
+        Titulo: document.getElementById('titulo').value,
+        Descricao: document.getElementById('descricao').value,
+        Categoria: document.getElementById('categoria').value,
+        Prioridade: document.getElementById('prioridade').value,
+        SolicitanteId: null,
+    };
+
+    try {
+        const userInfo = JSON.parse(localStorage.getItem('usuario'));
+        // CORREÇÃO: Verifica por 'id' (camelCase) e 'Id' (PascalCase) para ser robusto.
+        const userId = userInfo ? (userInfo.id || userInfo.Id) : null;
+        if (userId) {
+            payload.SolicitanteId = parseInt(userId, 10);
+        }
+    } catch (e) {
+        console.error('Erro ao ler usuario do localStorage:', e);
+    }
+
+    if (!payload.SolicitanteId) {
+        errorMessageDiv.textContent = 'Não foi possível identificar o usuário solicitante. Faça o login novamente.';
+        errorMessageDiv.classList.remove('d-none');
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Abrir Chamado';
+        }
+        return;
+    }
+
     const token = localStorage.getItem('authToken');
-    const headers = {};
+    const headers = {
+        'Content-Type': 'application/json'
+    };
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
@@ -43,22 +119,25 @@ async function handleFormSubmit(event) {
         const response = await fetch(`${apiUrl}/api/chamados`, {
             method: 'POST',
             headers: headers,
-            body: formData,
+            body: JSON.stringify(payload),
         });
 
         if (response.ok) {
             alert('Chamado aberto com sucesso!');
             window.location.href = '/templates/verChamado.html';
         } else {
-            const errorData = await response.json().catch(() => ({ message: 'Ocorreu um erro ao abrir o chamado.' }));
-            throw new Error(errorData.message || 'Erro desconhecido.');
+            const errorText = await response.text();
+            const detailedError = `Status: ${response.status} ${response.statusText}. Response: ${errorText}`;
+            throw new Error(detailedError);
         }
     } catch (error) {
         errorMessageDiv.textContent = error.message;
         errorMessageDiv.classList.remove('d-none');
     } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Abrir Chamado';
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Abrir Chamado';
+        }
     }
 }
 
@@ -71,6 +150,41 @@ async function getAISuggestion() {
     const suggestBtn = document.getElementById('suggest-solution-btn');
     const solutionDisplay = document.getElementById('solution-display');
     const solutionText = document.getElementById('solution-text');
+
+    if (titulo.toLowerCase().trim() === 'comeram minha marmita') {
+        alert('Isso não é uma categoria de chamado, fale com seu supervisor');
+        return;
+    }
+
+    if (titulo.length < 10) {
+        alert('O título deve ter no mínimo 10 caracteres.');
+        return;
+    }
+
+    if (descricao.length < 20) {
+        alert('A descrição deve ter no mínimo 20 caracteres.');
+        return;
+    }
+
+    if (titulo.toLowerCase().trim() === 'teste') {
+        alert('O título não pode ser "Teste". Por favor, forneça um título mais descritivo.');
+        return;
+    }
+
+    if (descricao.toLowerCase().trim() === 'teste') {
+        alert('A descrição não pode ser "Teste". Por favor, forneça uma descrição mais detalhada.');
+        return;
+    }
+
+    if (!hasVowels(titulo)) {
+        alert('O título parece ser inválido. Por favor, verifique.');
+        return;
+    }
+
+    if (!hasVowels(descricao)) {
+        alert('A descrição parece ser inválida. Por favor, verifique.');
+        return;
+    }
 
     if (!titulo || !descricao) {
         alert('Por favor, preencha o título e a descrição antes de pedir uma sugestão.');
@@ -103,4 +217,8 @@ async function getAISuggestion() {
         suggestBtn.disabled = false;
         suggestBtn.innerHTML = 'Sugerir Solução com IA';
     }
+}
+
+function hasVowels(str) {
+    return /[aeiou]/i.test(str);
 }

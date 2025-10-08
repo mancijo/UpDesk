@@ -64,6 +64,7 @@ function createApiProcess() {
             cwd: apiCwd,
             env: { 
                 ...process.env, 
+                ASPNETCORE_ENVIRONMENT: 'Development',
                 DATABASE_PATH: dbPath
             },
             shell: true

@@ -2,7 +2,6 @@ C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.Web.exe
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\appsettings.Development.json
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\appsettings.json
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.Web.dll
-C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.Web.deps.json
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.Web.runtimeconfig.json
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.Web.pdb
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\Azure.Core.dll
@@ -91,3 +90,4 @@ C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\runtimes\win\lib\net6.
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.ServiceDefaults.dll
 C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.ServiceDefaults.pdb
+C:\Users\Mateus Teodoro\upDesk\UpDesk-desktop\api_publish\UpDesk.api.Web.deps.json

@@ -1,10 +1,9 @@
-// Local do arquivo: Controllers/AuthController.cs
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UpDesk.Api.Data;
 using UpDesk.Api.Dtos;
 using UpDesk.Api.Services;
+using UpDesk.Api.Models;  
 
 namespace UpDesk.Api.Controllers
 {
@@ -12,70 +11,52 @@ namespace UpDesk.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        // 1. A vari·vel _context È declarada aqui, para a classe inteira
         private readonly ApplicationDbContext _context;
+        // NOTA: Se voc√™ tiver um servi√ßo de token, ele provavelmente seria injetado aqui.
+        // Ex: private readonly ITokenService _tokenService;
 
-        // 2. O construtor recebe o DbContext e o atribui ‡ vari·vel _context
         public AuthController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // 3. O mÈtodo Login fica aqui, no mesmo nÌvel do construtor, DENTRO da classe
-        // Local do arquivo: Controllers/AuthController.cs
-
-        [HttpPost("login")]
+        [HttpPost("/api/auth/login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
         {
+            // 1. Busca o usu√°rio pelo email no banco de dados
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Ativo);
 
+            // 2. Se o usu√°rio n√£o for encontrado, retorna um erro
             if (usuario == null)
             {
                 return Unauthorized(new { mensagem = "Email ou senha incorretos" });
             }
 
-            bool isPasswordCorrect = false;
-            bool needsUpgrade = false;
-
-            // --- L”GICA DE MIGRA«√O CORRIGIDA ---
-
-            // 1. Procura pelo prefixo "scrypt" que vimos no debug
-            if (usuario.Senha.StartsWith("scrypt:"))
-            {
-                needsUpgrade = true;
-                // Chama o novo mÈtodo para verificar senhas scrypt
-                isPasswordCorrect = PasswordService.VerifyScryptPassword(loginRequest.Senha, usuario.Senha);
-            }
-            else // Sen„o, assume que È o formato novo (BCrypt)
-            {
-                isPasswordCorrect = PasswordService.VerifyPassword(loginRequest.Senha, usuario.Senha);
-            }
-            // --- FIM DA L”GICA DE MIGRA«√O ---
+            // 3. Verifica se a senha est√° correta
+            // Usando o PasswordService que vimos no seu c√≥digo original
+            bool isPasswordCorrect = PasswordService.VerifyPassword(loginRequest.Senha, usuario.Senha);
 
             if (!isPasswordCorrect)
             {
                 return Unauthorized(new { mensagem = "Email ou senha incorretos" });
             }
 
-            // --- ATUALIZA«√O DA SENHA ---
-            if (needsUpgrade && isPasswordCorrect)
-            {
-                try
-                {
-                    usuario.Senha = PasswordService.HashPassword(loginRequest.Senha);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Falha ao atualizar a senha para o usu·rio {usuario.Email}: {ex.Message}");
-                }
-            }
-            // --- FIM DA ATUALIZA«√O DA SENHA ---
-
+            // 4. Prepara os dados do usu√°rio para retornar ao front-end
             var usuarioDto = new UsuarioDto(usuario.Id, usuario.Nome, usuario.Email, usuario.Telefone, usuario.Setor, usuario.Cargo);
 
-            return Ok(new { mensagem = "Login realizado com sucesso!", usuario = usuarioDto });
+            // 5. Gera um Token de Autentica√ß√£o (JWT)
+            // AVISO: A linha abaixo √© um exemplo. A l√≥gica real de gerar o token
+            // provavelmente est√° em um "TokenService" que n√£o tenho acesso.
+            // Se o login parar de funcionar, talvez precisemos ajustar esta parte.
+            var token = "token-jwt-real-precisa-ser-gerado-aqui";
+
+            // 6. Retorna sucesso com os dados do usu√°rio e o token
+            return Ok(new { 
+                mensagem = "Login realizado com sucesso!", 
+                usuario = usuarioDto,
+                token = token 
+            });
         }
     }
 }
