@@ -1,0 +1,48 @@
+/* static/css/components/_form.css */
+
+.form__group {
+  margin-bottom: var(--espaco-m);
+}
+
+.form__label {
+  display: block;
+  margin-bottom: var(--espaco-xs);
+  font-weight: var(--fonte-peso-medio);
+  color: var(--cor-texto-principal);
+}
+
+.form__input,
+.form__textarea,
+.form__select {
+  width: 100%;
+  padding: var(--espaco-s);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  font-size: var(--fonte-tamanho-base);
+  color: var(--cor-texto-principal);
+}
+
+
+
+.form__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form__input-file {
+  /* Estilos para input type="file" */
+  display: block;
+  width: 100%;
+  padding: var(--espaco-s);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  background-color: var(--cor-fundo-claro);
+  cursor: pointer;
+}
+
+.form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espaco-s);
+  margin-top: var(--espaco-m);
+}
