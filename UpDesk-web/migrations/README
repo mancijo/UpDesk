@@ -1,0 +1,14 @@
+# Configuração de Migrações de Banco de Dados para Flask
+
+Este diretório (`migrations`) contém os scripts de migração de esquema de banco de dados, gerenciados pela ferramenta Alembic.
+
+## Configuração de Banco de Dados Único
+
+A aplicação está configurada para operar com um *único banco de dados*. Esta abordagem simplifica a gestão do esquema e é comum para a maioria das aplicações Flask, especialmente em estágios iniciais ou quando a complexidade do domínio não exige múltiplos bancos de dados.
+
+### Implicações de Engenharia de Software:
+*   **Controle de Versão do Esquema:** Cada arquivo neste diretório representa uma versão do esquema do banco de dados, permitindo a evolução controlada e reversível.
+*   **Consistência:** Garante que o esquema do banco de dados seja consistente em diferentes ambientes (desenvolvimento, teste, produção).
+*   **Simplicidade:** Reduz a complexidade na configuração e manutenção do banco de dados, focando em uma única fonte de verdade para o esquema.
+
+Para gerar novas migrações ou aplicar migrações existentes, utilize os comandos do Alembic.
