@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "updesk-mobile",
+    "slug": "updesk-mobile",
+    "version": "1.0.0",
+    "scheme": "updesk-mobile",
+    "orientation": "portrait",
+    "icon": "./assets/logoUpd.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/logoUpd.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logoUpd.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/logoUpd.png"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
+
