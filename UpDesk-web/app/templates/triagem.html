@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Triagem de Chamados - UpDesk{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <div class="main-panel">
+        <h2 class="text-center panel-title">Painel de Triagem</h2>
+        <h5>Chamados Aguardando Atendimento</h5>
+
+        <div class="tickets-list mt-4">
+            <div class="tickets-header d-none d-md-grid">
+                <div>Id</div>
+                <div>Título</div>
+                <div>Status</div>
+                <div>Data</div>
+                <div class="actions-header">Ações</div>
+            </div>
+
+            {# 1. Loop corrigido para usar o objeto de paginação #}
+            {% for chamado in chamados_paginados.items %}
+            <div class="ticket-row">
+                <div>{{ chamado.chamado_ID }}</div>
+                <div>{{ chamado.titulo_Chamado }}</div>
+                <div>
+                    <span class="status 
+                        {% if chamado.status_Chamado == 'Resolvido' %}status-resolvido
+                        {% elif chamado.status_Chamado == 'Aberto' %}status-pendente
+                        {% elif chamado.status_Chamado == 'Em Atendimento' %}status-atendimento
+                        {% endif %}">
+                        {{ chamado.status_Chamado }}
+                    </span>
+                </div>
+                <div>{{ chamado.dataAbertura.strftime("%d/%m/%Y") }}</div>
+                <div class="ticket-actions text-end">
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#visualizarChamadoModal"
+                        data-id="{{ chamado.chamado_ID }}"
+                        data-titulo="{{ chamado.titulo_Chamado }}"
+                        data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
+                        data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
+                        data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
+                        data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
+                        data-status="{{ chamado.status_Chamado }}"
+                        data-categoria="{{ chamado.categoria_Chamado }}"
+                        data-descricao="{{ chamado.descricao_Chamado }}">
+                        Visualizar
+                    </button>
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}">
+                        Transferir
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="ticket-row">
+                <div style="grid-column: 1 / -1; text-align: center; padding: 20px;">Nenhum chamado aberto encontrado.</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {# 2. Bloco de navegação da paginação adicionado #}
+        <div class="mt-4 d-flex justify-content-center">
+            <nav aria-label="Navegação das páginas de chamados">
+              <ul class="pagination">
+                <li class="page-item {% if not chamados_paginados.has_prev %}disabled{% endif %}">
+                  <a class="page-link" href="{{ url_for('chamados.triagem', page=chamados_paginados.prev_num) }}">Anterior</a>
+                </li>
+            
+                {% for page_num in chamados_paginados.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                  {% if page_num %}
+                    <li class="page-item {% if page_num == chamados_paginados.page %}active{% endif %}">
+                      <a class="page-link" href="{{ url_for('chamados.triagem', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                  {% else %}
+                    <li class="page-item disabled"><span class="page-link">…</span></li>
+                  {% endif %}
+                {% endfor %}
+            
+                <li class="page-item {% if not chamados_paginados.has_next %}disabled{% endif %}">
+                  <a class="page-link" href="{{ url_for('chamados.triagem', page=chamados_paginados.next_num) }}">Próxima</a>
+                </li>
+              </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="visualizarChamadoModal" tabindex="-1" aria-labelledby="visualizarChamadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h1 class="modal-title fs-5" id="visualizarChamadoModalLabel">Dados do Chamado</h1>
+                    <h2 class="modal-subtitle" id="modal-data-abertura">Aberto em: ...</h2>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon"><i class="bi bi-person"></i></span>
+                    <strong>Solicitante:</strong><br>
+                    <span id="modal-solicitante-nome">...</span><br>
+                    <span id="modal-solicitante-email">...</span><br>
+                    Ramal: <span id="modal-solicitante-ramal">...</span>
+                </div>
+                <div class="text-center my-4">
+                    <span class="title-badge-modal" id="modal-titulo">...</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted mb-2">
+                    <span><strong>Status:</strong> <span id="modal-status">...</span></span>
+                    <span><strong>Categoria:</strong> <span id="modal-categoria">...</span></span>
+                </div>
+                <p class="mt-3"><strong>Descrição:</strong></p>
+                <div class="description-box" id="modal-descricao">...</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
+                <a href="#" id="iniciarTriagemBtn" class="btn btn-iniciar-modal rounded-pill">Iniciar Atendimento</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/triagem.js') }}"></script>
+{% endblock %}
