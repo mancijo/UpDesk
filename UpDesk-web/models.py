@@ -52,7 +52,7 @@ class Chamado(db.Model):
     status_Chamado = db.Column(
         db.String(20),
         default="Aberto"
-    )  # Aberto, Em Atendimento, Resolvido, Transferido, Agendado
+    )  # Aberto, Em Atendimento, Resolvido, Transferido, Agendado, Resolvido por IA
     dataAbertura = db.Column(db.DateTime, default=get_sao_paulo_time)
     dataUltimaModificacao = db.Column(db.DateTime)
     solucaoSugerida = db.Column(db.Text)

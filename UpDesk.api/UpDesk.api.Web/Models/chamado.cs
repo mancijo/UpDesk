@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UpDesk.Api.Models;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor
+
 [Table("Chamado")]
 public class Chamado
 {
@@ -16,19 +18,19 @@ public class Chamado
 
     [Required, MaxLength(255)]
     [Column("titulo_Chamado")]
-    public string TituloChamado { get; set; }
+    public required string TituloChamado { get; set; }
 
     [Required]
     [Column("descricao_Chamado")]
-    public string DescricaoChamado { get; set; }
+    public required string DescricaoChamado { get; set; }
 
     [Required, MaxLength(100)]
     [Column("categoria_Chamado")]
-    public string CategoriaChamado { get; set; }
+    public required string CategoriaChamado { get; set; }
 
     [Required, MaxLength(15)]
     [Column("prioridade_Chamado")]
-    public string PrioridadeChamado { get; set; }
+    public required string PrioridadeChamado { get; set; }
 
     [Column("status_Chamado")]
     public string StatusChamado { get; set; } = "Aberto";

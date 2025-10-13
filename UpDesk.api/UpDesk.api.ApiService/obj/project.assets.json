@@ -2235,8 +2235,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj": {
-              "projectPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj"
+            "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj": {
+              "projectPath": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj"
             }
           }
         }

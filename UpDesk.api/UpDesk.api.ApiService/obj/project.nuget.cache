@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "akTuq9pN2kk=",
+  "dgSpecHash": "CtuRGiaDVO4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ApiService\\UpDesk.api.ApiService.csproj",
+  "projectFilePath": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ApiService\\UpDesk.api.ApiService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mateus Teodoro\\.nuget\\packages\\google.protobuf\\3.22.5\\google.protobuf.3.22.5.nupkg.sha512",
     "C:\\Users\\Mateus Teodoro\\.nuget\\packages\\grpc.core.api\\2.52.0\\grpc.core.api.2.52.0.nupkg.sha512",

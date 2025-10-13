@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj": {}
+    "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj": {
+    "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj",
+        "projectUniqueName": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj",
         "projectName": "UpDesk.api.ServiceDefaults",
-        "projectPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj",
+        "projectPath": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\UpDesk.api.ServiceDefaults.csproj",
         "packagesPath": "C:\\Users\\Mateus Teodoro\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\obj\\",
+        "outputPath": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.ServiceDefaults\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

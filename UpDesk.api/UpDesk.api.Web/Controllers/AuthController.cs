@@ -12,12 +12,12 @@ namespace UpDesk.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        // NOTA: Se você tiver um serviço de token, ele provavelmente seria injetado aqui.
-        // Ex: private readonly ITokenService _tokenService;
+        private readonly JwtService _jwtService;
 
-        public AuthController(ApplicationDbContext context)
+        public AuthController(ApplicationDbContext context, JwtService jwtService)
         {
             _context = context;
+            _jwtService = jwtService;
         }
 
         [HttpPost("/api/auth/login")]
@@ -34,8 +34,7 @@ namespace UpDesk.Api.Controllers
             }
 
             // 3. Verifica se a senha está correta
-            // Usando o PasswordService que vimos no seu código original
-            bool isPasswordCorrect = PasswordService.VerifyPassword(loginRequest.Senha, usuario.Senha);
+            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(loginRequest.Senha, usuario.Senha);
 
             if (!isPasswordCorrect)
             {
@@ -46,10 +45,7 @@ namespace UpDesk.Api.Controllers
             var usuarioDto = new UsuarioDto(usuario.Id, usuario.Nome, usuario.Email, usuario.Telefone, usuario.Setor, usuario.Cargo);
 
             // 5. Gera um Token de Autenticação (JWT)
-            // AVISO: A linha abaixo é um exemplo. A lógica real de gerar o token
-            // provavelmente está em um "TokenService" que não tenho acesso.
-            // Se o login parar de funcionar, talvez precisemos ajustar esta parte.
-            var token = "token-jwt-real-precisa-ser-gerado-aqui";
+            var token = _jwtService.GenerateToken(usuario);
 
             // 6. Retorna sucesso com os dados do usuário e o token
             return Ok(new { 

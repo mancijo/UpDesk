@@ -7,5 +7,5 @@ namespace Projects;
 [global::System.Diagnostics.DebuggerDisplay("Type = {GetType().Name,nq}, ProjectPath = {ProjectPath}")]
 public class UpDesk_api_Web : global::Aspire.Hosting.IProjectMetadata
 {
-    public string ProjectPath => """C:\Users\Mateus Teodoro\upDesk\UpDesk.api\UpDesk.api.Web\UpDesk.api.Web.csproj""";
+    public string ProjectPath => """c:\Users\Mateus Teodoro\upDesk\UpDesk.api\UpDesk.api.Web\UpDesk.api.Web.csproj""";
 }

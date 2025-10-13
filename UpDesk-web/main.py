@@ -120,8 +120,8 @@ def home():
     nome_usuario = session.get('usuario_nome')
     chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
     chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
-    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido').count() 
-    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count() 
+    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido por IA').count()
+    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count()
 
     return render_template('home.html', 
                            nome_usuario=nome_usuario, 
@@ -188,6 +188,28 @@ def confirmar_abertura_chamado():
     )
     db.session.add(novo_chamado)
     db.session.commit()
+    return redirect(url_for('ver_chamado'))
+
+@app.route('/resolver_chamado_ia', methods=['POST'])
+def resolver_chamado_ia():
+    if 'usuario_id' not in session or 'chamado_temporario' not in session:
+        return redirect(url_for('index'))
+
+    dados_chamado = session.pop('chamado_temporario', None)
+    if dados_chamado:
+        novo_chamado = Chamado(
+            titulo_Chamado=dados_chamado['titulo'],
+            descricao_Chamado=dados_chamado['descricao'],
+            categoria_Chamado=dados_chamado['afetado'],
+            solicitanteID=session['usuario_id'],
+            prioridade_Chamado=dados_chamado['prioridade'],
+            status_Chamado='Resolvido por IA',
+            solucaoSugerida=dados_chamado['solucao_sugerida'],
+            solucaoAplicada=dados_chamado['solucao_sugerida']
+        )
+        db.session.add(novo_chamado)
+        db.session.commit()
+    
     return redirect(url_for('ver_chamado'))
 
 @app.route('/ver-chamado')
@@ -462,6 +484,29 @@ def gerar_relatorio_pdf():
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'inline; filename=relatorio_chamados_{datetime.now().strftime("%Y%m%d")}.pdf'
     return response
+
+@app.route('/api/chamados/triagem', methods=['GET'])
+def get_chamados_triagem():
+    """
+    Endpoint da API para retornar os chamados que precisam de triagem.
+    """
+    if 'usuario_id' not in session:
+        return jsonify({"erro": "Não autorizado"}), 401
+
+    try:
+        # Filtra os chamados com status "Aguardando Triagem"
+        chamados_para_triagem = Chamado.query.filter_by(status_Chamado='Aguardando Triagem').order_by(Chamado.dataAbertura.asc()).all()
+        
+        # Converte os resultados para um formato JSON
+        resultado = [chamado.to_dict() for chamado in chamados_para_triagem]
+        
+        return jsonify(resultado)
+
+    except Exception as e:
+        print(f"Erro ao buscar chamados para triagem: {e}")
+        return jsonify({"erro": "Ocorreu um erro interno ao buscar os chamados."}), 500
+
+
 
 def setup_database(app_instance):
     """Cria as tabelas do banco de dados se não existirem."""

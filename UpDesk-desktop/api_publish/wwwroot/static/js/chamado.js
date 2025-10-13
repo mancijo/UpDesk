@@ -35,8 +35,8 @@ async function handleFormSubmit(event) {
         return;
     }
 
-    if (titulo.length < 20) {
-        errorMessageDiv.textContent = 'O título deve ter no mínimo 20 caracteres.';
+    if (titulo.length < 10) {
+        errorMessageDiv.textContent = 'O título deve ter no mínimo 10 caracteres.';
         errorMessageDiv.classList.remove('d-none');
         return;
     }
@@ -156,8 +156,8 @@ async function getAISuggestion() {
         return;
     }
 
-    if (titulo.length < 20) {
-        alert('O título deve ter no mínimo 20 caracteres.');
+    if (titulo.length < 10) {
+        alert('O título deve ter no mínimo 10 caracteres.');
         return;
     }
 

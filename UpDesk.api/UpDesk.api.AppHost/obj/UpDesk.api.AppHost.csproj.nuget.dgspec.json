@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj": {}
+    "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj": {
+    "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj",
+        "projectUniqueName": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj",
         "projectName": "UpDesk.api.AppHost",
-        "projectPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj",
+        "projectPath": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\UpDesk.api.AppHost.csproj",
         "packagesPath": "C:\\Users\\Mateus Teodoro\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\obj\\",
+        "outputPath": "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

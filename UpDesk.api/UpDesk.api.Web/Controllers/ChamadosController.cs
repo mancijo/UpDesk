@@ -39,15 +39,15 @@ public class ChamadosController : ControllerBase
         // CORREÇÃO: OrderByDescending foi movido para ANTES do Select
         return await query
             .OrderByDescending(c => c.DataAbertura) 
-            .Select(c => new ChamadoSummaryDto(
-                c.ChamadoId,
-                c.TituloChamado,
-                c.CategoriaChamado,
-                c.PrioridadeChamado,
-                c.StatusChamado,
-                c.DataAbertura,
-                c.Solicitante != null ? c.Solicitante.Nome : null,
-                c.Atendente != null ? c.Atendente.Nome : null
+            .Select(c => new ChamadoSummaryDto( // Correção: Mapeamento explícito para garantir consistência
+                c.ChamadoId, // ChamadoId
+                c.TituloChamado, // TituloChamado
+                c.CategoriaChamado, // CategoriaChamado
+                c.PrioridadeChamado, // PrioridadeChamado
+                c.StatusChamado, // StatusChamado
+                c.DataAbertura, // DataAbertura
+                c.Solicitante != null ? c.Solicitante.Nome : "N/A", // SolicitanteNome
+                c.Atendente != null ? c.Atendente.Nome : "N/A" // AtendenteNome
             ))
             .ToListAsync();
     }
@@ -60,17 +60,17 @@ public class ChamadosController : ControllerBase
         return await _context.Chamados
             .Include(c => c.Solicitante)
             .Where(c => c.StatusChamado == "Aberto" && c.AtendenteId == null)
-            .Select(c => new ChamadoSummaryDto(
-                c.ChamadoId,
-                c.TituloChamado,
-                c.CategoriaChamado,
-                c.PrioridadeChamado,
-                c.StatusChamado,
-                c.DataAbertura,
-                c.Solicitante != null ? c.Solicitante.Nome : null,
+            .OrderBy(c => c.DataAbertura) // CORREÇÃO: Mover o OrderBy para antes do Select
+            .Select(c => new ChamadoSummaryDto( // Correção: Mapeamento explícito
+                c.ChamadoId, // ChamadoId
+                c.TituloChamado, // TituloChamado
+                c.CategoriaChamado, // CategoriaChamado
+                c.PrioridadeChamado, // PrioridadeChamado
+                c.StatusChamado, // StatusChamado
+                c.DataAbertura, // DataAbertura
+                c.Solicitante != null ? c.Solicitante.Nome : "N/A", // SolicitanteNome
                 null // Atendente é nulo na triagem
             ))
-            .OrderBy(c => c.DataAbertura)
             .ToListAsync();
     }
 
@@ -101,15 +101,17 @@ public class ChamadosController : ControllerBase
             chamado.DataUltimaModificacao,
             chamado.SolucaoSugerida,
             chamado.SolucaoAplicada,
-            chamado.SolicitanteId,
-            chamado.Solicitante?.Nome,
+            chamado.SolicitanteId, 
+            chamado.Solicitante?.Nome, 
+            chamado.Solicitante?.Email, 
+            chamado.Solicitante?.Telefone,
             chamado.AtendenteId,
             chamado.Atendente?.Nome,
             chamado.Interacoes.Select(i => new MensagemDto(
                 i.Id,
                 i.ChamadoId,
-                i.UsuarioId,
-                i.Usuario.Nome,
+                i.UsuarioId, 
+                i.Usuario != null ? i.Usuario.Nome : "Usuário Desconhecido",
                 i.Mensagem,
                 i.DataCriacao
             )).OrderBy(m => m.DataCriacao).ToList()
@@ -135,10 +137,21 @@ public class ChamadosController : ControllerBase
             DescricaoChamado = chamadoDto.Descricao,
             CategoriaChamado = chamadoDto.Categoria,
             PrioridadeChamado = chamadoDto.Prioridade,
-            StatusChamado = "Aberto", // Status inicial
             DataAbertura = DateTime.UtcNow,
             DataUltimaModificacao = DateTime.UtcNow
         };
+
+        // Verifica se o chamado está sendo resolvido pela IA no momento da criação
+        if (chamadoDto.Status == "Resolvido por IA" && !string.IsNullOrEmpty(chamadoDto.Solucao))
+        {
+            novoChamado.StatusChamado = "Resolvido por IA";
+            novoChamado.SolucaoSugerida = chamadoDto.Solucao;
+            novoChamado.SolucaoAplicada = chamadoDto.Solucao;
+        }
+        else
+        {
+            novoChamado.StatusChamado = "Aberto"; // Padrão
+        }
 
         _context.Chamados.Add(novoChamado);
         await _context.SaveChangesAsync();
@@ -257,11 +270,31 @@ public class ChamadosController : ControllerBase
             novaInteracao.Id,
             novaInteracao.ChamadoId,
             novaInteracao.UsuarioId,
-            usuario.Nome,
+            usuario != null ? usuario.Nome : "N/A",
             novaInteracao.Mensagem,
             novaInteracao.DataCriacao
         );
 
         return CreatedAtAction(nameof(GetChamadoMensagens), new { id }, resultDto);
+    }
+
+    // POST: api/chamados/5/resolver-com-ia
+    [HttpPost("{id}/resolver-com-ia")]
+    public async Task<IActionResult> ResolverComIa(int id, [FromBody] ResolverComIaDto dto)
+    {
+        var chamado = await _context.Chamados.FindAsync(id);
+        if (chamado == null)
+        {
+            return NotFound();
+        }
+
+        chamado.StatusChamado = "Resolvido por IA";
+        chamado.SolucaoSugerida = dto.Solucao;
+        chamado.SolucaoAplicada = dto.Solucao;
+        chamado.DataUltimaModificacao = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 }

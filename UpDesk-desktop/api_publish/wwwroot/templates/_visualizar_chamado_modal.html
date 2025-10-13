@@ -1,0 +1,30 @@
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div>
+                <h1 class="modal-title fs-5" id="modal-titulo"></h1>
+                <h2 class="modal-subtitle" id="modal-data-abertura"></h2>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="info-box mb-3">
+                <span class="info-box-icon"><i class="bi bi-person"></i></span>
+                <strong>Solicitante:</strong><br>
+                <span id="modal-solicitante-nome"></span><br>
+                <span id="modal-solicitante-email"></span><br>
+                Ramal: <span id="modal-solicitante-ramal"></span>
+            </div>
+            <div class="d-flex justify-content-between text-muted mb-2">
+                <span><strong>Status:</strong> <span id="modal-status"></span></span>
+                <span><strong>Categoria:</strong> <span id="modal-categoria"></span></span>
+            </div>
+            <p class="mt-3"><strong>Descrição:</strong></p>
+            <div class="description-box" id="modal-descricao"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
+            <a href="#" id="modal-atender-chamado-link" class="btn btn-iniciar-modal rounded-pill">Atender Chamado</a>
+        </div>
+    </div>
+</div>

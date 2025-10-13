@@ -8,5 +8,5 @@ namespace Projects;
 public class UpDesk_api_AppHost
 {
     private UpDesk_api_AppHost() { }
-    public static string ProjectPath => """C:\Users\Mateus Teodoro\upDesk\UpDesk.api\UpDesk.api.AppHost""";
+    public static string ProjectPath => """c:\Users\Mateus Teodoro\upDesk\UpDesk.api\UpDesk.api.AppHost""";
 }

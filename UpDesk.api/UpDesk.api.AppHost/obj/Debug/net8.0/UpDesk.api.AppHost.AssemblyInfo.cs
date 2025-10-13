@@ -17,14 +17,14 @@ using System.Reflection;
     "0\\tools\\ext\\"))]
 [assembly: System.Reflection.AssemblyMetadata("dcpbinpath", ("C:\\Users\\Mateus Teodoro\\.nuget\\packages\\aspire.hosting.orchestration.win-x64\\9.0." +
     "0\\tools\\ext\\bin\\"))]
-[assembly: System.Reflection.AssemblyMetadata("apphostprojectpath", "C:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost")]
+[assembly: System.Reflection.AssemblyMetadata("apphostprojectpath", "c:\\Users\\Mateus Teodoro\\upDesk\\UpDesk.api\\UpDesk.api.AppHost")]
 [assembly: System.Reflection.AssemblyMetadata("apphostprojectname", "UpDesk.api.AppHost.csproj")]
 [assembly: System.Reflection.AssemblyMetadata("aspiredashboardpath", ("C:\\Users\\Mateus Teodoro\\.nuget\\packages\\aspire.dashboard.sdk.win-x64\\9.0.0\\tools\\" +
     "Aspire.Dashboard.exe"))]
 [assembly: System.Reflection.AssemblyCompanyAttribute("UpDesk.api.AppHost")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dfb60fc9b6411a70361328d22b8f2cf0873d1284")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f99b9288270d72cb917ef53db4a9adba76321c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("UpDesk.api.AppHost")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UpDesk.api.AppHost")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

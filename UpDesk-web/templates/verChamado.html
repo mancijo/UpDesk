@@ -48,6 +48,7 @@
                             <button class="btn btn-secondary btn-sm"
                                 data-bs-toggle="modal" 
                                 data-bs-target="#visualizarChamadoModal"
+                                data-id="{{ chamado.chamado_ID }}"
                                 data-titulo="{{ chamado.titulo_Chamado }}"
                                 data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
                                 data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
@@ -154,5 +155,7 @@
             </div>
         </div>
     </div>
+
+    <script src="{{ url_for('static', filename='js/modal-handler.js') }}"></script>
 
 {% endblock %}

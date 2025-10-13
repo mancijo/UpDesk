@@ -1,8 +1,5 @@
 // /static/js/main.js
 
-// Define a URL base da API.
-const apiUrl = 'http://localhost:5000';
-
 document.addEventListener("DOMContentLoaded", function() {
     // Carrega a barra de navegação e verifica a autenticação ao carregar a página.
     loadNavbar();
@@ -78,9 +75,12 @@ async function fetchWithAuth(endpoint, options = {}) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const url = new URL(endpoint, apiUrl).href;
+    // Usa a origem da janela atual (http://localhost:PORTA) como base.
+    // Isso torna a URL da API dinâmica e resolve o problema da porta.
+    const baseUrl = window.location.origin;
+    const url = new URL(endpoint, baseUrl).href;
 
-    const response = await fetch(url, {
+    const response = await fetch(url, { // Correção: A variável 'url' agora está definida.
         ...options,
         headers: headers,
     });

@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UpDesk.Api.Data;
@@ -23,18 +22,17 @@ public class DashboardController : ControllerBase
     {
         var totalChamados = await _context.Chamados.CountAsync();
         var chamadosAbertos = await _context.Chamados.CountAsync(c => c.StatusChamado == "Aberto");
-        var chamadosEmAndamento = await _context.Chamados.CountAsync(c => c.StatusChamado == "Em Andamento");
-        var chamadosPendentes = await _context.Chamados.CountAsync(c => c.StatusChamado == "Pendente");
-        var chamadosResolvidos = await _context.Chamados.CountAsync(c => c.StatusChamado == "Resolvido");
-        var chamadosFechados = await _context.Chamados.CountAsync(c => c.StatusChamado == "Fechado");
+        var chamadosEmTriagem = await _context.Chamados.CountAsync(c => c.StatusChamado == "Em Atendimento");
+        var chamadosSolucaoIA = await _context.Chamados.CountAsync(c => c.StatusChamado == "Resolvido por IA");
+        var chamadosFinalizados = await _context.Chamados.CountAsync(c => c.StatusChamado == "Resolvido");
 
         var stats = new DashboardStatsDto(
             TotalChamados: totalChamados,
             ChamadosAbertos: chamadosAbertos,
-            ChamadosEmAndamento: chamadosEmAndamento,
-            ChamadosPendentes: chamadosPendentes,
-            ChamadosResolvidos: chamadosResolvidos,
-            ChamadosFechados: chamadosFechados
+            ChamadosEmAtendimento: chamadosEmTriagem, // Correção: Passando o valor para o parâmetro correto.
+            ChamadosSolucaoIA: chamadosSolucaoIA,
+            ChamadosFinalizados: chamadosFinalizados,
+            ChamadosEmTriagem: 0 // Adicionando o parâmetro que faltava. Ajuste se tiver uma contagem para "Triagem".
         );
 
         return Ok(stats);

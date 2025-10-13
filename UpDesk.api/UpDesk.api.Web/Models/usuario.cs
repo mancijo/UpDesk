@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UpDesk.Api.Models;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor
+
 [Table("Usuario")]
 public class Usuario
 {
@@ -10,10 +12,10 @@ public class Usuario
     public int Id { get; set; }
 
     [Required, MaxLength(100)]
-    public string Nome { get; set; }
+    public required string Nome { get; set; }
 
     [Required, MaxLength(255)]
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
     [MaxLength(15)]
     public string? Telefone { get; set; }
@@ -22,10 +24,10 @@ public class Usuario
     public string? Setor { get; set; }
 
     [Required, MaxLength(50)]
-    public string Cargo { get; set; }
+    public required string Cargo { get; set; }
 
     [Required]
-    public string Senha { get; set; }
+    public required string Senha { get; set; }
 
     public bool Ativo { get; set; } = true;
 
