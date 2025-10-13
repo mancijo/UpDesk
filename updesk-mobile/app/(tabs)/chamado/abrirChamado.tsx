@@ -19,6 +19,8 @@ export default function AbrirChamadoScreen() {
       });
     }
   };
+
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //REMOVER AO SUBIR EM PROD, CONTEUDO PARA TESTES E DEV
   useEffect(() => {
     handleInputChange('titulo', 'fogo na impressora');
@@ -27,21 +29,24 @@ export default function AbrirChamadoScreen() {
   }, [])
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  //validação simples dos campos obrigatórios
   const validateForm = () => {
     let newErrors: { [key: string]: string } = {};
-    if (!chamado.titulo) {
+    if (!chamado.tituloChamado) {
       newErrors.titulo = 'O título do chamado é obrigatório.';
     }
-    if (!chamado.descricao) {
+    if (!chamado.descricaoChamado) {
       newErrors.descricao = 'A descrição do chamado é obrigatória.';
     }
-    if (!chamado.afetados) {
+    if (!chamado.afetadosChamado) {
       newErrors.afetados = 'Selecione quem o chamado afeta.';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }; 
 
+  // Navega para a próxima tela se o formulário for válido
+  // Inserir envio para API aqui futuramente
   const handleSubmit = () => {
     if (validateForm()) {
       router.push('/chamado/solucaoIA');
@@ -56,7 +61,7 @@ export default function AbrirChamadoScreen() {
         <Text style={styles.label}>Título do Chamado</Text>
         <TextInput
           style={[styles.input, errors.titulo && styles.inputError]}
-          value={chamado.titulo}
+          value={chamado.tituloChamado}
           onChangeText={(text) => handleInputChange('titulo', text)}
           placeholder="Ex: Problema com a impressora"
         />
@@ -65,7 +70,7 @@ export default function AbrirChamadoScreen() {
         <Text style={styles.label}>Descrição do Chamado</Text>
         <TextInput
           style={[styles.input, styles.textArea, errors.descricao && styles.inputError]}
-          value={chamado.descricao}
+          value={chamado.descricaoChamado}
           onChangeText={(text) => handleInputChange('descricao', text)}
           placeholder="Descreva o problema em detalhes..."
           multiline
@@ -75,22 +80,22 @@ export default function AbrirChamadoScreen() {
         <Text style={styles.label}>Quem esse chamado afeta?</Text>
         <View style={styles.segmentedControlContainer}>
           <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetados === 'eu' && styles.segmentedControlSelected]}
+            style={[styles.segmentedControl, chamado.afetadosChamado === 'eu' && styles.segmentedControlSelected]}
             onPress={() => handleInputChange('afetados', 'eu')}
           >
-            <Text style={[styles.segmentedControlText, chamado.afetados === 'eu' && styles.segmentedControlTextSelected]}>Somente eu</Text>
+            <Text style={[styles.segmentedControlText, chamado.afetadosChamado === 'eu' && styles.segmentedControlTextSelected]}>Somente eu</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetados === 'setor' && styles.segmentedControlSelected]}
+            style={[styles.segmentedControl, chamado.afetadosChamado === 'setor' && styles.segmentedControlSelected]}
             onPress={() => handleInputChange('afetados', 'setor')}
           >
-            <Text style={[styles.segmentedControlText, chamado.afetados === 'setor' && styles.segmentedControlTextSelected]}>Meu Setor</Text>
+            <Text style={[styles.segmentedControlText, chamado.afetadosChamado === 'setor' && styles.segmentedControlTextSelected]}>Meu Setor</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetados === 'empresa' && styles.segmentedControlSelected]}
+            style={[styles.segmentedControl, chamado.afetadosChamado === 'empresa' && styles.segmentedControlSelected]}
             onPress={() => handleInputChange('afetados', 'empresa')}
           >
-            <Text style={[styles.segmentedControlText, chamado.afetados === 'empresa' && styles.segmentedControlTextSelected]}>A Empresa Toda</Text>
+            <Text style={[styles.segmentedControlText, chamado.afetadosChamado === 'empresa' && styles.segmentedControlTextSelected]}>A Empresa Toda</Text>
           </TouchableOpacity>
         </View>
         {errors.afetados && <Text style={styles.errorText}>{errors.afetados}</Text>}

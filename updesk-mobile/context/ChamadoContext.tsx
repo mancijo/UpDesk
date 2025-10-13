@@ -3,38 +3,39 @@ import { User, useAuth } from './AuthContext';
 
 // Definição dos tipos
 interface Chamado {
-  chamado_ID?: number;
-  atendenteID?: number;
-  solicitanteID?: number;
-  titulo_Chamado: string;
-  descricao_Chamado: string;
-  categoria_Chamado: string | null; // Permitir null inicialmente
-  prioridade_Chamado: 'baixa' | 'media' | 'alta' | 'urgente' | null; // Permitir null inicialmente
-  anexo_Chamado?: any | null; // O tipo 'any' pode ser refinado para um tipo de arquivo específico
-  status_Chamado?: 'aberto' | 'em_atendimento' | 'pendente' | 'resolvido' | 'fechado';
-  dataAbertura?: string | Date;
-  dataUltimaModificacao?: string | Date;
+  solicitante?: User; // Objeto do usuário para conveniência no frontend
+  // Dados para o BD
+  chamadoId?: number;
+  atendenteId?: number;
+  solicitanteId?: number;
+  tituloChamado?: string;
+  descricaoChamado?: string;
+  categoriaChamado?: string | null;
+  afetadosChamado?: 'eu' | 'setor' | 'empresa';
+  prioridadeChamado?: 'baixa' | 'media' | 'alta' | 'urgente' | null;
+  anexoChamado?: any | null;
+  statusChamado?: 'aberto' | 'em_atendimento' | 'pendente' | 'resolvido' | 'fechado';
+  dataAbertura?: Date | string;
+  dataUltimaModificacao?: Date | string;
   solucaoSugerida?: string;
   solucaoAplicada?: string;
-
-  // Campo auxiliar para o objeto de usuário, não vai para o DB diretamente
-  solicitante?: User;
 }
 
+// Definição do contexto
 interface ChamadoContextData {
   chamado: Chamado;
   setChamado: React.Dispatch<React.SetStateAction<Chamado>>;
   resetChamado: () => void;
 }
 
-// Estado inicial para o chamado
+// Estado inicial para um chamado "vazio"
 const initialChamadoState: Chamado = {
-  titulo_Chamado: '',
-  descricao_Chamado: '',
-  categoria_Chamado: null, // Inicia como nulo
-  prioridade_Chamado: null, // Inicia como nulo
-  anexo_Chamado: null,
-  status_Chamado: 'aberto',
+  tituloChamado: '',
+  descricaoChamado: '',
+  categoriaChamado: null,
+  prioridadeChamado: null,
+  anexoChamado: null,
+  statusChamado: 'aberto',
 };
 
 // Criação do Contexto
@@ -46,13 +47,17 @@ export const ChamadoProvider = ({ children }: { children: ReactNode }) => {
   const [chamado, setChamado] = useState<Chamado>(initialChamadoState);
 
   const resetChamado = () => {
-    // Ao resetar, limpamos o chamado e associamos o usuário logado para um novo preenchimento
-    setChamado({ ...initialChamadoState, solicitante: user ?? undefined, solicitanteID: user ? Number(user.id) : undefined });
+    // A função reset volta para o estado inicial limpo
+    setChamado(initialChamadoState);
   };
 
   // O valor do contexto que será fornecido aos componentes filhos
   const value = {
-    chamado: { ...chamado, solicitante: chamado.solicitante ?? user ?? undefined, solicitanteID: chamado.solicitanteID ?? (user ? Number(user.id) : undefined) }, // Garante que o usuário e seu ID estejam sempre no objeto chamado
+    chamado: {
+      ...chamado,
+      solicitante: user || undefined,
+      solicitanteId: user?.id ? Number(user.id) : undefined, // Garante que user.id existe e faz a conversão segura
+    },
     setChamado,
     resetChamado,
   };
