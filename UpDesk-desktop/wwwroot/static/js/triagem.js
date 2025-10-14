@@ -43,7 +43,7 @@ async function fetchTriagemChamados() {
 
     try {
         // ATENÇÃO: Crie o endpoint GET /api/chamados/triagem no backend
-        const response = await fetchWithAuth(`${apiUrl}/api/chamados/triagem`);
+        const response = await fetchWithAuth(`/api/chamados/triagem`);
         if (!response.ok) throw new Error('Falha ao carregar chamados para triagem');
         const chamados = await response.json();
 
@@ -94,7 +94,7 @@ async function prepareTransferModal(button) {
 
     try {
         // ATENÇÃO: Crie o endpoint GET /api/tecnicos no backend
-        const response = await fetchWithAuth(`${apiUrl}/api/tecnicos`);
+        const response = await fetchWithAuth(`/api/tecnicos`);
         if (!response.ok) throw new Error('Falha ao carregar técnicos');
         const tecnicos = await response.json();
         
@@ -125,7 +125,7 @@ async function handleTransferSubmit(event) {
 
     try {
         // ATENÇÃO: Crie o endpoint POST /api/chamados/{id}/transferir no backend
-        const response = await fetchWithAuth(`${apiUrl}/api/chamados/${chamadoId}/transferir`, {
+        const response = await fetchWithAuth(`/api/chamados/${chamadoId}/transferir`, {
             method: 'POST',
             body: JSON.stringify({ tecnicoId: tecnicoId })
         });
