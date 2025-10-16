@@ -1,10 +1,48 @@
 // /static/js/triagem.js
 
+const visualizarChamadoModal = document.getElementById('visualizarChamadoModal');
+
+visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
+    const button = event.relatedTarget;
+    const chamadoId = button.getAttribute('data-id');
+
+    // Exibe "Carregando..." enquanto busca os dados
+    visualizarChamadoModal.querySelector('#modal-titulo').textContent = 'Carregando...';
+    visualizarChamadoModal.querySelector('#modal-data-abertura').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-status').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-categoria').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-descricao').textContent = '';
+
+    try {
+        // Busca os detalhes completos do chamado
+        const response = await fetchWithAuth(`/api/chamados/${chamadoId}`);
+        if (!response.ok) throw new Error('Erro ao carregar detalhes do chamado');
+        const chamado = await response.json();
+
+        // Atualiza o modal com dados reais
+        visualizarChamadoModal.querySelector('#modal-titulo').textContent = chamado.tituloChamado || 'Sem título';
+        visualizarChamadoModal.querySelector('#modal-data-abertura').textContent = 
+            chamado.dataAbertura ? `Aberto em: ${new Date(chamado.dataAbertura).toLocaleDateString('pt-BR')}` : '';
+        visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = chamado.solicitanteNome || 'N/A';
+        visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = chamado.solicitanteEmail || 'N/A';
+        visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = chamado.solicitanteRamal || 'N/A';
+        visualizarChamadoModal.querySelector('#modal-status').textContent = chamado.statusChamado || '---';
+        visualizarChamadoModal.querySelector('#modal-categoria').textContent = chamado.categoriaChamado || '---';
+        visualizarChamadoModal.querySelector('#modal-descricao').textContent = chamado.descricaoChamado || 'Sem descrição disponível';
+
+    } catch (error) {
+        console.error(error);
+        visualizarChamadoModal.querySelector('#modal-titulo').textContent = 'Erro ao carregar chamado';
+        visualizarChamadoModal.querySelector('#modal-descricao').textContent = 'Não foi possível obter os detalhes deste chamado.';
+    }
+});
+
 let transferModal;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Reutiliza o modal de visualização que pode já estar em uso por outros scripts
-    const detailsModal = document.getElementById('visualizarChamadoModal');
     transferModal = new bootstrap.Modal(document.getElementById('transferirChamadoModal'));
 
     // Carrega a lista de chamados para triagem
@@ -14,9 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ticketsContainer = document.getElementById('tickets-list-container');
     ticketsContainer.addEventListener('click', (event) => {
         const target = event.target;
-        if (target.classList.contains('visualizar-btn')) {
-            populateDetailsModal(target);
-        }
         if (target.classList.contains('transferir-btn')) {
             prepareTransferModal(target);
         }
@@ -42,10 +77,12 @@ async function fetchTriagemChamados() {
         </div>`;
 
     try {
-        // ATENÇÃO: Crie o endpoint GET /api/chamados/triagem no backend
+        // Endpoint GET /api/chamados/triagem
         const response = await fetchWithAuth(`/api/chamados/triagem`);
         if (!response.ok) throw new Error('Falha ao carregar chamados para triagem');
+
         const chamados = await response.json();
+        console.log(chamados);
 
         if (chamados.length === 0) {
             container.innerHTML += '<div class="ticket-row" style="grid-column: 1 / -1; text-align: center;">Nenhum chamado para triagem.</div>';
@@ -54,23 +91,38 @@ async function fetchTriagemChamados() {
 
         chamados.forEach(chamado => {
             const dataAbertura = new Date(chamado.dataAbertura).toLocaleDateString('pt-BR');
+
             const ticketRow = document.createElement('div');
             ticketRow.className = 'ticket-row';
+
             ticketRow.innerHTML = `
                 <div>${chamado.chamadoId}</div>
                 <div>${chamado.tituloChamado}</div>
                 <div><span class="status status-pendente">${chamado.statusChamado}</span></div>
                 <div>${dataAbertura}</div>
                 <div class="ticket-actions text-end">
-                    <button class="btn visualizar-btn" 
+                    <button class="btn visualizar-btn"
+                        data-id="${chamado.chamadoId}"
                         data-bs-toggle="modal" 
                         data-bs-target="#visualizarChamadoModal"
-                        data-chamado='${JSON.stringify(chamado)}'>Visualizar</button>
+                        data-titulo="${chamado.tituloChamado || ''}"
+                        data-data-abertura="${dataAbertura}"
+                        data-solicitante-nome="${chamado.solicitanteNome || 'N/A'}"
+                        data-solicitante-email="${chamado.solicitanteEmail || 'N/A'}"
+                        data-solicitante-ramal="${chamado.solicitanteRamal || 'N/A'}"
+                        data-status="${chamado.statusChamado || ''}"
+                        data-categoria="${chamado.categoriaChamado || ''}"
+                        data-descricao="${chamado.descricaoChamado || ''}">
+                        Visualizar
+                    </button>
                     <button class="btn transferir-btn" 
                         data-id="${chamado.chamadoId}" 
-                        data-titulo="${chamado.tituloChamado}">Transferir</button>
+                        data-titulo="${chamado.tituloChamado}">
+                        Transferir
+                    </button>
                 </div>
             `;
+
             container.appendChild(ticketRow);
         });
     } catch (error) {
@@ -93,11 +145,10 @@ async function prepareTransferModal(button) {
     tecnicoSelect.innerHTML = '<option value="">Carregando...</option>';
 
     try {
-        // ATENÇÃO: Crie o endpoint GET /api/tecnicos no backend
         const response = await fetchWithAuth(`/api/tecnicos`);
         if (!response.ok) throw new Error('Falha ao carregar técnicos');
         const tecnicos = await response.json();
-        
+
         tecnicoSelect.innerHTML = '<option value="" disabled selected>Selecione um técnico</option>';
         tecnicos.forEach(tecnico => {
             tecnicoSelect.innerHTML += `<option value="${tecnico.id}">${tecnico.nome}</option>`;
@@ -124,7 +175,6 @@ async function handleTransferSubmit(event) {
     }
 
     try {
-        // ATENÇÃO: Crie o endpoint POST /api/chamados/{id}/transferir no backend
         const response = await fetchWithAuth(`/api/chamados/${chamadoId}/transferir`, {
             method: 'POST',
             body: JSON.stringify({ tecnicoId: tecnicoId })
@@ -136,19 +186,5 @@ async function handleTransferSubmit(event) {
     } catch (error) {
         console.error(error);
         alert(error.message);
-    }
-}
-
-/**
- * Preenche o modal de detalhes (lógica similar a outras páginas).
- */
-function populateDetailsModal(button) {
-    try {
-        const chamado = JSON.parse(button.dataset.chamado);
-        // ... (aqui iria a lógica para preencher o modal de detalhes, 
-        // que pode ser padronizada e movida para main.js no futuro)
-        alert(`Visualizando detalhes do chamado: ${chamado.tituloChamado}`);
-    } catch (e) {
-        console.error("Erro ao ler dados do chamado:", e);
     }
 }

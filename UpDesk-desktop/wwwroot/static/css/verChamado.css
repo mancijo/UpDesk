@@ -125,6 +125,10 @@ tr {
     justify-content: space-between;
 }
 
+.bottom-bar:hover .btn {
+    background: #bbb;
+}
+
 .btn-gestao {
     background-color: #2B4C7E;
     color: white;

@@ -1,5 +1,45 @@
 // /static/js/verChamado.js
 
+const visualizarChamadoModal = document.getElementById('visualizarChamadoModal');
+
+visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
+    const button = event.relatedTarget;
+    const chamadoId = button.getAttribute('data-id');
+
+    // Exibe "Carregando..." enquanto busca os dados
+    visualizarChamadoModal.querySelector('#modal-titulo').textContent = 'Carregando...';
+    visualizarChamadoModal.querySelector('#modal-data-abertura').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-status').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-categoria').textContent = '';
+    visualizarChamadoModal.querySelector('#modal-descricao').textContent = '';
+
+    try {
+        // Busca os detalhes completos do chamado
+        const response = await fetchWithAuth(`/api/chamados/${chamadoId}`);
+        if (!response.ok) throw new Error('Erro ao carregar detalhes do chamado');
+        const chamado = await response.json();
+
+        // Atualiza o modal com dados reais
+        visualizarChamadoModal.querySelector('#modal-titulo').textContent = chamado.tituloChamado || 'Sem título';
+        visualizarChamadoModal.querySelector('#modal-data-abertura').textContent = 
+            chamado.dataAbertura ? `Aberto em: ${new Date(chamado.dataAbertura).toLocaleDateString('pt-BR')}` : '';
+        visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = chamado.solicitanteNome || 'N/A';
+        visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = chamado.solicitanteEmail || 'N/A';
+        visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = chamado.solicitanteRamal || 'N/A';
+        visualizarChamadoModal.querySelector('#modal-status').textContent = chamado.statusChamado || '---';
+        visualizarChamadoModal.querySelector('#modal-categoria').textContent = chamado.categoriaChamado || '---';
+        visualizarChamadoModal.querySelector('#modal-descricao').textContent = chamado.descricaoChamado || 'Sem descrição disponível';
+
+    } catch (error) {
+        console.error(error);
+        visualizarChamadoModal.querySelector('#modal-titulo').textContent = 'Erro ao carregar chamado';
+        visualizarChamadoModal.querySelector('#modal-descricao').textContent = 'Não foi possível obter os detalhes deste chamado.';
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-button');
     const statusFilter = document.getElementById('status-filter');
