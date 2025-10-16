@@ -8,8 +8,8 @@ Responsabilidade:
 """
 from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for
 from werkzeug.security import generate_password_hash
-from app.models import db, Usuario
-from app.forms import CriarUsuarioForm, EditarUsuarioForm
+from ..models import db, Usuario
+from ..forms import CriarUsuarioForm, EditarUsuarioForm
 
 bp = Blueprint('usuarios', __name__, url_prefix='/usuarios')
 
