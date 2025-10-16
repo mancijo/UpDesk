@@ -36,7 +36,6 @@
 .btn-primary {
   background-color: var(--cor-primaria) !important;
   border-color: var(--cor-primaria) !important;
-  color: var(--cor-texto-claro) !important; /* Ensure text is white */
 }
 
 .btn-primary:hover {
@@ -48,4 +47,9 @@
 a.navbar-brand.logo {
   color: var(--cor-primaria) !important;
   text-decoration: none !important;
+}
+
+a.navbar-brand.logo:hover {
+    color: var(--cor-primaria-escura) !important;
+    text-decoration: none !important;
 }

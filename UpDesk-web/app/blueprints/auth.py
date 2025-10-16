@@ -8,7 +8,7 @@ Responsabilidade:
 """
 from flask import Blueprint, request, jsonify, session, redirect, url_for, render_template
 from werkzeug.security import check_password_hash
-from app.models import Usuario, db # Import db aqui se for fazer commits
+from ..models import Usuario, db # Import db aqui se for fazer commits
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 

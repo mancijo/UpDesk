@@ -42,7 +42,7 @@ def buscar_solucao_com_ia(titulo, descricao):
     """
     try:
         # Seleciona o modelo generativo a ser usado
-        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        model = genai.GenerativeModel('gemini-pro')
         
         # Constrói o prompt que será enviado para a IA. 
         # O prompt é cuidadosamente elaborado para dar um contexto à IA (agir como suporte N1)

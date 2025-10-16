@@ -3,15 +3,13 @@
 {% block title %}Dashboard - UpDesk{% endblock %}
 
 {% block body %}
-<div class="container-fluid pt-3"> <!-- Changed container to container-fluid -->
-
-  <div class="row g-4">
-
+<div class="container mt-4"> <!-- Adicionado container e margem superior -->
+  <div class="row g-4 justify-content-center">
     <div class="col-12 col-md-6 col-lg-3">
-      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
         <div class="card-body">
-          <h4 class="card-title text-primary">
-            <i class="bi bi-folder-open me-2"></i>Chamados Abertos
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados Abertos
           </h4>
           <span class="display-4 fw-bold text-primary">{{ chamados_abertos }}</span>
         </div>
@@ -19,10 +17,10 @@
     </div>
 
     <div class="col-12 col-md-6 col-lg-3">
-      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
         <div class="card-body">
-          <h4 class="card-title text-primary">
-            <i class="bi bi-hourglass-split me-2"></i>Chamados em Triagem
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados em Triagem
           </h4>
           <span class="display-4 fw-bold text-primary">{{ chamados_em_triagem }}</span>
         </div>
@@ -30,10 +28,10 @@
     </div>
 
     <div class="col-12 col-md-6 col-lg-3">
-      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
         <div class="card-body">
-          <h4 class="card-title text-primary">
-            <i class="bi bi-robot me-2"></i>Chamados com Solução IA
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados com Solução IA
           </h4>
           <span class="display-4 fw-bold text-primary">{{ chamados_solucao_ia }}</span>
         </div>
@@ -41,37 +39,31 @@
     </div>
 
     <div class="col-12 col-md-6 col-lg-3">
-      <div class="card text-center shadow-sm border-0 h-100 custom-card">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
         <div class="card-body">
-          <h4 class="card-title text-primary">
-            <i class="bi bi-check-circle me-2"></i>Chamados Finalizados
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados Finalizados
           </h4>
           <span class="display-4 fw-bold text-primary">{{ chamados_finalizados }}</span>
         </div>
       </div>
     </div>
-
   </div>
 
-  <div class="row g-4 mt-3">
-    
-    <div class="col-12 col-md-6 col-lg-3">
-      <a href="{{ url_for('chamados.abrir_chamado') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Abrir Chamado</a>
+  <!-- Seção de Ações -->
+  <nav class="row g-4 justify-content-center mt-5">
+    <div class="col-12 col-md-6 col-lg-3 text-center">
+      <a href="{{ url_for('chamados.abrir_chamado') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Abrir Chamado</a>
     </div>
-
-    <div class="col-12 col-md-6 col-lg-3">
-      <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Monitoramento de Chamados</a>
+    <div class="col-12 col-md-6 col-lg-3 text-center">
+      <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-eye me-2"></i>Monitoramento de Chamados</a>
     </div>
-
-    <div class="col-12 col-md-6 col-lg-3">
-      <a href="{{ url_for('usuarios.ger_usuarios') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Gerenciar Usuário</a>
+    <div class="col-12 col-md-6 col-lg-3 text-center">
+            <a href="{{ url_for('chamados.triagem') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-gear me-2"></i>Painel da Triagem</a>
     </div>
-    
-    <div class="col-12 col-md-6 col-lg-3">
-      <a href="{{ url_for('chamados.triagem') }}" class="btn btn-primary w-100 py-3 fw-bold custom-btn">Painel da Triagem</a>
+    <div class="col-12 col-md-6 col-lg-3 text-center">
+      <a href="{{ url_for('usuarios.ger_usuarios') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-person-gear me-2"></i>Gerenciar Usuário</a>
     </div>
-
-  </div>
-
-</div>
+  </nav>
+</div> <!-- Fechamento do container -->
 {% endblock %}
