@@ -3,60 +3,33 @@
 .user-page__container {
   width: 90%;
   max-width: 1400px;
-  margin: var(--espaco-l, 32px) auto;
+  margin: var(--espaco-l) auto;
 }
 
 .user-page__title {
   text-align: center;
-  margin-bottom: var(--espaco-l, 32px);
-  color: var(--cor-primaria, #2B4C7E);
-  margin-top: var(--espaco-m, 20px); /* Added from gerUsuarios.css */
+  margin-bottom: var(--espaco-l);
+  color: var(--cor-primaria);
+  margin-top: var(--espaco-m);
 }
 
 .user-page__tools {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--espaco-s, 1rem); /* Adapted from gerUsuarios.css */
+  margin-bottom: var(--espaco-s);
   flex-wrap: wrap;
-  gap: var(--espaco-s, 16px);
+  gap: var(--espaco-s);
 }
 
 .user-page__search-form {
   display: flex;
-  gap: var(--espaco-s, 16px);
+  gap: var(--espaco-s);
 }
 
-/* Styles from gerUsuarios.css */
-body { /* Consider moving to a more global place like _typography.css */
-    background-color: var(--cor-fundo-principal, #DCE0E6);
-}
-
-.card { /* Consider moving to _card.css */
-    padding: var(--espaco-xl, 40px) var(--espaco-xl, 40px);
-}
-
-.voltarBtn {
-    width: 100px;
-    text-align: center;
-}
-
-.colAcoes {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-#searchUser input{
-    background-color: var(--cor-fundo-principal, #DCE0E6);
+.user-page__search-input {
+    background-color: var(--cor-fundo-principal);
     width: 260px;
-}
-
-.editarUsuarioBtn { /* Consider moving to _button.css */
-    background-color: #567EBB; /* Specific color, consider adding to variables */
-}
-
-.editarUsuarioBtn:hover { /* Consider moving to _button.css */
-    background-color: var(--cor-primaria, #2B4C7E);
 }
 
 /* Responsividade para ocultar colunas em telas menores que 992px */
