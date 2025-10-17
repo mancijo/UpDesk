@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useChamado } from '../../../context/ChamadoContext';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function SolucaoIAScreen() {
-  const { chamado, usuario } = useChamado();
+  const { chamado } = useChamado();
+  const { user } = useAuth();
   const router = useRouter();
 
   const handleOpenTicket = () => {
@@ -25,9 +27,9 @@ export default function SolucaoIAScreen() {
         <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryTitle}>Resumo do seu Problema</Text>
-          <Text style={styles.summaryText}><Text style={styles.bold}>Título:</Text> {chamado.titulo}</Text>
-          <Text style={styles.summaryText}><Text style={styles.bold}>Descrição:</Text> {chamado.descricao}</Text>
-          <Text style={styles.summaryText}><Text style={styles.bold}>Afeta:</Text> {chamado.afetados}</Text>
+          <Text style={styles.summaryText}><Text style={styles.bold}>Título:</Text> {chamado.tituloChamado}</Text>
+          <Text style={styles.summaryText}><Text style={styles.bold}>Descrição:</Text> {chamado.descricaoChamado}</Text>
+          <Text style={styles.summaryText}><Text style={styles.bold}>Afeta:</Text> {chamado.afetadosChamado}</Text>
         </View>
 
         <View style={styles.solutionContainer}>
