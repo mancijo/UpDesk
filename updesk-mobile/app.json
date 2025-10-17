@@ -28,8 +28,8 @@
       "favicon": "./assets/logoUpd.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ]
   }
 }
-

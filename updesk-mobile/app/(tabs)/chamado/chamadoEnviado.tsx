@@ -12,7 +12,7 @@ export default function PlaceholderScreen() {
     <SafeAreaView style={styles.container}>
       <Card>
         <Text style={styles.text}>Chamado enviado com sucesso!</Text>
-        <Text style={styles.summaryText}><Text style={styles.bold}>Descrição:</Text> {chamado.descricao}</Text>
+        <Text style={styles.summaryText}><Text style={styles.bold}>Descrição:</Text> {chamado.descricaoChamado}</Text>
       </Card>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.push('../menu')}>
