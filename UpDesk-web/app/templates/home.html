@@ -3,7 +3,7 @@
 {% block title %}Dashboard - UpDesk{% endblock %}
 
 {% block body %}
-<div class="container mt-4"> <!-- Adicionado container e margem superior -->
+<section class="container mt-4"> <!-- Adicionado container e margem superior -->
   <div class="row g-4 justify-content-center">
     <div class="col-12 col-md-6 col-lg-3">
       <div class="card text-center shadow-lg border-0 h-100 custom-card">
@@ -51,19 +51,22 @@
   </div>
 
   <!-- Seção de Ações -->
-  <nav class="row g-4 justify-content-center mt-5">
-    <div class="col-12 col-md-6 col-lg-3 text-center">
-      <a href="{{ url_for('chamados.abrir_chamado') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Abrir Chamado</a>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3 text-center">
-      <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-eye me-2"></i>Monitoramento de Chamados</a>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3 text-center">
-            <a href="{{ url_for('chamados.triagem') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-gear me-2"></i>Painel da Triagem</a>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3 text-center">
-      <a href="{{ url_for('usuarios.ger_usuarios') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-person-gear me-2"></i>Gerenciar Usuário</a>
-    </div>
+  <nav>
+    <ul class="row g-4 justify-content-center mt-5 list-unstyled">
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('chamados.abrir_chamado') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Abrir Chamado</a>
+      </li>
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-eye me-2"></i>Monitoramento de Chamados</a>
+      </li>
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('chamados.triagem') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-gear me-2"></i>Painel da Triagem</a>
+      </li>
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('usuarios.ger_usuarios') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-person-gear me-2"></i>Gerenciar Usuário</a>
+      </li>
+    </ul>
   </nav>
 </div> <!-- Fechamento do container -->
+</section>
 {% endblock %}
