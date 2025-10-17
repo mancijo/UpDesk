@@ -8,6 +8,13 @@ export default function AbrirChamadoScreen() {
   const { chamado, setChamado } = useChamado();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  const segmentedOptions = [
+    { label: 'Somente eu', value: 'eu' },
+    { label: 'Meu Setor', value: 'setor' },
+    { label: 'A Empresa Toda', value: 'empresa' },
+  ];
+
+  // Atualiza o estado do chamado conforme o usuário digita
   const handleInputChange = (name: string, value: any) => {
     setChamado(prevState => ({ ...prevState, [name]: value }));
     // Clear error for the field when it's being edited
@@ -77,11 +84,12 @@ export default function AbrirChamadoScreen() {
   return (
     <View style={styles.mainContainer}>
       <ScrollView style={styles.container}>
+        {/* Fomulário de chamado */}
         <Text style={styles.label}>Título do Chamado</Text>
         <TextInput
           style={[styles.input, errors.tituloChamado && styles.inputError]}
           value={chamado.tituloChamado}
-          onChangeText={(text) => handleInputChange('tituloChamado', text)}
+          onChangeText={(text) => handleInputChange('tituloChamado', text)} /* Reducer para inserir conteudo ao text */
           placeholder="Ex: Problema com a impressora"
         />
         {errors.tituloChamado && <Text style={styles.errorText}>{errors.tituloChamado}</Text>}
@@ -98,24 +106,15 @@ export default function AbrirChamadoScreen() {
 
         <Text style={styles.label}>Quem esse chamado afeta?</Text>
         <View style={styles.segmentedControlContainer}>
-          <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetadosChamado === 'eu' && styles.segmentedControlSelected]}
-            onPress={() => handleInputChange('afetadosChamado', 'eu')}
-          >
-            <Text style={[styles.segmentedControlText, chamado.afetadosChamado === 'eu' && styles.segmentedControlTextSelected]}>Somente eu</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetadosChamado === 'setor' && styles.segmentedControlSelected]}
-            onPress={() => handleInputChange('afetadosChamado', 'setor')}
-          >
-            <Text style={[styles.segmentedControlText, chamado.afetadosChamado === 'setor' && styles.segmentedControlTextSelected]}>Meu Setor</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetadosChamado === 'empresa' && styles.segmentedControlSelected]}
-            onPress={() => handleInputChange('afetadosChamado', 'empresa')}
-          >
-            <Text style={[styles.segmentedControlText, chamado.afetadosChamado === 'empresa' && styles.segmentedControlTextSelected]}>A Empresa Toda</Text>
-          </TouchableOpacity>
+          {segmentedOptions.map(option => (
+            <TouchableOpacity
+              key={option.value}
+              style={[styles.segmentedControl, chamado.afetadosChamado === option.value && styles.segmentedControlSelected]}
+              onPress={() => handleInputChange('afetadosChamado', option.value)}
+            >
+              <Text style={[styles.segmentedControlText, chamado.afetadosChamado === option.value && styles.segmentedControlTextSelected]}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
         {errors.afetadosChamado && <Text style={styles.errorText}>{errors.afetadosChamado}</Text>}
 
@@ -125,11 +124,11 @@ export default function AbrirChamadoScreen() {
         </TouchableOpacity>
       </ScrollView>
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={handleReturn}>
-            <Text style={styles.backButtonText}>Voltar</Text>
+          <TouchableOpacity style={[styles.actionButton, styles.backButton]} onPress={handleReturn}>
+            <Text style={styles.actionButtonText}>Voltar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText} >Buscar Solução com IA</Text>
+          <TouchableOpacity style={[styles.actionButton, styles.submitButton]} onPress={handleSubmit}>
+            <Text style={styles.actionButtonText} >Buscar Solução com IA</Text>
           </TouchableOpacity>
         </View>
     </View>
@@ -152,12 +151,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#DCE0E6',
+    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 12,
     fontSize: 16,
     marginBottom: 20,
     color: '#000000',
+    borderColor: '#gray',
+    borderWidth: 1,
   },
   inputError: {
     borderColor: '#FF0000',
@@ -174,9 +175,10 @@ const styles = StyleSheet.create({
   segmentedControl: {
     flex: 1,
     padding: 10,
-    alignItems: 'center',
-    backgroundColor: '#DCE0E6',
-    borderColor: '#2B4C7E',
+    justifyContent: 'center',
+    textAlign: 'center',
+    backgroundColor: '#FFF',
+    borderColor: '#CCCCCC',
     borderWidth: 1,
   },
   segmentedControlSelected: {
@@ -204,29 +206,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  backButton: {
-    backgroundColor: '#606D80',
+  actionButton: {
     borderRadius: 5,
     padding: 8,
     flex: 1,
-    marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  backButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16,
+  backButton: {
+    backgroundColor: '#606D80',
+    marginRight: 10,
   },
   submitButton: {
     backgroundColor: '#567EBB',
-    borderRadius: 5,
-    padding: 8,
-    flex: 1,
     marginLeft: 10,
-    alignItems: 'center',
   },
-  submitButtonText: {
+  actionButtonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 16,

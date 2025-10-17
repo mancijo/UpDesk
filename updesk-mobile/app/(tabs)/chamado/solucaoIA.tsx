@@ -22,21 +22,20 @@ export default function SolucaoIAScreen() {
   };
 
   return (
-    <View style={{backgroundColor: '#FFFFFF', flex: 1}}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.summaryContainer}>
-          <Text style={styles.summaryTitle}>Resumo do seu Problema</Text>
-          <Text style={styles.summaryText}><Text style={styles.bold}>Título:</Text> {chamado.tituloChamado}</Text>
-          <Text style={styles.summaryText}><Text style={styles.bold}>Descrição:</Text> {chamado.descricaoChamado}</Text>
-          <Text style={styles.summaryText}><Text style={styles.bold}>Afeta:</Text> {chamado.afetadosChamado}</Text>
+          <Text style={styles.title}>Resumo do seu Problema</Text>
+          <Text style={styles.baseText}><Text >Título:</Text> {chamado.tituloChamado}</Text>
+          <Text style={styles.baseText}><Text >Descrição:</Text> {chamado.descricaoChamado}</Text>
+          <Text style={styles.baseText}><Text >Afeta:</Text> {chamado.afetadosChamado}</Text>
         </View>
 
         <View style={styles.solutionContainer}>
-          <Text style={styles.solutionTitle}>Solução Sugerida pela IA</Text>
+          <Text style={styles.title}>Solução Sugerida pela IA</Text>
           <Text style={styles.solutionText}>
             Aqui será apresentada a solução gerada pela IA com base nos dados do seu chamado.
-            Por exemplo: "Verifique se a impressora está conectada na tomada e se o cabo USB está bem encaixado no computador. Tente reiniciar o computador e a impressora."
+            Por exemplo: "Verifique a impressora está conectada na tomada e se o cabo USB está bem encaixado no computador. Tente reiniciar o computador e a impressora."
           </Text>
         </View>
 
@@ -44,50 +43,52 @@ export default function SolucaoIAScreen() {
           <View style={styles.buttonRow}>
             <View style={styles.buttonWrapper}>
               <Text style={styles.helpText}>Problema resolvido?</Text>
-              <TouchableOpacity style={styles.finishButton} onPress={handleFinish}>
+              <TouchableOpacity style={[styles.button, styles.finishButton]} onPress={handleFinish}>
                 <Text style={styles.buttonText}>Finalizar</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.buttonWrapper}>
               <Text style={styles.helpText}>Preciso de ajuda</Text>
-              <TouchableOpacity style={styles.openTicketButton} onPress={handleOpenTicket}>
+              <TouchableOpacity style={[styles.button, styles.openTicketButton]} onPress={handleOpenTicket}>
                 <Text style={styles.buttonText}>Abrir Chamado</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </ScrollView>
-      </SafeAreaView>
-    </View>
+    </SafeAreaView>
   );
 }
 
+const baseTextStyle = {
+  fontSize: 16,
+  color: '#000000',
+  marginBottom: 5,
+};
+
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
+    flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  container: {
     padding: 20,
     flexGrow: 1, 
     justifyContent: 'space-between',
   },
   summaryContainer: {
-    backgroundColor: '#DCE0E6',
+    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 15,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
   },
-  summaryTitle: {
+  title: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2B4C7E',
     marginBottom: 10,
-  },
-  summaryText: {
-    fontSize: 16,
-    color: '#000000',
-    marginBottom: 5,
-  },
-  bold: {
-    fontWeight: 'bold',
   },
   solutionContainer: {
     backgroundColor: '#E6F2FF',
@@ -97,15 +98,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#567EBB',
   },
-  solutionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2B4C7E',
-    marginBottom: 10,
-  },
+  baseText: baseTextStyle,
   solutionText: {
-    fontSize: 16,
-    color: '#000000',
+    ...baseTextStyle,
     lineHeight: 22,
   },
   actionsContainer: {
@@ -123,17 +118,16 @@ const styles = StyleSheet.create({
     color: '#606D80',
     marginBottom: 8,
   },
-  finishButton: {
-    backgroundColor: '#606D80',
+  button: {
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 5,
   },
+  finishButton: {
+    backgroundColor: '#606D80',
+  },
   openTicketButton: {
     backgroundColor: '#567EBB',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 5,
   },
   buttonText: {
     color: '#FFFFFF',
