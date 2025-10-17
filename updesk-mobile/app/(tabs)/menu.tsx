@@ -29,20 +29,6 @@ const { width } = Dimensions.get('window'); // Obtem largura da tela
 
 export default function MenuScreen() {
   const flatListRef = useRef<FlatList<any>>(null); 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const nextIndex = (currentIndex + 1) % cardData.length;
-      flatListRef.current?.scrollToIndex({
-        animated: true,
-        index: nextIndex,
-      });
-      setCurrentIndex(nextIndex);
-    }, 3000); // scroll every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [currentIndex]);
 
   return (
     <View style={styles.container}>
@@ -57,13 +43,8 @@ export default function MenuScreen() {
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
-        horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={(event) => {
-          const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-          setCurrentIndex(newIndex);
-        }}
       />
     </View>
   );
@@ -88,6 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 5,
     padding: 16,
+    marginVertical: 20, 
     marginHorizontal: 40,
     justifyContent: 'center',
     alignItems: 'center',

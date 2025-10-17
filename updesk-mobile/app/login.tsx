@@ -24,7 +24,7 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     const userData: User= {
-      ID: '123', 
+      id: '123', 
       nome: 'Nome do Usuário', 
       telefone: '11987654321', 
       email: email, 
