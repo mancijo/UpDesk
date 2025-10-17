@@ -1,20 +1,20 @@
 /* static/css/components/_perfil-page.css */
 
 .perfil-page__container {
-  min-height: 100vh; /* Added from perfil.css */
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e3eafc 0%, #f8f9fa 100%); /* Added from perfil.css */
-  padding: var(--espaco-l, 32px);
+  background: linear-gradient(135deg, #e3eafc 0%, #f8f9fa 100%);
+  padding: var(--espaco-l);
 }
 
 .perfil-page__card {
-  background: var(--cor-fundo-claro, #fff); /* Adapted from perfil.css */
-  border-radius: var(--raio-borda-xl, 24px); /* Adapted from perfil.css */
-  box-shadow: var(--sombra-intensa, 0 8px 32px rgba(60, 80, 120, 0.12)); /* Adapted from perfil.css */
-  padding: var(--espaco-xl, 40px) var(--espaco-l, 32px); /* Adapted from perfil.css */
-  max-width: 420px; /* Kept existing value */
+  background: var(--cor-fundo-claro);
+  border-radius: var(--raio-borda-xl);
+  box-shadow: var(--sombra-intensa);
+  padding: var(--espaco-xl) var(--espaco-l);
+  max-width: 420px;
   width: 100%;
   text-align: center;
 }
@@ -23,35 +23,35 @@
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background-color: var(--cor-fundo-cinza, #EEE); /* Kept existing variable */
+  background-color: var(--cor-fundo-cinza);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto var(--espaco-m, 24px) auto;
+  margin: 0 auto var(--espaco-m) auto;
   font-size: 2.5rem;
-  color: var(--cor-texto-secundario, #666); /* Kept existing variable */
+  color: var(--cor-texto-secundario);
 }
 
 .perfil-page__name {
-  font-family: 'Abel', Arial, sans-serif; /* Added from perfil.css */
-  font-size: var(--fonte-tamanho-h2, 2rem); /* Adapted from perfil.css */
-  margin-bottom: var(--espaco-s, 16px); /* Adapted from perfil.css (was 18px) */
-  color: var(--cor-texto-escuro, #3a4668); /* Adapted from perfil.css */
+  font-family: 'Abel', Arial, sans-serif;
+  font-size: var(--fonte-tamanho-h2);
+  margin-bottom: var(--espaco-s);
+  color: var(--cor-texto-escuro);
 }
 
 .perfil-page__info {
-  margin-bottom: var(--espaco-l, 32px); /* Adapted from perfil.css (was 28px) */
+  margin-bottom: var(--espaco-l);
   text-align: left;
 }
 
 .perfil-page__info-item {
-  margin-bottom: var(--espaco-s, 12px);
-  font-size: 1.1rem; /* Kept existing value */
-  color: var(--cor-texto-principal, #4a5672); /* Adapted from perfil.css */
+  margin-bottom: var(--espaco-s);
+  font-size: 1.1rem;
+  color: var(--cor-texto-principal);
 }
 
 .perfil-page__info-item strong {
-  color: var(--cor-texto-escuro, #2d3552); /* Adapted from perfil.css */
+  color: var(--cor-texto-escuro);
   min-width: 80px;
   display: inline-block;
 }
@@ -59,10 +59,10 @@
 .perfil-page__actions {
   display: flex;
   justify-content: center;
-  gap: var(--espaco-s, 16px);
+  gap: var(--espaco-s);
 }
 
-.perfil-actions .btn { /* Added from perfil.css, consider moving to _button.css if general */
+.perfil-page__actions .btn {
     min-width: 120px;
     font-weight: 500;
 }

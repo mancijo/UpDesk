@@ -1,29 +1,36 @@
 <!-- /templates/navbar.html -->
-<nav class="navbar navbar-expand-lg border-bottom">
-  <div class="container-fluid">
-    
-    <!-- Navigation Links (Left) -->
-    <div class="navbar-nav me-auto"> <!-- Use Bootstrap's navbar-nav and me-auto to push right -->
-      <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
-      <a class="nav-link" href="{{ url_for('chamados.ver_chamados') }}">Ver Chamados</a>
-      <a class="nav-link" href="{{ url_for('chamados.triagem') }}">Triagem</a>
-    </div>
+<header class="navbar">
+    <!-- Botão Hambúrguer para Mobile -->
+    <button class="navbar-toggler" type="button" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+      &#9776; <!-- Ícone de hambúrguer -->
+    </button>
 
-    <!-- Logo (Center) -->
-    <a class="navbar-brand mx-auto" href="{{ url_for('main.home') }}">UpDesk</a> <!-- mx-auto to center -->
+    <!-- Logo da UpDesk -->
+    <a class="navbar-brand" href="{{ url_for('main.home') }}">UpDesk</a>
 
-    <!-- User Dropdown (Right) -->
-    <div class="dropdown ms-auto"> <!-- ms-auto to push left -->
-      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-        {{ session.get('usuario_nome', 'Usuário') }}
+    <!-- Links de Navegação -->
+    <nav class="navbar-menu" id="navbar-menu">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.home' %}active{% endif %}" href="{{ url_for('main.home') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'chamados.ver_chamados' %}active{% endif %}" href="{{ url_for('chamados.ver_chamados') }}">Ver Chamados</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'chamados.triagem' %}active{% endif %}" href="{{ url_for('chamados.triagem') }}">Triagem</a></li>
+      </ul>
+    </nav>
+
+    <!-- Dropdown do Usuário -->
+    <div class="navbar-user-dropdown">
+      <button id="userDropdownButton" aria-haspopup="true" aria-expanded="false" aria-label="Menu do Usuário">
+        {{ session.get('usuario_nome', 'Usuário') }} <span class="dropdown-arrow">&#9662;</span>
       </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownButton">
-        <li><a class="dropdown-item" href="{{ url_for('usuarios.perfil') }}">Meu Perfil</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('chamados.ver_chamados') }}">Meus Chamados</a></li>
+      <ul class="navbar-user-dropdown-content" aria-labelledby="userDropdownButton">
+        <li><a href="{{ url_for('usuarios.perfil') }}">Meu Perfil</a></li>
+        <li><a href="{{ url_for('chamados.ver_chamados') }}">Meus Chamados</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
+        <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
       </ul>
     </div>
 
-  </div>
-</nav>
+</header>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>

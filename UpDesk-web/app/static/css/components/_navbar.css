@@ -3,7 +3,7 @@
 nav.navbar {
   background-color: #FFFFFF !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  padding: 8px 20px; /* Reduced padding slightly */
+  padding: 0 20px; /* Adjusted padding to remove top/bottom, keep horizontal */
   position: fixed;
   top: 0;
   left: 0;
@@ -25,6 +25,11 @@ nav.navbar {
   font-weight: 500;
   padding: 5px 0; /* Reduced padding for links */
   line-height: 1; /* Ensure consistent line height */
+}
+
+.nav-link.active {
+  border-bottom: 2px solid var(--cor-primaria);
+  padding-bottom: 3px; /* Adjust as needed to make space for the underline */
 }
 
 /* Adjustments for the user dropdown button */
@@ -57,4 +62,8 @@ nav.navbar {
 .dropdown-menu .dropdown-item:focus {
     background-color: var(--cor-primaria);
     color: #FFFFFF;
+}
+
+body {
+  padding-top: 60px; /* Ajuste conforme a altura da sua navbar */
 }

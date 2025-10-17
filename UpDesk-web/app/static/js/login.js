@@ -52,22 +52,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Verifica se a requisição foi bem-sucedida (status HTTP 2xx)
                 if (resposta.ok) {
-                    // Em caso de sucesso, redireciona o usuário para a página home
+                    // Em caso de sucesso, restaura o botão e DEPOIS redireciona
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Login';
                     window.location.href = "/home";
                 } else {
                     // Se o backend retornar um erro (ex: senha incorreta), exibe a mensagem de erro
                     mensagem.style.color = 'red';
                     mensagem.innerText = dados.mensagem || 'Ocorreu um erro.';
+                    // Restaura o botão em caso de falha de login
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Login';
                 }
             } catch (error) {
                 // Captura erros de rede (ex: servidor offline)
                 console.error('Erro de rede ou ao fazer login:', error);
                 mensagem.style.color = 'red';
                 mensagem.innerText = 'Não foi possível conectar ao servidor. Tente novamente mais tarde.';
-            } finally {
-                // --- Fim do Feedback Visual ---
-                // Este bloco é executado sempre, seja em caso de sucesso ou erro.
-                // Reabilita o botão e restaura o texto original.
+                // Restaura o botão em caso de erro de rede
                 submitButton.disabled = false;
                 submitButton.innerHTML = 'Login';
             }

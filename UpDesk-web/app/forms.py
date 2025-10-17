@@ -45,7 +45,7 @@ class LoginForm(FlaskForm):
     """
     # Campo de Email: Requer que seja preenchido e que tenha um formato de email válido.
     # O nome da variável "Email" com "E" maiúsculo é como foi definido e deve ser usado no template.
-    Email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     
     # Campo de Senha: Requer que seja preenchido.
     senha = PasswordField('Senha', validators=[DataRequired()])

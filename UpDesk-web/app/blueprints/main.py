@@ -1,7 +1,6 @@
-
 from flask import Blueprint, render_template, session, redirect, url_for
-from app.models import Chamado
-from app.forms import LoginForm
+from ..models import Chamado
+from ..forms import LoginForm
 
 bp = Blueprint('main', __name__)
 
@@ -25,8 +24,8 @@ def index():
 
 @bp.route('/home')
 def home():
-    if 'usuario_id' not in session:
-        return redirect(url_for('main.index'))
+    # if 'usuario_id' not in session:
+    #     return redirect(url_for('main.index'))
 
     nome_usuario = session.get('usuario_nome')
     

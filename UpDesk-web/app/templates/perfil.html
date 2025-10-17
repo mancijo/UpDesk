@@ -15,9 +15,7 @@
             <p class="perfil-page__info-item"><strong>Setor:</strong> {{ user.setor }}</p>
             <p class="perfil-page__info-item"><strong>Telefone:</strong> {{ user.telefone }}</p>
         </div>
-        <div class="perfil-page__actions">
-            <a href="/home" class="btn btn-secondary">Voltar</a>
-        </div>
+<a href="{{ url_for('main.home') }}" class="btn btn-secondary">Voltar</a>
     </div>
 </div>
 {% endblock %}

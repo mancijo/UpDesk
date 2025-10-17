@@ -7,10 +7,10 @@ Responsabilidade:
 - Inclui rotas para abrir, visualizar, atender, transferir, encerrar e interagir com chamados.
 - Fornece uma API para a funcionalidade de chat em tempo real.
 """
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, make_response
-from app.models import db, Chamado, Interacao
-from app.forms import chamadoForm
-from app.services import buscar_solucao_com_ia
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, make_response, current_app
+from ..models import db, Chamado, Interacao
+from ..forms import chamadoForm
+from ..services import buscar_solucao_com_ia
 from datetime import datetime, timedelta
 from fpdf import FPDF
 
@@ -32,6 +32,7 @@ def abrir_chamado():
     if request.method == 'POST' and form.validate_on_submit():
         # Chama o serviço de IA para obter uma solução baseada no título e descrição
         solucao_sugerida = buscar_solucao_com_ia(form.titulo.data, form.descricao.data)
+        current_app.logger.info(f"Solucao sugerida: {solucao_sugerida}")
         
         # Armazena os dados do formulário e a solução da IA na sessão para uso posterior
         session['chamado_temporario'] = {
