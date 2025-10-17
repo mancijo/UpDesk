@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="chamado-page__container">
+    <section class="chamado-page__container">
         <h2 class="chamado-page__title">Abertura do chamado</h2>
 
         <form action="{{ form_action or url_for('chamado') }}" method="post" enctype="multipart/form-data">
@@ -45,7 +45,7 @@
                 <a href="/home" class="btn-back">Voltar</a>
             </div>
         </form>
-    </div>
+</section>
 {% endblock %}
 
 {% block scripts %}
