@@ -1,17 +1,6 @@
 /* c:\UpDesk\UpDesk-web\app\static\js\navbar.js */
 
 document.addEventListener('DOMContentLoaded', function() {
-    const navbarToggler = document.querySelector('.navbar-toggler');
-    const navbarMenu = document.querySelector('.navbar-menu');
-
-    if (navbarToggler && navbarMenu) {
-        navbarToggler.addEventListener('click', function() {
-            navbarMenu.classList.toggle('show');
-            const expanded = navbarToggler.getAttribute('aria-expanded') === 'true' || false;
-            navbarToggler.setAttribute('aria-expanded', !expanded);
-        });
-    }
-
     const userDropdownButton = document.getElementById('userDropdownButton');
     const userDropdownContent = document.querySelector('.navbar-user-dropdown-content');
 

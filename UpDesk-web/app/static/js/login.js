@@ -10,6 +10,35 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Seleciona o formulário de login no DOM
     const loginForm = document.getElementById('loginForm');
+    const mensagem = document.getElementById('mensagem');
+    const submitButton = loginForm ? loginForm.querySelector('button[type="submit"]') : null;
+
+    // Constantes para mensagens e estados do botão
+    const MSG_ERROR_NETWORK = 'Não foi possível conectar ao servidor. Tente novamente mais tarde.';
+    const MSG_ERROR_GENERIC = 'Ocorreu um erro.';
+    const BTN_TEXT_LOGIN = 'Login';
+    const BTN_TEXT_LOADING = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Entrando...';
+
+    /**
+     * Exibe uma mensagem para o usuário.
+     * @param {string} text - O texto da mensagem.
+     * @param {string} type - O tipo da mensagem ('success' ou 'error').
+     */
+    function displayMessage(text, type) {
+        mensagem.innerText = text;
+        mensagem.style.color = type === 'error' ? 'red' : 'green';
+    }
+
+    /**
+     * Define o estado de carregamento do botão de submit.
+     * @param {boolean} isLoading - Se o botão deve estar em estado de carregamento.
+     */
+    function setLoadingState(isLoading) {
+        if (submitButton) {
+            submitButton.disabled = isLoading;
+            submitButton.innerHTML = isLoading ? BTN_TEXT_LOADING : BTN_TEXT_LOGIN;
+        }
+    }
 
     // Garante que o script só execute se o formulário de login existir na página
     if (loginForm) {
@@ -26,15 +55,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
             
-            // Seleciona elementos para feedback do usuário
-            const mensagem = document.getElementById('mensagem');
-            const submitButton = loginForm.querySelector('button[type="submit"]');
+            // Limpa mensagens de erro anteriores
+            displayMessage('', 'success'); 
+
+            // --- Validação no Cliente ---
+            if (!email || !senha) {
+                displayMessage('Por favor, preencha todos os campos.', 'error');
+                return; // Impede o envio do formulário se a validação falhar
+            }
 
             // --- Início do Feedback Visual ---
-            // Desabilita o botão para prevenir múltiplos envios e muda o texto para indicar carregamento.
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Entrando...';
-            mensagem.innerText = ''; // Limpa mensagens de erro anteriores
+            setLoadingState(true);
 
             // O bloco try...catch...finally garante que o botão seja reativado mesmo se ocorrer um erro.
             try {
@@ -52,26 +83,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Verifica se a requisição foi bem-sucedida (status HTTP 2xx)
                 if (resposta.ok) {
-                    // Em caso de sucesso, restaura o botão e DEPOIS redireciona
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = 'Login';
+                    // Em caso de sucesso, redireciona
                     window.location.href = "/home";
                 } else {
                     // Se o backend retornar um erro (ex: senha incorreta), exibe a mensagem de erro
-                    mensagem.style.color = 'red';
-                    mensagem.innerText = dados.mensagem || 'Ocorreu um erro.';
-                    // Restaura o botão em caso de falha de login
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = 'Login';
+                    displayMessage(dados.mensagem || MSG_ERROR_GENERIC, 'error');
                 }
             } catch (error) {
                 // Captura erros de rede (ex: servidor offline)
                 console.error('Erro de rede ou ao fazer login:', error);
-                mensagem.style.color = 'red';
-                mensagem.innerText = 'Não foi possível conectar ao servidor. Tente novamente mais tarde.';
-                // Restaura o botão em caso de erro de rede
-                submitButton.disabled = false;
-                submitButton.innerHTML = 'Login';
+                displayMessage(MSG_ERROR_NETWORK, 'error');
+            } finally {
+                // Restaura o botão em qualquer caso (sucesso, falha de login, erro de rede)
+                setLoadingState(false);
             }
         });
     }

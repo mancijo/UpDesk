@@ -21,7 +21,7 @@
 </head>
 
 <body class="login-page-body">
-    <div class="login-card">
+    <main class="login-card" role="main">
         <h1 class="login-card__brand">UpDesk</h1>
 
         <!-- 
@@ -30,8 +30,8 @@
           - `data-login-url`: Passa a URL de login do Flask para o JavaScript de forma dinâmica e segura.
           - `novalidate`: Desativa a validação padrão do navegador, pois a validação será tratada via JavaScript e backend.
         -->
-        <form id="loginForm" class="w-100" data-login-url="{{ url_for('auth.login') }}" novalidate>
-            
+        <form id="loginForm" class="w-100" data-login-url="{{ url_for('auth.login') }}" novalidate aria-labelledby="login-heading">
+            <h2 id="login-heading" class="visually-hidden">Formulário de Login</h2>
             <!-- 
               Token CSRF (Cross-Site Request Forgery)
               Essencial para a segurança do formulário. Gerado automaticamente pelo Flask-WTF.
@@ -46,13 +46,13 @@
                 {{ form.email.label(class="visually-hidden") }}
                 <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
                 <!-- Campo de email renderizado pelo Flask-WTF. Atributos HTML são passados como argumentos. -->
-                {{ form.email(class="form-control", placeholder="E-mail", id="email") }}
+                {{ form.email(class="form-control", placeholder="E-mail", id="email", **{'aria-label': 'E-mail'}) }}
             </div>
 
             <div class="input-group mb-4">
                 {{ form.senha.label(class="visually-hidden") }}
                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                {{ form.senha(class="form-control", placeholder="Senha", id="senha") }}
+                {{ form.senha(class="form-control", placeholder="Senha", id="senha", **{'aria-label': 'Senha'}) }}
             </div>
 
             <!--
@@ -65,11 +65,11 @@
         </form>
 
         <!-- Área para exibir mensagens de erro ou sucesso para o usuário -->
-        <div class="message mt-3" id="mensagem"></div>
+        <div class="message mt-3" id="mensagem" role="status" aria-live="polite"></div>
 
         <!-- Link para recuperação de senha (atualmente um placeholder) -->
         <a href="#" class="text-decoration-none mt-3">Esqueceu sua senha?</a>
-    </div>
+    </main>
 
     <!-- Dependências de JavaScript (Bootstrap) via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
