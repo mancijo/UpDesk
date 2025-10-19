@@ -10,7 +10,6 @@
   /* 1. Mapeamento de Cores */
   --bs-primary: var(--cor-primaria, #2B4C7E);
   --bs-secondary: var(--cor-secundaria, #6c757d); /* Usando um cinza padrão como fallback */
-  --bs-danger: var(--cor-perigo, #dc3545);
   --bs-light: var(--cor-fundo-claro, #f8f9fa);
   --bs-dark: var(--cor-texto-escuro, #212529);
   --bs-body-color: var(--cor-texto-principal, #343a40);
@@ -37,7 +36,6 @@
 .btn-primary {
   background-color: var(--cor-primaria) !important;
   border-color: var(--cor-primaria) !important;
-  color: var(--cor-texto-claro) !important; /* Ensure text is white */
 }
 
 .btn-primary:hover {
@@ -49,4 +47,9 @@
 a.navbar-brand.logo {
   color: var(--cor-primaria) !important;
   text-decoration: none !important;
+}
+
+a.navbar-brand.logo:hover {
+    color: var(--cor-primaria-escura) !important;
+    text-decoration: none !important;
 }

@@ -210,7 +210,7 @@ def resolver_chamado_ia():
         db.session.add(novo_chamado)
         db.session.commit()
     
-    return redirect(url_for('ver_chamado'))
+    return redirect(url_for('home'))
 
 @app.route('/ver-chamado')
 def ver_chamado():

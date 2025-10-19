@@ -1,11 +1,11 @@
 /* static/css/base/_variables.css */
 
 :root {
-  /* Cores */
-  --cor-primaria: #2C3E50; /* Updated to Dark navy blue */
-  --cor-primaria-escura: #1E3A60; /* Keep as is, or adjust based on new primary */
+  /* Paleta de Cores Principal */
+  --cor-primaria: #2B4C7E;
+  --cor-primaria-escura: #203A60; /* Tom mais escuro para hover */
   --cor-secundaria: #6c757d;
-  --cor-sucesso: #28a745;
+  --cor-sucesso: #198754;
   --cor-perigo: #dc3545;
   --cor-aviso: #ffc107;
   --cor-info: #17a2b8;
@@ -24,6 +24,9 @@
   --cor-borda-foco: #80bdff;
   --cor-borda-erro: #dc3545;
 
+  --cor-primaria-rgb: 43, 76, 112;
+  --sombra-foco-primaria: 0 0 0 3px rgba(var(--cor-primaria-rgb), 0.2);
+
   /* Espaçamentos */
   --espaco-xs: 8px;
   --espaco-s: 16px;
@@ -32,7 +35,7 @@
   --espaco-xl: 40px;
 
   /* Tipografia */
-  --fonte-principal: 'Inter', sans-serif; /* Updated font */
+  --fonte-principal: 'Roboto', sans-serif; /* Fonte principal da aplicação */
   --fonte-tamanho-base: 16px;
   --fonte-tamanho-s: 14px;
   --fonte-tamanho-m: 16px;

@@ -37,8 +37,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<JwtService>();
 
 // Registra o serviço de IA (usando mock temporariamente)
-builder.Services.AddScoped<IaiService, MockIaService>();
-// builder.Services.AddHttpClient<IaiService, GeminiIaService>(); // Descomente quando quiser usar a API real
+//  builder.Services.AddScoped<IaiService, MockIaService>();
+
+builder.Services.AddHttpClient<IaiService, GeminiIaService>(); // Descomente quando quiser usar a API real
 
 var app = builder.Build();
 app.UseDefaultFiles(); // Esta linha faz o servidor encontrar o index.html por defeito

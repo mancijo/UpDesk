@@ -19,8 +19,10 @@
 
             <div class="d-flex justify-content-center gap-3 mt-3">
                 <!-- Botão para finalizar (solução funcionou) -->
-                <a href="{{ url_for('home') }}" class="btn btn-success btn-lg">Sim, problema resolvido!</a>
-
+                <form action="{{ url_for('resolver_chamado_ia') }}" method="post">
+                    <button type="submit" class="btn btn-success btn-lg">Sim, problema resolvido!</button>
+                </form>
+                
                 <!-- Formulário para abrir o chamado (solução não funcionou) -->
                 <form action="{{ url_for('confirmar_abertura_chamado') }}" method="post">
                     <button type="submit" class="btn btn-danger btn-lg">Não, quero abrir um chamado</button>

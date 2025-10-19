@@ -66,15 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function fetchTriagemChamados() {
     const container = document.getElementById('tickets-list-container');
-    // Limpa a lista e adiciona o cabeçalho
-    container.innerHTML = `
-        <div class="tickets-header d-none d-md-grid">
-            <div>Id</div>
-            <div>Título</div>
-            <div>Status</div>
-            <div>Data</div>
-            <div class="actions-header">Ações</div>
-        </div>`;
+    // Limpa a lista
+    container.innerHTML = '';
 
     try {
         // Endpoint GET /api/chamados/triagem
@@ -85,49 +78,40 @@ async function fetchTriagemChamados() {
         console.log(chamados);
 
         if (chamados.length === 0) {
-            container.innerHTML += '<div class="ticket-row" style="grid-column: 1 / -1; text-align: center;">Nenhum chamado para triagem.</div>';
+            container.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum chamado para triagem.</td></tr>';
             return;
         }
 
         chamados.forEach(chamado => {
             const dataAbertura = new Date(chamado.dataAbertura).toLocaleDateString('pt-BR');
 
-            const ticketRow = document.createElement('div');
-            ticketRow.className = 'ticket-row';
+            const tableRow = document.createElement('tr');
 
-            ticketRow.innerHTML = `
-                <div>${chamado.chamadoId}</div>
-                <div>${chamado.tituloChamado}</div>
-                <div><span class="status status-pendente">${chamado.statusChamado}</span></div>
-                <div>${dataAbertura}</div>
-                <div class="ticket-actions text-end">
-                    <button class="btn visualizar-btn"
+            tableRow.innerHTML = `
+                <td>${chamado.chamadoId}</td>
+                <td>${chamado.tituloChamado}</td>
+                <td><span class="status status-pendente">${chamado.statusChamado}</span></td>
+                <td>${dataAbertura}</td>
+                <td class="ticket-actions text-end">
+                    <button class="btn btn-primary btn-sm visualizar-btn"
                         data-id="${chamado.chamadoId}"
                         data-bs-toggle="modal" 
-                        data-bs-target="#visualizarChamadoModal"
-                        data-titulo="${chamado.tituloChamado || ''}"
-                        data-data-abertura="${dataAbertura}"
-                        data-solicitante-nome="${chamado.solicitanteNome || 'N/A'}"
-                        data-solicitante-email="${chamado.solicitanteEmail || 'N/A'}"
-                        data-solicitante-ramal="${chamado.solicitanteRamal || 'N/A'}"
-                        data-status="${chamado.statusChamado || ''}"
-                        data-categoria="${chamado.categoriaChamado || ''}"
-                        data-descricao="${chamado.descricaoChamado || ''}">
+                        data-bs-target="#visualizarChamadoModal">
                         Visualizar
                     </button>
-                    <button class="btn transferir-btn" 
+                    <button class="btn btn-secondary btn-sm transferir-btn" 
                         data-id="${chamado.chamadoId}" 
                         data-titulo="${chamado.tituloChamado}">
                         Transferir
                     </button>
-                </div>
+                </td>
             `;
 
-            container.appendChild(ticketRow);
+            container.appendChild(tableRow);
         });
     } catch (error) {
         console.error(error);
-        container.innerHTML += `<div class="ticket-row text-danger" style="grid-column: 1 / -1; text-align: center;">${error.message}</div>`;
+        container.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${error.message}</td></tr>`;
     }
 }
 

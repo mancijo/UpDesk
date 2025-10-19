@@ -22,14 +22,7 @@
   color: var(--cor-texto-principal);
 }
 
-/* Specific styles for login inputs, extending .form__input */
-.form__input--login {
-    padding: var(--espaco-xs) var(--espaco-m);
-    height: 40px;
-    border-radius: var(--raio-borda-pílula);
-    border: 1px solid var(--cor-borda);
-    background: var(--cor-fundo-claro);
-}
+
 
 .form__textarea {
   min-height: 120px;
@@ -52,4 +45,15 @@
   justify-content: flex-end;
   gap: var(--espaco-s);
   margin-top: var(--espaco-m);
+}
+
+/*
+  PADRONIZAÇÃO DE BORDAS EM INPUT GROUPS
+  - Garante que, quando um ícone (`.input-group-text`) é seguido por um campo (`.form-control`),
+    o campo tenha os cantos da direita arredondados.
+  - Esta é a forma correta de garantir a consistência visual sem `!important`.
+*/
+.input-group > .input-group-text + .form-control {
+  border-top-right-radius: var(--raio-borda-s);
+  border-bottom-right-radius: var(--raio-borda-s);
 }
