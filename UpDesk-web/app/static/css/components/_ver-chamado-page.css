@@ -1,0 +1,44 @@
+/* static/css/components/_ver-chamado-page.css */
+
+.ver-chamado-container {
+    max-width: 1000px;
+    margin: var(--espaco-xl) auto;
+    background: var(--cor-fundo-claro);
+    padding: var(--espaco-l);
+    border-radius: var(--raio-borda-grande);
+    box-shadow: var(--sombra-padrao);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h2 {
+    font-weight: var(--fonte-peso-semi-bold);
+}
+
+.filtros {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--espaco-m);
+}
+
+select,
+input[type="text"] {
+    padding: var(--espaco-xs) var(--espaco-s);
+    border-radius: var(--raio-borda-pílula);
+    border: 1px solid var(--cor-borda);
+}
+
+.bottom-bar {
+    margin-top: var(--espaco-l);
+    display: flex;
+    justify-content: space-between;
+}
+
+.user {
+    font-weight: var(--fonte-peso-semi-bold);
+    font-style: bold;
+}

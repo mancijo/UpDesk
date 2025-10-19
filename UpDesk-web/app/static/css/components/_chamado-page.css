@@ -1,0 +1,31 @@
+/* static/css/components/_chamado-page.css */
+
+/*
+  Este arquivo contém estilos específicos para o layout da página de criação de chamado.
+  Ele assume que os componentes de formulário (.form-group) e botão (.button) já estão estilizados.
+*/
+
+.chamado-page__container {
+  max-width: 600px;
+  margin: var(--espaco-l, 32px) auto; /* Adapted from .form-container margin */
+  padding: var(--espaco-l, 32px); /* Adapted from .form-container padding */
+  background-color: var(--cor-fundo-claro, #FFFFFF);
+  border-radius: var(--raio-borda-grande, 15px); /* Adapted from .form-container border-radius */
+  box-shadow: var(--sombra-intensa, 0 6px 18px rgba(0, 0, 0, 0.12)); /* Adapted from .form-container box-shadow */
+}
+
+.chamado-page__title {
+  text-align: center;
+  color: var(--cor-primaria, #2B4C7E);
+  margin-bottom: var(--espaco-l, 30px); /* Adapted from .titulo margin-bottom */
+  margin-top: var(--espaco-m, 20px); /* Adapted from .titulo margin-top */
+  font-size: var(--fonte-tamanho-xl, 28px); /* Adapted from .titulo font-size */
+  font-weight: var(--fonte-peso-bold, bold); /* Adapted from .titulo font-weight */
+}
+
+@media (max-width: 768px) {
+    .chamado-page__container { /* Changed from .form-container */
+        margin: var(--espaco-m, 20px);
+        padding: var(--espaco-m, 20px);
+    }
+}

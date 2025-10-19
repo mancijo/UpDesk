@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Ver Chamados - UpDesk{% endblock %}
+
+{% block body %}
+
+    <div class="container ver-chamado-container">
+        <header class="header">
+            <h2>Monitoramento de Chamados</h2>
+        </header>
+
+        <form class="filtros" method="GET" action="{{ url_for('ver_chamado') }}">
+            <div class="input-group">
+                <select class="form-select" name="status" onchange="this.form.submit()">
+                    <option value="Todos" {% if status_filtro == 'Todos' %}selected{% endif %}>Todos os Status</option>
+                    <option value="Aberto" {% if status_filtro == 'Aberto' %}selected{% endif %}>Aberto</option>
+                    <option value="Em Atendimento" {% if status_filtro == 'Em Atendimento' %}selected{% endif %}>Em Atendimento</option>
+                    <option value="Resolvido" {% if status_filtro == 'Resolvido' %}selected{% endif %}>Resolvido</option>
+                    <option value="Transferido" {% if status_filtro == 'Transferido' %}selected{% endif %}>Transferido</option>
+                    <option value="Agendado" {% if status_filtro == 'Agendado' %}selected{% endif %}>Agendado</option>
+                </select>
+                <input class="form-control w-50" type="search" name="q" placeholder="Buscar por título do chamado..." value="{{ search_query or '' }}">
+                <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        <div class="container mt-4">
+            <h2>Lista de Chamados</h2>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th>Data </th>
+                        <th>Ações</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chamado in chamados %}
+                    <tr>
+                        <td>{{ chamado.titulo_Chamado }}</td>
+                        <td>{{ chamado.prioridade_Chamado }}</td>
+                        <td>{{ chamado.status_Chamado }}</td>
+                        <td>{{ chamado.dataAbertura.strftime("%d/%m/%Y %H:%M") }}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#visualizarChamadoModal"
+                                data-id="{{ chamado.chamado_ID }}"
+                                data-titulo="{{ chamado.titulo_Chamado }}"
+                                data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
+                                data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
+                                data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
+                                data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
+                                data-status="{{ chamado.status_Chamado }}"
+                                data-categoria="{{ chamado.categoria_Chamado }}"
+                                data-descricao="{{ chamado.descricao_Chamado }}">Ver detalhes</button>
+                            <a href="{{ url_for('atender_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-primary btn-sm">Atender</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhum chamado encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bottom-bar">
+            <button class="btn" onclick="window.location.href='/home'">Página inicial</button>
+            <button class="btn btn-gestao" data-bs-toggle="modal" data-bs-target="#modalRelatorio">Relatório Gestão</button>
+        </div>
+    </div>
+
+    <!-- Modal de Relatório de Gestão -->
+    <div class="modal fade" id="modalRelatorio" tabindex="-1" aria-labelledby="modalRelatorioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formRelatorio" action="{{ url_for('gerar_relatorio_pdf') }}" method="GET" target="_blank">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalRelatorioLabel">Gerar Relatório de Gestão</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="intervalo" class="form-label">Intervalo de Tempo</label>
+                            <select class="form-select" id="intervalo" name="intervalo">
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="30" selected>Últimos 30 dias</option>
+                                <option value="90">Últimos 3 meses</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Filtrar por Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="todos">Todos</option>
+                                <option value="Aberto">Aberto</option>
+                                <option value="Em Atendimento">Em Atendimento</option>
+                                <option value="Resolvido">Resolvido</option>
+                                <option value="Transferido">Transferido</option>
+                                <option value="Agendado">Agendado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Exportar para PDF</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização de Chamado (copiado de triagem.html) -->
+    <div class="modal fade" id="visualizarChamadoModal" tabindex="-1" aria-labelledby="visualizarChamadoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h1 class="modal-title fs-5" id="visualizarChamadoModalLabel">Dados do Chamado</h1>
+                        <h2 class="modal-subtitle" id="modal-data-abertura">Aberto em: ...</h2>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon"><i class="bi bi-person"></i></span>
+                        <strong>Solicitante:</strong><br>
+                        <span id="modal-solicitante-nome">...</span><br>
+                        <span id="modal-solicitante-email">...</span><br>
+                        Ramal: <span id="modal-solicitante-ramal">...</span>
+                    </div>
+
+                    <div class="text-center my-4">
+                        <span class="title-badge-modal" id="modal-titulo">...</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between text-muted mb-2">
+                        <span><strong>Status:</strong> <span id="modal-status">...</span></span>
+                        <span><strong>Categoria:</strong> <span id="modal-categoria">...</span></span>
+                    </div>
+
+                    <p class="mt-3"><strong>Descrição:</strong></p>
+                    <div class="description-box" id="modal-descricao">
+                        ...
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
+                    <button type="button" class="btn btn-iniciar-modal rounded-pill">Atender Chamado</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/modal-handler.js') }}"></script>
+
+{% endblock %}

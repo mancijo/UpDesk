@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Solução Sugerida - UpDesk{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        <div class="card p-4 shadow-sm">
+            <h2 class="text-center mb-4">Solução Sugerida pela IA</h2>
+            
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Sugestão de Solução:</h4>
+                <p>{{ solucao }}</p>
+            </div>
+
+            <hr>
+
+            <p class="text-center">A solução acima resolveu o seu problema?</p>
+
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <!-- Botão para finalizar (solução funcionou) -->
+<<<<<<< HEAD:UpDesk-web/templates/solucao_ia.html
+                <form action="{{ url_for('resolver_chamado_ia') }}" method="post">
+                    <button type="submit" class="btn btn-success btn-lg">Sim, problema resolvido!</button>
+                </form>
+                
+=======
+                <a href="{{ url_for('main.home') }}" class="btn btn-success btn-lg">Sim, problema resolvido!</a>
+
+>>>>>>> d82b71defb868dcbfd244450643bece347d1141a:UpDesk-web/app/templates/solucao_ia.html
+                <!-- Formulário para abrir o chamado (solução não funcionou) -->
+                <form action="{{ url_for('chamados.confirmar_abertura_chamado') }}" method="post">
+                    <button type="submit" class="btn btn-danger btn-lg">Não, quero abrir um chamado</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

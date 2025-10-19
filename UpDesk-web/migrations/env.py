@@ -1,3 +1,13 @@
+"""
+Arquivo de Ambiente do Alembic (Flask-Migrate)
+
+Responsabilidade:
+- Este arquivo é o script de configuração que o Alembic executa ao rodar um comando de migração.
+- Sua principal função é conectar o Alembic ao banco de dados da aplicação Flask e fornecer a ele
+  os metadados dos modelos (de `app/models.py`) para que ele possa detectar alterações no esquema.
+- É um arquivo majoritariamente gerado automaticamente e raramente precisa de edição manual, a não ser
+  para configurações avançadas de migração.
+"""
 import logging
 from logging.config import fileConfig
 
@@ -5,22 +15,22 @@ from flask import current_app
 
 from alembic import context
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# Este é o objeto de Configuração do Alembic, que fornece
+# acesso aos valores dentro do arquivo .ini em uso.
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Interpreta o arquivo de configuração para o logging do Python.
+# Esta linha basicamente configura os loggers.
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
 
 def get_engine():
     try:
-        # this works with Flask-SQLAlchemy<3 and Alchemical
+        # isso funciona com Flask-SQLAlchemy<3 e Alchemical
         return current_app.extensions['migrate'].db.get_engine()
     except (TypeError, AttributeError):
-        # this works with Flask-SQLAlchemy>=3
+        # isso funciona com Flask-SQLAlchemy>=3
         return current_app.extensions['migrate'].db.engine
 
 
@@ -32,15 +42,123 @@ def get_engine_url():
         return str(get_engine().url).replace('%', '%%')
 
 
-# add your model's MetaData object here
-# for 'autogenerate' support
+# adicione o objeto MetaData do seu modelo aqui
+# para suporte a 'autogenerate'
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-config.set_main_option('sqlalchemy.url', get_engine_url())
+import logging
+from logging.config import fileConfig
+
+from alembic import context
+from flask import current_app
+from sqlalchemy.engine import Engine
+from sqlalchemy.schema import MetaData
+
+# --- Configuração Inicial do Alembic ---
+
+# Objeto de configuração do Alembic, com acesso aos valores do alembic.ini
+config = context.config
+
+# Configura o logger com base no arquivo .ini
+if config.config_file_name:
+    fileConfig(config.config_file_name)
+logger = logging.getLogger('alembic.env')
+
+# --- Funções Auxiliares para Integração com Flask ---
+
+def get_flask_db_object():
+    """
+    Obtém o objeto SQLAlchemy (db) da extensão Flask-Migrate na aplicação Flask.
+    """
+    return current_app.extensions['migrate'].db
+
+def get_engine() -> Engine:
+    """
+    Obtém o Engine do SQLAlchemy a partir da aplicação Flask.
+    Lida com diferentes versões do Flask-SQLAlchemy.
+    """
+    db_object = get_flask_db_object()
+    # Para Flask-SQLAlchemy >= 3
+    if hasattr(db_object, 'engine'):
+        return db_object.engine
+    # Para Flask-SQLAlchemy < 3
+    return db_object.get_engine()
+
+def get_metadata() -> MetaData:
+    """
+    Obtém o objeto MetaData dos modelos da aplicação para o 'autogenerate'.
+    """
+    db_object = get_flask_db_object()
+    if hasattr(db_object, 'metadatas'):
+        return db_object.metadatas[None]
+    return db_object.metadata
+
+# --- Configuração Principal do Contexto do Alembic ---
+
+# Define dinamicamente a URL do banco de dados para o Alembic
+# usando a mesma configuração da aplicação Flask.
+engine = get_engine()
+config.set_main_option('sqlalchemy.url', str(engine.url).replace('%', '%%'))
+
+# Define o metadata dos modelos para que o Alembic possa detectar alterações.
+target_metadata = get_metadata()
+
+def run_migrations_offline() -> None:
+    """
+    Executa migrações no modo 'offline'.
+    Gera um script SQL sem se conectar ao banco de dados.
+    """
+    url = config.get_main_option("sqlalchemy.url")
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+def run_migrations_online() -> None:
+    """
+    Executa migrações no modo 'online'.
+    Conecta-se ao banco de dados e aplica as alterações.
+    """
+    # Callback para evitar a criação de migrações vazias.
+    def process_revision_directives(context, revision, directives):
+        if getattr(config.cmd_opts, 'autogenerate', False):
+            script = directives[0]
+            if script.upgrade_ops.is_empty():
+                directives[:] = []
+                logger.info('Nenhuma alteração no esquema detectada.')
+
+    conf_args = current_app.extensions['migrate'].configure_args
+    if "process_revision_directives" not in conf_args:
+        conf_args["process_revision_directives"] = process_revision_directives
+
+    with engine.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            **conf_args
+        )
+
+        with context.begin_transaction():
+            context.run_migrations()
+
+# --- Ponto de Entrada ---
+
+if context.is_offline_mode():
+    logger.info("Executando migrações no modo offline...")
+    run_migrations_offline()
+else:
+    logger.info("Executando migrações no modo online...")
+    run_migrations_online()
+
 target_db = current_app.extensions['migrate'].db
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
+# outros valores da configuração, definidos pelas necessidades de env.py,
+# podem ser adquiridos:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
@@ -52,15 +170,15 @@ def get_metadata():
 
 
 def run_migrations_offline():
-    """Run migrations in 'offline' mode.
+    """Executa migrações no modo 'offline'.
 
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
+    Isso configura o contexto apenas com uma URL
+    e não um Engine, embora um Engine seja aceitável
+    aqui também. Ao pular a criação do Engine
+    nem precisamos de um DBAPI disponível.
 
-    Calls to context.execute() here emit the given string to the
-    script output.
+    Chamadas para context.execute() aqui emitem a string fornecida para a
+    saída do script.
 
     """
     url = config.get_main_option("sqlalchemy.url")
@@ -73,22 +191,22 @@ def run_migrations_offline():
 
 
 def run_migrations_online():
-    """Run migrations in 'online' mode.
+    """Executa migrações no modo 'online'.
 
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
+    Neste cenário, precisamos criar um Engine
+    e associar uma conexão ao contexto.
 
     """
 
-    # this callback is used to prevent an auto-migration from being generated
-    # when there are no changes to the schema
-    # reference: http://alembic.zzzcomputing.com/en/latest/cookbook.html
+    # este callback é usado para evitar que uma auto-migração seja gerada
+    # quando não há alterações no esquema
+    # referência: http://alembic.zzzcomputing.com/en/latest/cookbook.html
     def process_revision_directives(context, revision, directives):
         if getattr(config.cmd_opts, 'autogenerate', False):
             script = directives[0]
             if script.upgrade_ops.is_empty():
                 directives[:] = []
-                logger.info('No changes in schema detected.')
+                logger.info('Nenhuma alteração no esquema detectada.')
 
     conf_args = current_app.extensions['migrate'].configure_args
     if conf_args.get("process_revision_directives") is None:

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Transferir Chamado #{{ chamado.chamado_ID }} - UpDesk{% endblock %}
+
+{% block body %}
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-lg-7 mb-4">
+                <div class="main-card">
+                    <div class="row h-100">
+                        <!-- Dados do Chamado (Dinâmico) -->
+                        <div class="col-md-5 ticket-data">
+                            <h5 class="card-title-custom">Dados Abertura Chamado</h5>
+                            <p><strong>Aberto em:</strong> {{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}</p>
+                            {% if chamado.solicitante %}
+                            <p><strong>Solicitante:</strong><br>
+                                {{ chamado.solicitante.nome }}<br>
+                                {{ chamado.solicitante.email }}<br>
+                                Ramal: {{ chamado.solicitante.telefone }}
+                            </p>
+                            {% endif %}
+                            <p><strong>Status:</strong> {{ chamado.status_Chamado }}</p>
+                            <p><strong>Categoria:</strong> {{ chamado.categoria_Chamado }}</p>
+                        </div>
+                        <!-- Título e Descrição (Dinâmico) -->
+                        <div class="col-md-7">
+                            <div class="ticket-message-box">
+                                <span class="ticket-title-badge">{{ chamado.titulo_Chamado }}</span>
+                                <blockquote>
+                                    "{{ chamado.descricao_Chamado }}"
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 mb-4">
+                <!-- Formulário de Transferência -->
+                <div class="main-card">
+                    <h5 class="card-title-custom">Prioridade do chamado</h5>
+                    
+                    <ul class="priority-options">
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="prioridade" id="prio-baixa">
+                                <label class="form-check-label" for="prio-baixa">Baixa</label> {# Lógica para checar a prioridade atual #}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="prioridade" id="prio-media" checked>
+                                <label class="form-check-label" for="prio-media">Média</label> {# Lógica para checar a prioridade atual #}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="prioridade" id="prio-alta">
+                                <label class="form-check-label" for="prio-alta">Alta</label> {# Lógica para checar a prioridade atual #}
+                            </div>
+                        </li>
+                    </ul>
+                    <h5 class="card-title-custom">Transferir para</h5>
+
+                    <ul class="transferir-opcoes">
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n1">
+                                <label class="form-check-label" for="setor-ti-n1">Setor TI N1</label>                          
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n2" checked>
+                                <label class="form-check-label" for="setor-ti-n2">Setor TI N2</label>                          
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="transferir" id="setor-triagem">
+                                <label class="form-check-label" for="setor-triagem">Setor Triagem</label> 
+                            </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-actions">
+            <a href="{{ url_for('triagem') }}" class="btn btn-voltar rounded-pill">Voltar</a>
+            <button class="btn btn-finalizar rounded-pill">Finalizar</button>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - UpDesk{% endblock %}
+
+{% block body %}
+<section class="container mt-4"> <!-- Adicionado container e margem superior -->
+  <div class="row g-4 justify-content-center">
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados Abertos
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_abertos }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados em Triagem
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_em_triagem }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados com Solução IA
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_solucao_ia }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card text-center shadow-lg border-0 h-100 custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary fw-semibold">
+            Chamados Finalizados
+          </h4>
+          <span class="display-4 fw-bold text-primary">{{ chamados_finalizados }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção de Ações -->
+  <nav>
+    <ul class="row g-4 justify-content-center mt-5 list-unstyled">
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('chamados.abrir_chamado') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Abrir Chamado</a>
+      </li>
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-eye me-2"></i>Monitoramento de Chamados</a>
+      </li>
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('chamados.triagem') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-gear me-2"></i>Painel da Triagem</a>
+      </li>
+      <li class="col-12 col-md-6 col-lg-3 text-center">
+        <a href="{{ url_for('usuarios.ger_usuarios') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-person-gear me-2"></i>Gerenciar Usuário</a>
+      </li>
+    </ul>
+  </nav>
+</div> <!-- Fechamento do container -->
+</section>
+{% endblock %}
