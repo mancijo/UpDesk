@@ -71,6 +71,7 @@ class Chamado(db.Model):
     descricao_Chamado = db.Column(db.Text, nullable=False)
     categoria_Chamado = db.Column(db.String(100), nullable=False)
     prioridade_Chamado = db.Column(db.String(15), nullable=False)
+    # Armazena conteúdo binário do anexo (varbinary / LargeBinary no banco)
     anexo_Chamado = db.Column(db.LargeBinary)
     status_Chamado = db.Column(
         db.String(20),

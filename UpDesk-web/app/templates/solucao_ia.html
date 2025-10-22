@@ -10,12 +10,28 @@
             
             <div class="alert alert-info" role="alert">
                 <h4 class="alert-heading">Sugestão de Solução:</h4>
-                <p>{{ solucao }}</p>
+                    {# Fallback de debug removido para manter fluxo canônico #}
+                    {# Render the pre-sanitized HTML returned by format_solucao as safe #}
+                    <div>{{ solucao_html|safe }}</div>
             </div>
 
             <hr>
 
             <p class="text-center">A solução acima resolveu o seu problema?</p>
+                {% if 'Não foi possível obter uma sugestão da IA' in solucao or 'Não foi possível obter uma sugestão' in solucao %}
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">A IA está indisponível — algumas ações manuais</h5>
+                        <ol>
+                            <li>Reinicie o equipamento afetado.</li>
+                            <li>Verifique cabos e conexões de rede.</li>
+                            <li>Colete prints e anote mensagens de erro.</li>
+                            <li>Reproduza o problema e registre passos exatos.</li>
+                        </ol>
+                        <p class="mb-0">Anexe essas informações ao abrir o chamado para acelerar o atendimento.</p>
+                    </div>
+                </div>
+                {% endif %}
 
             <div class="d-flex justify-content-center gap-3 mt-3">
                 <!-- Botão para finalizar (solução funcionou) -->
@@ -23,6 +39,9 @@
 
                 <!-- Formulário para abrir o chamado (solução não funcionou) -->
                 <form action="{{ url_for('chamados.confirmar_abertura_chamado') }}" method="post">
+                    {%- if csrf_token is defined -%}
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    {%- endif -%}
                     <button type="submit" class="btn btn-danger btn-lg">Não, quero abrir um chamado</button>
                 </form>
             </div>

@@ -21,4 +21,3 @@ if __name__ == '__main__':
     # a cada alteração no código e um depurador interativo no navegador em caso de erro.
     # O valor é pego do arquivo de configuração para facilitar a mudança entre ambientes.
     app.run(debug=app.config.get('DEBUG', False), host='0.0.0.0')
-    
