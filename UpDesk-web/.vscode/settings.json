@@ -1,3 +1,4 @@
 {
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "python.defaultInterpreterPath": "c:\\UpDesk\\UpDesk-web\\venv\\Scripts\\python.exe"
 }

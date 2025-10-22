@@ -7,7 +7,7 @@ Responsabilidade:
 - A integração com o Flask-WTF garante a segurança contra ataques CSRF.
 """
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 from flask_wtf.file import FileField, FileAllowed
 
@@ -32,7 +32,7 @@ class EditarUsuarioForm(FlaskForm):
 
 class chamadoForm(FlaskForm):
     titulo = StringField('Titulo', validators=[DataRequired(), Length(min=5, max=100)])
-    descricao = StringField('Descrição', validators=[DataRequired(), Length(min=10)])
+    descricao = TextAreaField('Descrição', validators=[DataRequired(), Length(min=10)])
     afetado = SelectField('Quem esse chamado afeta', choices=[('Eu', 'Somente eu'), ('Meu setor', 'Meu setor'), ('Empresa ao todo', 'Empresa ao todo')], validators=[DataRequired()])
     prioridade = StringField('Prioridade', validators=[DataRequired(), Length(min=3, max=20)])
     anexo = FileField('Adicionar Anexo', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'xls', 'xlsx'])])

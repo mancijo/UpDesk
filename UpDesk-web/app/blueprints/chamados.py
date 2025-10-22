@@ -7,12 +7,18 @@ Responsabilidade:
 - Inclui rotas para abrir, visualizar, atender, transferir, encerrar e interagir com chamados.
 - Fornece uma API para a funcionalidade de chat em tempo real.
 """
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, make_response, current_app
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, make_response, current_app, flash
+from werkzeug.utils import secure_filename
+import os
 from ..models import db, Chamado, Interacao
 from ..forms import chamadoForm
 from ..services import buscar_solucao_com_ia
 from datetime import datetime, timedelta
 from fpdf import FPDF
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 bp = Blueprint('chamados', __name__, url_prefix='/chamados')
 
@@ -26,6 +32,8 @@ def abrir_chamado():
        temporariamente na sessão do usuário.
     """
     form = chamadoForm()
+    # Log mínimo: método da requisição (útil para auditoria)
+    current_app.logger.debug(f"abrir_chamado called, method={request.method}")
     if 'usuario_id' not in session:
         return redirect(url_for('main.index'))
     
@@ -35,20 +43,64 @@ def abrir_chamado():
         current_app.logger.info(f"Solucao sugerida: {solucao_sugerida}")
         
         # Armazena os dados do formulário e a solução da IA na sessão para uso posterior
-        session['chamado_temporario'] = {
+        chamado_data = {
             'titulo': form.titulo.data,
             'descricao': form.descricao.data,
             'afetado': form.afetado.data,
             'prioridade': form.prioridade.data,
-            'solucao_sugerida': solucao_sugerida
+            'solucao_sugerida': solucao_sugerida,
+            'anexo': None  # Inicializa anexo como None
         }
+
+        # Lida com o upload do arquivo
+        if 'anexo' in request.files:
+            file = request.files['anexo']
+            if file.filename == '':
+                current_app.logger.warning("Nenhum arquivo selecionado para upload.")
+            elif file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                upload_folder = current_app.config['UPLOAD_FOLDER']
+                os.makedirs(upload_folder, exist_ok=True)
+                file_path = os.path.join(upload_folder, filename)
+                # Salva uma cópia no disco para referência (opcional)
+                file.save(file_path)
+                # Lê bytes para armazenar no banco (LargeBinary)
+                try:
+                    with open(file_path, 'rb') as f:
+                        file_bytes = f.read()
+                    chamado_data['anexo'] = file_bytes
+                    current_app.logger.info(f"Arquivo {filename} salvo em {file_path} e bytes preparados para DB")
+                except Exception as e:
+                    current_app.logger.exception(f"Erro ao ler arquivo salvo para armazenamento em DB: {e}")
+                    chamado_data['anexo'] = None
+            else:
+                current_app.logger.warning(f"Tipo de arquivo não permitido: {file.filename}")
+        
+        session['chamado_temporario'] = chamado_data
         user = {'name': session.get('usuario_nome')}
+        # Format and sanitize the solution HTML before rendering
+        try:
+            from ..services import format_solucao
+            solucao_html = format_solucao(solucao_sugerida)
+        except Exception:
+            solucao_html = solucao_sugerida or ''
+
         # Renderiza a página que mostra a solução da IA para o usuário decidir se resolve o problema
-        return render_template('solucao_ia.html', solucao=solucao_sugerida, user=user)
+        return render_template('solucao_ia.html', solucao=solucao_sugerida, solucao_html=solucao_html, user=user)
+    elif request.method == 'POST':
+        # Validação falhou: registrar erros e fornecer feedback ao usuário
+        current_app.logger.warning('POST recebido em /chamados/abrir, mas form.validate_on_submit() retornou False')
+        current_app.logger.debug(f'form.errors: {form.errors}')
+        try:
+            current_app.logger.debug(f'request.form keys: {list(request.form.keys())}')
+        except Exception:
+            current_app.logger.debug('Não foi possível ler request.form')
+        # Mostrar mensagem genérica e permitir que template exiba os erros detalhados
+        flash('Corrija os erros do formulário e tente novamente.', 'danger')
 
     # Para requisições GET, apenas exibe o formulário de abertura de chamado
-    user = {'name': session.get('usuario_nome')}
-    return render_template('chamado.html', form=form, user=user, form_action=url_for('chamados.abrir_chamado'))
+    user = {'name': session.get('usuario_nome', 'Usuário')}
+    return render_template('chamado.html', form=form, user=user)
 
 @bp.route('/confirmar_abertura', methods=['POST'])
 def confirmar_abertura_chamado():
@@ -72,7 +124,8 @@ def confirmar_abertura_chamado():
         categoria_Chamado=dados_chamado['afetado'],
         solicitanteID=session['usuario_id'],
         prioridade_Chamado=dados_chamado['prioridade'],
-        solucaoSugerida=dados_chamado['solucao_sugerida']
+        solucaoSugerida=dados_chamado['solucao_sugerida'],
+        anexo_Chamado=dados_chamado.get('anexo') # Adiciona o nome do arquivo anexado, se existir
     )
     db.session.add(novo_chamado)
     db.session.commit()

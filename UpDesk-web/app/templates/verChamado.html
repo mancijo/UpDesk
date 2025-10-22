@@ -9,7 +9,7 @@
             <h2>Monitoramento de Chamados</h2>
         </header>
 
-        <form class="filtros" method="GET" action="{{ url_for('ver_chamado') }}">
+    <form class="filtros" method="GET" action="{{ url_for('chamados.ver_chamados') }}">
             <div class="input-group">
                 <select class="form-select" name="status" onchange="this.form.submit()">
                     <option value="Todos" {% if status_filtro == 'Todos' %}selected{% endif %}>Todos os Status</option>
@@ -56,7 +56,7 @@
                                 data-status="{{ chamado.status_Chamado }}"
                                 data-categoria="{{ chamado.categoria_Chamado }}"
                                 data-descricao="{{ chamado.descricao_Chamado }}">Ver detalhes</button>
-                            <a href="{{ url_for('atender_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-primary btn-sm">Atender</a>
+                            <a href="{{ url_for('chamados.atender_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-primary btn-sm">Atender</a>
                         </td>
                     </tr>
                     {% else %}
@@ -78,7 +78,7 @@
     <div class="modal fade" id="modalRelatorio" tabindex="-1" aria-labelledby="modalRelatorioLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form id="formRelatorio" action="{{ url_for('gerar_relatorio_pdf') }}" method="GET" target="_blank">
+                <form id="formRelatorio" action="{{ url_for('chamados.gerar_relatorio_pdf') }}" method="GET" target="_blank">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalRelatorioLabel">Gerar Relatório de Gestão</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>

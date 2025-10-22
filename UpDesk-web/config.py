@@ -60,3 +60,7 @@ class Config:
 
     # Chave da API do Google Gemini, lida a partir das variáveis de ambiente.
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+    # --- Configurações de Upload de Arquivos ---
+    UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'uploads')
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'doc', 'docx'}
