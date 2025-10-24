@@ -7,9 +7,10 @@ import Button from '../../../components/Button';
 
 export default function AbrirChamadoScreen() {
   const router = useRouter();
-  const { chamado, setChamado } = useChamado();
+  const { newChamado, setChamado } = useChamado();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // Pré definindo as opções a quem este chamado afeta
   const segmentedOptions = [
     { label: 'Somente eu', value: 'eu' },
     { label: 'Meu Setor', value: 'setor' },
@@ -41,13 +42,13 @@ export default function AbrirChamadoScreen() {
   //validação simples dos campos obrigatórios
   const validateForm = () => {
     let newErrors: { [key: string]: string } = {};
-    if (!chamado.tituloChamado) {
+    if (!newChamado.tituloChamado) {
       newErrors.tituloChamado = 'O título do chamado é obrigatório.';
     }
-    if (!chamado.descricaoChamado) {
+    if (!newChamado.descricaoChamado) {
       newErrors.descricaoChamado = 'A descrição do chamado é obrigatória.';
     }
-    if (!chamado.afetadosChamado) {
+    if (!newChamado.afetadosChamado) {
       newErrors.afetadosChamado = 'Selecione quem o chamado afeta.';
     }
     setErrors(newErrors);
@@ -89,7 +90,7 @@ export default function AbrirChamadoScreen() {
         {/* Fomulário de chamado */}
         <CustomInput
           label="Título do Chamado"
-          value={chamado.tituloChamado}
+          value={newChamado.tituloChamado}
           onChangeText={(text) => handleInputChange('tituloChamado', text)}
           placeholder="Ex: Problema com a impressora"
           error={errors.tituloChamado}
@@ -97,7 +98,7 @@ export default function AbrirChamadoScreen() {
 
         <CustomInput
           label="Descrição do Chamado"
-          value={chamado.descricaoChamado}
+          value={newChamado.descricaoChamado}
           onChangeText={(text) => handleInputChange('descricaoChamado', text)}
           placeholder="Descreva o problema em detalhes..."
           multiline
@@ -107,13 +108,14 @@ export default function AbrirChamadoScreen() {
 
         <Text style={styles.label}>Quem esse chamado afeta?</Text>
         <View style={styles.segmentedControlContainer}>
+          {/* Loop que apresenta as opções pré-definidas */}
           {segmentedOptions.map(option => (
             <TouchableOpacity
               key={option.value}
-              style={[styles.segmentedControl, chamado.afetadosChamado === option.value && styles.segmentedControlSelected]}
+              style={[styles.segmentedControl, newChamado.afetadosChamado === option.value && styles.segmentedControlSelected]}
               onPress={() => handleInputChange('afetadosChamado', option.value)}
             >
-              <Text style={[styles.segmentedControlText, chamado.afetadosChamado === option.value && styles.segmentedControlTextSelected]}>{option.label}</Text>
+              <Text style={[styles.segmentedControlText, newChamado.afetadosChamado === option.value && styles.segmentedControlTextSelected]}>{option.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2B4C7E',
   },
   segmentedControlText: {
-    color: '#2B4C7E',
+    color: '#000',
   },
   segmentedControlTextSelected: {
     color: '#FFFFFF',

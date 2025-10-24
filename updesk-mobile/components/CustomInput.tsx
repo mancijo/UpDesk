@@ -20,7 +20,7 @@ const CustomInput: React.FC<CustomInputProps> = ({ label, error, style, ...props
           error ? styles.inputError : null,
           style, // Permite sobrescrever estilos
         ]}
-        placeholderTextColor="#606D80"
+        placeholderTextColor="#000"
         {...props} // Passa todas as outras props (value, onChangeText, etc.) para o TextInput
       />
       {/* Mensagem de erro clara e próxima ao contexto */}
@@ -41,11 +41,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#DCE0E6',
+    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 12,
     fontSize: 16,
     color: '#000000',
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
   },
   inputError: {
     borderColor: '#D92D20',

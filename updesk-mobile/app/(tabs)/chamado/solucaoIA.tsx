@@ -7,7 +7,7 @@ import { useAuth } from '../../../context/AuthContext';
 import Button from '../../../components/Button';
 
 export default function SolucaoIAScreen() {
-  const { chamado } = useChamado();
+  const { newChamado } = useChamado();
   const { user } = useAuth();
   const router = useRouter();
 
@@ -27,9 +27,9 @@ export default function SolucaoIAScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.summaryContainer}>
           <Text style={styles.title}>Resumo do seu Problema</Text>
-          <Text style={styles.baseText}><Text >Título:</Text> {chamado.tituloChamado}</Text>
-          <Text style={styles.baseText}><Text >Descrição:</Text> {chamado.descricaoChamado}</Text>
-          <Text style={styles.baseText}><Text >Afeta:</Text> {chamado.afetadosChamado}</Text>
+          <Text style={styles.baseText}><Text >Título:</Text> {newChamado.tituloChamado}</Text>
+          <Text style={styles.baseText}><Text >Descrição:</Text> {newChamado.descricaoChamado}</Text>
+          <Text style={styles.baseText}><Text >Afeta:</Text> {newChamado.afetadosChamado}</Text>
         </View>
 
         <View style={styles.solutionContainer}>
