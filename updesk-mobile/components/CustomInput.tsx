@@ -9,7 +9,6 @@ interface CustomInputProps extends TextInputProps {
 
 /**
  * Um componente de input reutilizável que inclui label e tratamento de erro,
- * seguindo as Heurísticas de Nielsen para melhor usabilidade.
  */
 const CustomInput: React.FC<CustomInputProps> = ({ label, error, style, ...props }) => {
   return (
@@ -18,13 +17,13 @@ const CustomInput: React.FC<CustomInputProps> = ({ label, error, style, ...props
       <TextInput
         style={[
           styles.input,
-          error ? styles.inputError : null, // Heurística #1 e #9: Mostra visualmente o erro
+          error ? styles.inputError : null,
           style, // Permite sobrescrever estilos
         ]}
-        placeholderTextColor="#606D80" // Cor suave para não competir com o texto digitado
+        placeholderTextColor="#606D80"
         {...props} // Passa todas as outras props (value, onChangeText, etc.) para o TextInput
       />
-      {/* Heurística #9: Mensagem de erro clara e próxima ao contexto */}
+      {/* Mensagem de erro clara e próxima ao contexto */}
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   );
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   inputError: {
-    borderColor: '#D92D20', // Vermelho para erro, com bom contraste
+    borderColor: '#D92D20',
     borderWidth: 1,
   },
   errorText: {

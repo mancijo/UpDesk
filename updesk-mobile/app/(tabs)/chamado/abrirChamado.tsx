@@ -1,7 +1,9 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useChamado } from '../../../context/ChamadoContext';
+import CustomInput from '../../../components/CustomInput';
+import Button from '../../../components/Button';
 
 export default function AbrirChamadoScreen() {
   const router = useRouter();
@@ -85,24 +87,23 @@ export default function AbrirChamadoScreen() {
     <View style={styles.mainContainer}>
       <ScrollView style={styles.container}>
         {/* Fomulário de chamado */}
-        <Text style={styles.label}>Título do Chamado</Text>
-        <TextInput
-          style={[styles.input, errors.tituloChamado && styles.inputError]}
+        <CustomInput
+          label="Título do Chamado"
           value={chamado.tituloChamado}
-          onChangeText={(text) => handleInputChange('tituloChamado', text)} /* Reducer para inserir conteudo ao text */
+          onChangeText={(text) => handleInputChange('tituloChamado', text)}
           placeholder="Ex: Problema com a impressora"
+          error={errors.tituloChamado}
         />
-        {errors.tituloChamado && <Text style={styles.errorText}>{errors.tituloChamado}</Text>}
 
-        <Text style={styles.label}>Descrição do Chamado</Text>
-        <TextInput
-          style={[styles.input, styles.textArea, errors.descricaoChamado && styles.inputError]}
+        <CustomInput
+          label="Descrição do Chamado"
           value={chamado.descricaoChamado}
           onChangeText={(text) => handleInputChange('descricaoChamado', text)}
           placeholder="Descreva o problema em detalhes..."
           multiline
+          style={styles.textArea}
+          error={errors.descricaoChamado}
         />
-        {errors.descricaoChamado && <Text style={styles.errorText}>{errors.descricaoChamado}</Text>}
 
         <Text style={styles.label}>Quem esse chamado afeta?</Text>
         <View style={styles.segmentedControlContainer}>
@@ -123,14 +124,20 @@ export default function AbrirChamadoScreen() {
           <Text style={styles.anexoButtonText}>Adicionar um documento</Text>
         </TouchableOpacity>
       </ScrollView>
+
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.actionButton, styles.backButton]} onPress={handleReturn}>
-            <Text style={styles.actionButtonText}>Voltar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionButton, styles.submitButton]} onPress={handleSubmit}>
-            <Text style={styles.actionButtonText} >Buscar Solução com IA</Text>
-          </TouchableOpacity>
-        </View>
+        <Button
+          title="Voltar"
+          onPress={handleReturn}
+          variant="secondary"
+          buttonStyle={{ marginRight: 10 }}
+        />
+        <Button 
+          title="Buscar Solução com IA" 
+          onPress={handleSubmit} 
+          buttonStyle={{ marginLeft: 10 }} 
+        />
+      </View>
     </View>
   );
 }
@@ -149,20 +156,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2B4C7E',
     marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 20,
-    color: '#000000',
-    borderColor: '#gray',
-    borderWidth: 1,
-  },
-  inputError: {
-    borderColor: '#FF0000',
-    borderWidth: 1,
   },
   textArea: {
     height: 100,
@@ -205,27 +198,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  actionButton: {
-    borderRadius: 5,
-    padding: 8,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backButton: {
-    backgroundColor: '#606D80',
-    marginRight: 10,
-  },
-  submitButton: {
-    backgroundColor: '#567EBB',
-    marginLeft: 10,
-  },
-  actionButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center',
   },
   errorText: {
     color: '#FF0000',

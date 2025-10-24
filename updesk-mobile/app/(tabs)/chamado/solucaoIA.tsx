@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useChamado } from '../../../context/ChamadoContext';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../../context/AuthContext';
+import Button from '../../../components/Button';
 
 export default function SolucaoIAScreen() {
   const { chamado } = useChamado();
@@ -43,15 +44,15 @@ export default function SolucaoIAScreen() {
           <View style={styles.buttonRow}>
             <View style={styles.buttonWrapper}>
               <Text style={styles.helpText}>Problema resolvido?</Text>
-              <TouchableOpacity style={[styles.button, styles.finishButton]} onPress={handleFinish}>
-                <Text style={styles.buttonText}>Finalizar</Text>
-              </TouchableOpacity>
+              <Button title="Finalizar" onPress={handleFinish} variant="secondary" />
             </View>
             <View style={styles.buttonWrapper}>
               <Text style={styles.helpText}>Preciso de ajuda</Text>
-              <TouchableOpacity style={[styles.button, styles.openTicketButton]} onPress={handleOpenTicket}>
-                <Text style={styles.buttonText}>Abrir Chamado</Text>
-              </TouchableOpacity>
+              <Button
+                title="Abrir Chamado"
+                onPress={handleOpenTicket}
+                variant="primary"
+              />
             </View>
           </View>
         </View>
@@ -59,6 +60,11 @@ export default function SolucaoIAScreen() {
     </SafeAreaView>
   );
 }
+
+
+
+
+
 
 const baseTextStyle = {
   fontSize: 16,
@@ -108,30 +114,16 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
   buttonWrapper: {
     alignItems: 'center',
+    flex: 1,
+    marginHorizontal: 10,
   },
   helpText: {
     fontSize: 16,
     color: '#606D80',
     marginBottom: 8,
-  },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 5,
-  },
-  finishButton: {
-    backgroundColor: '#606D80',
-  },
-  openTicketButton: {
-    backgroundColor: '#567EBB',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
 });
