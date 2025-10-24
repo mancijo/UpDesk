@@ -21,7 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Registro leve do submit (não altera o comportamento padrão)
     if (form) {
-        form.addEventListener('submit', function () {
+        form.addEventListener('submit', function (event) {
+            // Verifica se o formulário é válido antes de mostrar o modal
+            if (form.checkValidity()) {
+                const loadingModal = document.getElementById('loadingModal');
+                if (loadingModal) {
+                    loadingModal.classList.add('loading-modal--show');
+                }
+            }
             console.debug('chamado form submit');
         });
     }

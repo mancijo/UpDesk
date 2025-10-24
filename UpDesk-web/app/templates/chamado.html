@@ -97,6 +97,17 @@
         </form>
     </section>
 </main>
+
+<!-- Loading Modal -->
+<div id="loadingModal" class="loading-modal" role="dialog" aria-modal="true" aria-labelledby="loadingModalTitle">
+    <div class="loading-modal__content">
+        <h3 id="loadingModalTitle" class="loading-modal__message">Buscando solução com a IA...</h3>
+        <div class="loading-modal__spinner spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
