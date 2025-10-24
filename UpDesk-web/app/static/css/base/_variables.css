@@ -6,9 +6,15 @@
   --cor-primaria-escura: #203A60; /* Tom mais escuro para hover */
   --cor-secundaria: #6c757d;
   --cor-sucesso: #198754;
+  --cor-sucesso-escura: #157347; /* Tom mais escuro para hover */
   --cor-perigo: #dc3545;
+  --cor-perigo-escura: #c82333; /* Tom mais escuro para hover */
   --cor-aviso: #ffc107;
   --cor-info: #17a2b8;
+  --color-light-blue: #e0f7fa; /* Azul claro para fundos de destaque */
+  --color-success: var(--cor-sucesso); /* Mapeia para a variável existente */
+  --color-danger: var(--cor-perigo); /* Mapeia para a variável existente */
+  --color-background-light: #f0f2f5; /* Fundo claro para cards de fallback */
 
   --cor-fundo-principal: #F4F6F8; /* Updated to Light gray */
   --cor-fundo-claro: #FFFFFF; /* Keep as white for cards */

@@ -19,6 +19,7 @@
 @import url('./components/_table.css');
 @import url('./components/_footer.css');
 @import url('./components/_custom.css');
+@import url('./components/_loading-modal.css');
 
 /* 3. Layouts de Páginas Específicas */
 @import url('./pages/_home-page.css');
@@ -29,3 +30,4 @@
 @import url('./pages/_login.css');
 @import url('./pages/_atender-chamado-page.css');
 @import url('./pages/_transferir-chamado-page.css');
+@import url('./pages/_solucao-ia-page.css');

@@ -2,50 +2,48 @@
 
 {% block title %}Solução Sugerida - UpDesk{% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/_solucao-ia-page.css') }}">
+{% endblock %}
+
 {% block body %}
 
-    <div class="container mt-5">
-        <div class="card p-4 shadow-sm">
-            <h2 class="text-center mb-4">Solução Sugerida pela IA</h2>
+    <main class="solucao-ia-page__container" aria-labelledby="solucaoIaTitle">
+        <h2 id="solucaoIaTitle" class="solucao-ia-page__title">Solução Sugerida pela IA</h2>
             
-            <div class="alert alert-info" role="alert">
-                <h4 class="alert-heading">Sugestão de Solução:</h4>
-                    {# Fallback de debug removido para manter fluxo canônico #}
-                    {# Render the pre-sanitized HTML returned by format_solucao as safe #}
-                    <div>{{ solucao_html|safe }}</div>
-            </div>
-
-            <hr>
-
-            <p class="text-center">A solução acima resolveu o seu problema?</p>
-                {% if 'Não foi possível obter uma sugestão da IA' in solucao or 'Não foi possível obter uma sugestão' in solucao %}
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">A IA está indisponível — algumas ações manuais</h5>
-                        <ol>
-                            <li>Reinicie o equipamento afetado.</li>
-                            <li>Verifique cabos e conexões de rede.</li>
-                            <li>Colete prints e anote mensagens de erro.</li>
-                            <li>Reproduza o problema e registre passos exatos.</li>
-                        </ol>
-                        <p class="mb-0">Anexe essas informações ao abrir o chamado para acelerar o atendimento.</p>
-                    </div>
-                </div>
-                {% endif %}
-
-            <div class="d-flex justify-content-center gap-3 mt-3">
-                <!-- Botão para finalizar (solução funcionou) -->
-                <a href="{{ url_for('main.home') }}" class="btn btn-success btn-lg">Sim, problema resolvido!</a>
-
-                <!-- Formulário para abrir o chamado (solução não funcionou) -->
-                <form action="{{ url_for('chamados.confirmar_abertura_chamado') }}" method="post">
-                    {%- if csrf_token is defined -%}
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    {%- endif -%}
-                    <button type="submit" class="btn btn-danger btn-lg">Não, quero abrir um chamado</button>
-                </form>
-            </div>
+        <div class="solucao-ia-page__solution-box" role="region" aria-labelledby="sugestaoSolucaoHeading">
+            <h3 id="sugestaoSolucaoHeading" class="solucao-ia-page__solution-heading">Sugestão de Solução:</h3>
+            <div class="solucao-ia-page__solution-content">{{ solucao_html|safe }}</div>
         </div>
-    </div>
 
-    {% endblock %}
+        <hr>
+
+        <p class="solucao-ia-page__question">A solução acima resolveu o seu problema?</p>
+            {% if 'Não foi possível obter uma sugestão da IA' in solucao or 'Não foi possível obter uma sugestão' in solucao %}
+            <div class="solucao-ia-page__fallback-card" role="complementary" aria-labelledby="iaIndisponivelTitle">
+                <h4 id="iaIndisponivelTitle" class="solucao-ia-page__fallback-card-title">A IA está indisponível — algumas ações manuais</h4>
+                <ol>
+                    <li>Reinicie o equipamento afetado.</li>
+                    <li>Verifique cabos e conexões de rede.</li>
+                    <li>Colete prints e anote mensagens de erro.</li>
+                    <li>Reproduza o problema e registre passos exatos.</li>
+                </ol>
+                <p class="mb-0">Anexe essas informações ao abrir o chamado para acelerar o atendimento.</p>
+            </div>
+            {% endif %}
+
+        <div class="solucao-ia-page__actions">
+            <!-- Botão para finalizar (solução funcionou) -->
+            <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-lg custom-btn shadow-sm" role="button"><i class="bi bi-check-circle me-2"></i>Sim, problema resolvido!</a>
+
+            <!-- Formulário para abrir o chamado (solução não funcionou) -->
+            <form action="{{ url_for('chamados.confirmar_abertura_chamado') }}" method="post">
+                {%- if csrf_token is defined -%}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                {%- endif -%}
+                <button type="submit" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Não, quero abrir um chamado</button>
+            </form>
+        </div>
+    </main>
+
+{% endblock %}
