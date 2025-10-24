@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { User, useAuth } from './AuthContext';
 
 // Definição dos tipos
-interface Chamado {
+export interface ChamadoProp {
   solicitante?: User; // Objeto do usuário para conveniência no frontend
   // Dados para o BD
   chamadoId?: number;
@@ -23,13 +23,13 @@ interface Chamado {
 
 // Definição do contexto
 interface ChamadoContextData {
-  chamado: Chamado;
-  setChamado: React.Dispatch<React.SetStateAction<Chamado>>;
+  newChamado: ChamadoProp;
+  setChamado: React.Dispatch<React.SetStateAction<ChamadoProp>>;
   resetChamado: () => void;
 }
 
 // Estado inicial para um chamado "vazio"
-const initialChamadoState: Chamado = {
+const initialChamadoState: ChamadoProp = {
   tituloChamado: '',
   descricaoChamado: '',
   categoriaChamado: null,
@@ -44,7 +44,7 @@ const ChamadoContext = createContext<ChamadoContextData | undefined>(undefined);
 // Provider Component
 export const ChamadoProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth(); // Obter o usuário logado do AuthContext
-  const [chamado, setChamado] = useState<Chamado>(initialChamadoState);
+  const [newChamado, setChamado] = useState<ChamadoProp>(initialChamadoState);
 
   const resetChamado = () => {
     // A função reset volta para o estado inicial limpo
@@ -53,8 +53,8 @@ export const ChamadoProvider = ({ children }: { children: ReactNode }) => {
 
   // O valor do contexto que será fornecido aos componentes filhos
   const value = {
-    chamado: {
-      ...chamado,
+    newChamado: {
+      ...newChamado,
       solicitante: user || undefined,
       solicitanteId: user?.id ? Number(user.id) : undefined, // Garante que user.id existe e faz a conversão segura
     },
