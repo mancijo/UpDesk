@@ -1,0 +1,50 @@
+{
+  "name": "updesk-desktop",
+  "version": "1.0.0",
+  "description": "Desktop client for UpDesk",
+  "main": "electron_main.js",
+  "scripts": {
+    "start": "electron .",
+    "prebuild": "taskkill /im UpDesk.api.Web.exe /f || exit 0",
+    "prepublish-api": "if exist api_publish ( rd /s /q api_publish )",
+    "publish-api": "dotnet publish ../UpDesk.api/UpDesk.api.Web -c Release -o ./api_publish && xcopy wwwroot api_publish\\wwwroot /E /I /Y",
+    "build": "npm run publish-api && electron-builder"
+  },
+  "keywords": [],
+  "author": "Mateus Teodoro",
+  "license": "ISC",
+  "dependencies": {
+    "electron-log": "^5.1.5"
+    ,"marked": "^5.1.1",
+    "dompurify": "^2.4.0"
+  },
+  "devDependencies": {
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.teodoro.updesk",
+    "productName": "UpDesk",
+    "win": {
+      "target": "nsis",
+      "icon": "../UpDesk.api/UpDesk.api.Web/wwwroot/favicon.ico"
+    },
+    "files": [
+      "electron_main.js"
+    ],
+    "extraResources": [
+      {
+        "from": "api_publish",
+        "to": "api",
+        "filter": [
+          "**/*",
+          "!wwwroot/**"
+        ]
+      },
+      {
+        "from": "wwwroot",
+        "to": "api/wwwroot"
+      }
+    ]
+  }
+}
