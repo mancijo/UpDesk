@@ -65,12 +65,13 @@ public class MockIaService : IaiService
         {
             if (textoCompleto.Contains(palavra))
             {
-                return solucoes[palavra];
+                // Retorna versão resumida e formatada da solução encontrada
+                return SolutionFormatter.Summarize(solucoes[palavra]);
             }
         }
 
         // Solução genérica se não encontrar palavra-chave
-        return @"**Diagnóstico:** Problema técnico reportado
+        var generic = @"**Diagnóstico:** Problema técnico reportado
 
 **Soluções passo a passo:**
 1. Reinicie o dispositivo/equipamento
@@ -86,5 +87,7 @@ public class MockIaService : IaiService
 - Quando o problema começou
 - O que estava fazendo quando ocorreu
 - Se outros usuários são afetados";
+
+        return SolutionFormatter.Summarize(generic);
     }
 }

@@ -80,10 +80,13 @@ async function fetchWithAuth(endpoint, options = {}) {
     const baseUrl = window.location.origin;
     const url = new URL(endpoint, baseUrl).href;
 
-    const response = await fetch(url, { // Correção: A variável 'url' agora está definida.
-        ...options,
-        headers: headers,
-    });
+    // Se o body for um objeto, stringify aqui para evitar formatações incorretas
+    const finalOptions = { ...options, headers: headers };
+    if (finalOptions.body && typeof finalOptions.body === 'object') {
+        finalOptions.body = JSON.stringify(finalOptions.body);
+    }
+
+    const response = await fetch(url, finalOptions);
 
     // Se a resposta for 401 (Não Autorizado), o token é inválido ou expirou.
     if (response.status === 401) {

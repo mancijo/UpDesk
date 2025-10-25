@@ -15,6 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "electron-log": "^5.1.5"
+    ,"marked": "^5.1.1",
+    "dompurify": "^2.4.0"
   },
   "devDependencies": {
     "electron": "^29.1.5",

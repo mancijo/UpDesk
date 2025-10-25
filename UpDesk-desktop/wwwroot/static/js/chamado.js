@@ -22,6 +22,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+/* UI feedback helpers: global loading overlay with spinner + message */
+function showLoading(message) {
+    let el = document.getElementById('global-loading');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'global-loading';
+        el.setAttribute('role', 'status');
+        el.setAttribute('aria-live', 'polite');
+        Object.assign(el.style, {
+            position: 'fixed',
+            top: '20%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(0,0,0,0.75)',
+            color: '#fff',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        });
+
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner-border text-light';
+        spinner.style.width = '1.2rem';
+        spinner.style.height = '1.2rem';
+        spinner.setAttribute('role', 'status');
+        const sr = document.createElement('span');
+        sr.className = 'visually-hidden';
+        sr.textContent = 'Carregando...';
+        spinner.appendChild(sr);
+
+        const msg = document.createElement('div');
+        msg.id = 'global-loading-message';
+        msg.style.fontSize = '0.95rem';
+
+        el.appendChild(spinner);
+        el.appendChild(msg);
+        document.body.appendChild(el);
+    }
+    const msgEl = document.getElementById('global-loading-message');
+    if (msgEl) msgEl.textContent = message || '';
+    el.style.display = 'flex';
+}
+
+function hideLoading() {
+    const el = document.getElementById('global-loading');
+    if (el) el.style.display = 'none';
+}
+
 /**
  * Quando o usuário clica em "Sim, problema resolvido!"
  * cria um chamado com status "Resolvido por IA"
@@ -56,6 +108,10 @@ async function handleSolutionWorked() {
         const headers = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
+        // Mostrar feedback ao usuário enquanto processamos
+        showLoading('Finalizando seu chamado...');
+
+        // Cria o chamado primeiro (API sempre cria como 'Aberto')
         const response = await fetch('/api/chamados', {
             method: 'POST',
             headers,
@@ -67,7 +123,30 @@ async function handleSolutionWorked() {
             throw new Error(`Erro ao salvar: ${errorText}`);
         }
 
-        alert('Chamado registrado como resolvido pela IA!');
+        const created = await response.json();
+        // procurar o id retornado (variações de casing)
+        const chamadoId = created?.ChamadoId ?? created?.chamadoId ?? created?.Id ?? created?.id;
+        if (!chamadoId) {
+            hideLoading();
+            alert('Chamado criado, mas não foi possível identificar o ID para marcar como resolvido.');
+            window.location.href = '/templates/verChamado.html';
+            return;
+        }
+
+        // Agora chama o endpoint para resolver com IA
+        const resolverResp = await fetch(`/api/chamados/${chamadoId}/resolver-com-ia`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ Solucao: solutionText })
+        });
+
+        if (!resolverResp.ok) {
+            const err = await resolverResp.text();
+            throw new Error(`Chamado criado (id=${chamadoId}) mas falha ao marcar como resolvido: ${err}`);
+        }
+
+        hideLoading();
+        alert('Chamado registrado e marcado como resolvido pela IA!');
         window.location.href = '/templates/verChamado.html';
 
     } catch (error) {
@@ -125,6 +204,8 @@ async function handleFormSubmit(event) {
     }
 
     try {
+        // Show global feedback while submitting the ticket
+        showLoading('Seu chamado está sendo enviado para um técnico...');
         const token = localStorage.getItem('authToken');
         const headers = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
@@ -136,6 +217,7 @@ async function handleFormSubmit(event) {
         });
 
         if (response.ok) {
+            hideLoading();
             alert('Chamado aberto com sucesso!');
             window.location.href = '/templates/verChamado.html';
         } else {
@@ -143,6 +225,7 @@ async function handleFormSubmit(event) {
             throw new Error(errorText);
         }
     } catch (error) {
+        hideLoading();
         showError(error.message);
     } finally {
         if (submitButton) {
@@ -177,9 +260,12 @@ async function getAISuggestion() {
     solutionDisplay.classList.add('d-none');
 
     try {
+        // Envia com as chaves capitalizadas para casar com o DTO do servidor
+        showLoading('Buscando solução com IA...');
+        // Envia a requisição para a IA
         const response = await fetchWithAuth('/api/ia/sugerir-solucao', {
             method: 'POST',
-            body: JSON.stringify({ titulo, descricao })
+            body: { Titulo: titulo, Descricao: descricao }
         });
 
         if (!response.ok) {
@@ -187,13 +273,75 @@ async function getAISuggestion() {
         }
 
         const data = await response.json();
-        solutionText.textContent = data.solucao || 'Nenhuma sugestão disponível no momento.';
+        const raw = data.solucao || 'Nenhuma sugestão disponível no momento.';
+        // Renderiza um subconjunto de Markdown com segurança (escape + conversões simples)
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function renderMarkdown(md) {
+            const escaped = escapeHtml(md);
+            const lines = escaped.split(/\r?\n/);
+            let html = '';
+            let inOrdered = false;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) {
+                    // blank line -> close lists
+                    if (inOrdered) { html += '</ol>'; inOrdered = false; }
+                    html += '<p></p>';
+                    continue;
+                }
+
+                // headings: ## , ###
+                if (line.startsWith('### ')) { html += '<h3>' + line.substring(4) + '</h3>'; continue; }
+                if (line.startsWith('## ')) { html += '<h2>' + line.substring(3) + '</h2>'; continue; }
+
+                // blockquote starting with >
+                if (line.startsWith('> ')) { html += '<blockquote>' + line.substring(2) + '</blockquote>'; continue; }
+
+                // ordered list item like '1. ' or '2. '
+                const olMatch = line.match(/^\d+\.\s+(.*)$/);
+                if (olMatch) {
+                    if (!inOrdered) { html += '<ol>'; inOrdered = true; }
+                    html += '<li>' + olMatch[1] + '</li>';
+                    continue;
+                }
+
+                // bold **text**
+                const bold = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                // simple inline code `code`
+                const code = bold.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+                html += '<p>' + code + '</p>';
+            }
+
+            if (inOrdered) html += '</ol>';
+            return html;
+        }
+
+        // Use marked + DOMPurify for robust markdown -> safe HTML
+        try {
+            const html = marked.parse(raw);
+            const clean = DOMPurify.sanitize(html);
+            solutionText.innerHTML = clean;
+        } catch (e) {
+            // Fallback to previous renderer
+            solutionText.innerHTML = renderMarkdown(raw);
+        }
         solutionDisplay.classList.remove('d-none');
 
     } catch (error) {
         console.error('Erro IA:', error);
         alert('Erro ao obter sugestão: ' + error.message);
     } finally {
+        hideLoading();
         suggestBtn.disabled = false;
         suggestBtn.innerHTML = 'Buscar Solução com IA';
     }

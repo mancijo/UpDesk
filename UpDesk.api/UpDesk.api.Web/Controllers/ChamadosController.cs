@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using UpDesk.Api.Data;
 using UpDesk.Api.Dtos;
 using UpDesk.Api.Models;
+using UpDesk.Api.Services;
 
 namespace UpDesk.Api.Controllers;
 
@@ -12,9 +13,12 @@ public class ChamadosController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
 
-    public ChamadosController(ApplicationDbContext context)
+    private readonly IaiService _iaService;
+
+    public ChamadosController(ApplicationDbContext context, IaiService iaService)
     {
         _context = context;
+        _iaService = iaService;
     }
 
     // GET: api/chamados
@@ -38,7 +42,7 @@ public class ChamadosController : ControllerBase
 
         // CORREÇÃO: OrderByDescending foi movido para ANTES do Select
         return await query
-            .OrderByDescending(c => c.DataAbertura) 
+            .OrderByDescending(c => c.DataAbertura)
             .Select(c => new ChamadoSummaryDto( // Correção: Mapeamento explícito para garantir consistência
                 c.ChamadoId, // ChamadoId
                 c.TituloChamado, // TituloChamado
@@ -101,16 +105,16 @@ public class ChamadosController : ControllerBase
             chamado.DataUltimaModificacao,
             chamado.SolucaoSugerida,
             chamado.SolucaoAplicada,
-            chamado.SolicitanteId, 
-            chamado.Solicitante?.Nome, 
-            chamado.Solicitante?.Email, 
+            chamado.SolicitanteId,
+            chamado.Solicitante?.Nome,
+            chamado.Solicitante?.Email,
             chamado.Solicitante?.Telefone,
             chamado.AtendenteId,
             chamado.Atendente?.Nome,
             chamado.Interacoes.Select(i => new MensagemDto(
                 i.Id,
                 i.ChamadoId,
-                i.UsuarioId, 
+                i.UsuarioId,
                 i.Usuario != null ? i.Usuario.Nome : "Usuário Desconhecido",
                 i.Mensagem,
                 i.DataCriacao
@@ -137,20 +141,25 @@ public class ChamadosController : ControllerBase
             DescricaoChamado = chamadoDto.Descricao,
             CategoriaChamado = chamadoDto.Categoria,
             PrioridadeChamado = chamadoDto.Prioridade,
+            StatusChamado = "Aberto",
             DataAbertura = DateTime.UtcNow,
             DataUltimaModificacao = DateTime.UtcNow
         };
 
-        // Verifica se o chamado está sendo resolvido pela IA no momento da criação
-        if (chamadoDto.Status == "Resolvido por IA" && !string.IsNullOrEmpty(chamadoDto.Solucao))
+        // 🔹 Envia a descrição do problema para a IA Gemini
+        try
         {
-            novoChamado.StatusChamado = "Resolvido por IA";
-            novoChamado.SolucaoSugerida = chamadoDto.Solucao;
-            novoChamado.SolucaoAplicada = chamadoDto.Solucao;
+            // Usa o serviço de IA via contrato IaiService (pode ser mock ou Gemini)
+            string respostaIa = await _iaService.BuscarSolucaoAsync(chamadoDto.Titulo, chamadoDto.Descricao);
+
+            if (!string.IsNullOrWhiteSpace(respostaIa))
+            {
+                novoChamado.SolucaoSugerida = respostaIa;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            novoChamado.StatusChamado = "Aberto"; // Padrão
+            Console.WriteLine($"Erro ao consultar a IA: {ex.Message}");
         }
 
         _context.Chamados.Add(novoChamado);
@@ -164,7 +173,7 @@ public class ChamadosController : ControllerBase
             novoChamado.StatusChamado,
             novoChamado.DataAbertura,
             solicitante.Nome,
-            null // Sem atendente na criação
+            null
         );
 
         return CreatedAtAction(nameof(GetChamado), new { id = novoChamado.ChamadoId }, resultDto);

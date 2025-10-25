@@ -37,9 +37,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<JwtService>();
 
 // Registra o serviço de IA (usando mock temporariamente)
-//  builder.Services.AddScoped<IaiService, MockIaService>();
+// Se quiser usar o mock, descomente a linha abaixo e comente o registro do GeminiIaService
+// builder.Services.AddScoped<IaiService, MockIaService>();
 
-builder.Services.AddHttpClient<IaiService, GeminiIaService>(); // Descomente quando quiser usar a API real
+// Registra a implementação da IA dependendo da configuração
+var geminiApiKey = builder.Configuration["Gemini:ApiKey"];
+if (!string.IsNullOrWhiteSpace(geminiApiKey))
+{
+    // Se existir chave configurada, registra o serviço real
+    builder.Services.AddScoped<IaiService, GeminiIaService>();
+}
+else
+{
+    // Caso não exista chave (ex.: ambiente de desenvolvimento), usa o mock para evitar falhas na ativação
+    builder.Services.AddScoped<IaiService, MockIaService>();
+}
 
 var app = builder.Build();
 app.UseDefaultFiles(); // Esta linha faz o servidor encontrar o index.html por defeito
