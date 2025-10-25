@@ -59,8 +59,19 @@
 .solucao-ia-page__actions {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: center;
+    gap: 2rem; /* Aumenta o espaço entre os botões */
     margin-top: 1.5rem;
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas menores */
+}
+
+.solucao-ia-page__actions .custom-btn {
+    width: auto; /* Remove a largura de 100% do .custom-btn */
+    padding: 10px 25px; /* Aumenta o padding para um visual mais equilibrado */
+}
+
+.solucao-ia-page__actions form {
+    margin: 0; /* Garante que o formulário não adicione margens */
 }
 
 /* Card de fallback para IA indisponível */

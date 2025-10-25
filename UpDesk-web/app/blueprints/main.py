@@ -30,13 +30,16 @@ def home():
     nome_usuario = session.get('usuario_nome')
     
     # Contagem de chamados por status
-    chamados_abertos = Chamado.query.filter_by(status_Chamado='Aberto').count()
-    chamados_em_atendimento = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
-    chamados_resolvidos = Chamado.query.filter_by(status_Chamado='Resolvido').count()
+    chamados_abertos = Chamado.query.filter(Chamado.status_Chamado.in_(['Aberto', 'Em Atendimento', 'Resolvido por IA'])).count()
+    chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Aberto').count()
+    chamados_n1_n2 = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
+    chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido por IA').count()
+    chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count()
 
     return render_template('home.html', 
                            nome_usuario=nome_usuario, 
                            chamados_abertos=chamados_abertos,
-                           chamados_em_triagem=chamados_em_atendimento, # Ajustado para consistência
-                           chamados_solucao_ia=chamados_resolvidos, # Simplificado
-                           chamados_finalizados=chamados_resolvidos)
+                           chamados_em_triagem=chamados_em_triagem,
+                           chamados_n1_n2=chamados_n1_n2,
+                           chamados_solucao_ia=chamados_solucao_ia,
+                           chamados_finalizados=chamados_finalizados)

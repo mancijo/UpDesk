@@ -1,0 +1,42 @@
+x{% extends "base.html" %}
+
+{% block title %}Chamado Enviado com Sucesso{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/_chamado-enviado-page.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="card-container">
+        <div class="card-header-success">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h1 class="card-title-success">Chamado enviado com sucesso!</h1>
+        </div>
+        <div class="card-body">
+            <div class="info-item">
+                <span class="info-label">Título do Chamado:</span>
+                <span class="info-value">{{ (chamado.titulo_Chamado if chamado else chamado_data.titulo) if chamado or chamado_data else '' }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Solicitante:</span>
+                <span class="info-value">{{ user.name if user else '' }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Urgência:</span>
+                <span class="info-value">{{ (chamado.prioridade_Chamado if chamado else chamado_data.prioridade) if chamado or chamado_data else '' }}</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-redirect">
+                Ir para Página Inicial
+            </a>
+            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-secondary btn-redirect">
+                Ver Meus Chamados
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

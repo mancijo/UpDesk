@@ -1,4 +1,3 @@
-
 """
 Blueprint para Gerenciamento de Chamados
 
@@ -39,15 +38,15 @@ def abrir_chamado():
     
     if request.method == 'POST' and form.validate_on_submit():
         # Chama o serviço de IA para obter uma solução baseada no título e descrição
-        solucao_sugerida = buscar_solucao_com_ia(form.titulo.data, form.descricao.data)
-        current_app.logger.info(f"Solucao sugerida: {solucao_sugerida}")
+        solucao_sugerida, prioridade_ia = buscar_solucao_com_ia(form.titulo.data, form.descricao.data)
+        current_app.logger.info(f"Solucao sugerida: {solucao_sugerida}, Prioridade IA: {prioridade_ia}")
         
         # Armazena os dados do formulário e a solução da IA na sessão para uso posterior
         chamado_data = {
             'titulo': form.titulo.data,
             'descricao': form.descricao.data,
             'afetado': form.afetado.data,
-            'prioridade': form.prioridade.data,
+            'prioridade': prioridade_ia, # Usa a prioridade classificada pela IA
             'solucao_sugerida': solucao_sugerida,
             'anexo': None  # Inicializa anexo como None
         }
@@ -102,7 +101,7 @@ def abrir_chamado():
     user = {'name': session.get('usuario_nome', 'Usuário')}
     return render_template('chamado.html', form=form, user=user)
 
-@bp.route('/confirmar_abertura', methods=['POST'])
+@bp.route('/confirmar_abertura', methods=['GET', 'POST'])
 def confirmar_abertura_chamado():
     """
     Cria o chamado no banco de dados.
@@ -112,12 +111,56 @@ def confirmar_abertura_chamado():
     if 'usuario_id' not in session or 'chamado_temporario' not in session:
         return redirect(url_for('main.index'))
 
-    # Recupera e remove os dados temporários da sessão para evitar reuso
-    dados_chamado = session.pop('chamado_temporario', None)
+    dados_chamado = session.get('chamado_temporario')
     if not dados_chamado:
         return redirect(url_for('chamados.abrir_chamado'))
 
-    # Cria a nova instância do modelo Chamado e a salva no banco
+    user = {'name': session.get('usuario_nome', 'Usuário')} # Define user aqui, antes dos blocos GET/POST
+
+    if request.method == 'POST':
+        # Recupera e remove os dados temporários da sessão para evitar reuso
+        dados_chamado = session.pop('chamado_temporario', None)
+        if not dados_chamado:
+            return redirect(url_for('chamados.abrir_chamado'))
+
+        # Cria a nova instância do modelo Chamado e a salva no banco
+        novo_chamado = Chamado(
+            titulo_Chamado=dados_chamado['titulo'],
+            descricao_Chamado=dados_chamado['descricao'],
+            categoria_Chamado=dados_chamado['afetado'],
+            solicitanteID=session['usuario_id'],
+            prioridade_Chamado=dados_chamado['prioridade'],
+            solucaoSugerida=dados_chamado['solucao_sugerida'],
+            anexo_Chamado=dados_chamado.get('anexo') # Adiciona o nome do arquivo anexado, se existir
+        )
+        db.session.add(novo_chamado)
+        db.session.flush() # Garante que o ID seja atribuído ao objeto antes do commit.
+        db.session.commit()
+        return render_template('chamado_enviado.html', chamado=novo_chamado, user=user) # Passa user aqui
+    else: # GET request
+        current_app.logger.debug(f"Nome do usuário na sessão para chamado_enviado.html (GET): {user['name']}")
+        return render_template('chamado_enviado.html', chamado_data=dados_chamado, user=user) # Passa user aqui
+
+@bp.route('/resolvido_ia', methods=['POST'])
+def resolvido_pela_ia():
+    """
+    Cria o chamado com status 'Resolvido por IA'.
+    Esta rota é acionada quando o usuário confirma que a solução sugerida pela IA resolveu o problema.
+    O chamado é criado para fins de registro e métricas, mas já entra no sistema como resolvido.
+    """
+    if 'usuario_id' not in session or 'chamado_temporario' not in session:
+        # Se não houver dados na sessão, redireciona para a home, pois não há o que processar.
+        flash('Sessão expirada ou inválida.', 'warning')
+        return redirect(url_for('main.index'))
+
+    # Recupera os dados do chamado da sessão.
+    dados_chamado = session.pop('chamado_temporario', None)
+    if not dados_chamado:
+        # Se os dados não existirem, redireciona para a abertura de chamado.
+        flash('Não foi possível encontrar os dados do chamado.', 'danger')
+        return redirect(url_for('chamados.abrir_chamado'))
+
+    # Cria a instância do chamado, definindo o status diretamente como 'Resolvido por IA'.
     novo_chamado = Chamado(
         titulo_Chamado=dados_chamado['titulo'],
         descricao_Chamado=dados_chamado['descricao'],
@@ -125,11 +168,20 @@ def confirmar_abertura_chamado():
         solicitanteID=session['usuario_id'],
         prioridade_Chamado=dados_chamado['prioridade'],
         solucaoSugerida=dados_chamado['solucao_sugerida'],
-        anexo_Chamado=dados_chamado.get('anexo') # Adiciona o nome do arquivo anexado, se existir
+        anexo_Chamado=dados_chamado.get('anexo'),
+        status_Chamado='Resolvido por IA'  # Status que indica a resolução pela IA.
     )
+    
+    # Salva o chamado no banco de dados.
     db.session.add(novo_chamado)
+    db.session.flush()  # Garante que o ID seja atribuído ao objeto antes do commit.
     db.session.commit()
-    return redirect(url_for('chamados.ver_chamados'))
+    
+    # Log para registrar o evento.
+    current_app.logger.info(f"Chamado {novo_chamado.chamado_ID} criado e marcado como 'Resolvido por IA'.")
+
+    # Renderiza a página de confirmação para o usuário.
+    return render_template('chamado_resolvido_ia.html', chamado=novo_chamado)
 
 @bp.route('/ver')
 def ver_chamados():
