@@ -1,0 +1,142 @@
+/* Estilos para a página de confirmação de chamado */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Ajuste conforme necessário */
+    background-color: #f8f9fa; /* Cor de fundo suave */
+}
+
+.card-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    width: 100%;
+    max-width: 500px; /* Largura máxima do card */
+}
+
+.card-header-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.success-icon {
+    color: #28a745; /* Verde de sucesso */
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+.card-title-success {
+    color: #28a745;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.card-body {
+    margin-bottom: 30px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #343a40;
+    flex-basis: 40%; /* Ajuste para alinhar os rótulos */
+    text-align: left;
+}
+
+.info-value {
+    color: #6c757d;
+    flex-basis: 60%; /* Ajuste para alinhar os valores */
+    text-align: right;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px; /* Espaçamento entre os botões */
+}
+
+.btn-redirect {
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    flex-grow: 1; /* Faz os botões ocuparem o espaço disponível */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Azul primário */
+    color: #ffffff;
+    border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Cinza secundário */
+    color: #ffffff;
+    border: 1px solid #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .card-container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .card-title-success {
+        font-size: 24px;
+    }
+
+    .success-icon {
+        font-size: 50px;
+    }
+
+    .info-item {
+        flex-direction: column; /* Empilha rótulo e valor em telas pequenas */
+        align-items: flex-start;
+    }
+
+    .info-label, .info-value {
+        flex-basis: auto;
+        text-align: left;
+        width: 100%;
+    }
+
+    .info-label {
+        margin-bottom: 5px;
+    }
+
+    .card-footer {
+        flex-direction: column; /* Empilha botões em telas pequenas */
+    }
+
+    .btn-redirect {
+        width: 100%; /* Botões de largura total */
+    }
+}

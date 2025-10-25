@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileNameSpan = document.querySelector('.chamado-form__file-name');
     const browseButton = document.querySelector('.chamado-form__btn--browse');
     const form = document.querySelector('.chamado-form');
+    const btnBuscarIa = document.getElementById('btn-buscar-ia');
+    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    const confirmIaSearchBtn = document.getElementById('confirm-ia-search');
+    const loadingModal = document.getElementById('loadingModal');
 
     // Lógica para o input de arquivo customizado
     if (fileInput && fileNameSpan && browseButton) {
@@ -19,17 +23,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Registro leve do submit (não altera o comportamento padrão)
-    if (form) {
-        form.addEventListener('submit', function (event) {
-            // Verifica se o formulário é válido antes de mostrar o modal
+    // 1. Lida com o clique no botão "Buscar solução com a IA"
+    if (btnBuscarIa) {
+        btnBuscarIa.addEventListener('click', function() {
+            // Valida o formulário antes de abrir o modal de confirmação
             if (form.checkValidity()) {
-                const loadingModal = document.getElementById('loadingModal');
-                if (loadingModal) {
-                    loadingModal.classList.add('loading-modal--show');
-                }
+                confirmationModal.show();
+            } else {
+                // Se o formulário for inválido, força a exibição das mensagens de validação do navegador
+                form.reportValidity();
             }
-            console.debug('chamado form submit');
+        });
+    }
+
+    // 2. Lida com o clique no botão "Confirmar" dentro do modal
+    if (confirmIaSearchBtn) {
+        confirmIaSearchBtn.addEventListener('click', function() {
+            // Esconde o modal de confirmação
+            confirmationModal.hide();
+            
+            // Mostra o modal de carregamento
+            if (loadingModal) {
+                loadingModal.classList.add('loading-modal--show');
+            }
+            
+            // Envia o formulário
+            form.submit();
         });
     }
 });

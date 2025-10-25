@@ -33,15 +33,14 @@
             {% endif %}
 
         <div class="solucao-ia-page__actions">
-            <!-- Botão para finalizar (solução funcionou) -->
-            <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-lg custom-btn shadow-sm" role="button"><i class="bi bi-check-circle me-2"></i>Sim, problema resolvido!</a>
+            <!-- Formulário para finalizar (solução funcionou) -->
+            <form action="{{ url_for('chamados.resolvido_pela_ia') }}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-primary custom-btn shadow-sm"><i class="bi bi-check-circle me-2"></i>Sim, problema resolvido!</button>
+            </form>
 
             <!-- Formulário para abrir o chamado (solução não funcionou) -->
-            <form action="{{ url_for('chamados.confirmar_abertura_chamado') }}" method="post">
-                {%- if csrf_token is defined -%}
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                {%- endif -%}
-                <button type="submit" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Não, quero abrir um chamado</button>
+            <form action="{{ url_for('chamados.confirmar_abertura_chamado') }}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-primary custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Não, quero abrir um chamado</button>
             </form>
         </div>
     </main>

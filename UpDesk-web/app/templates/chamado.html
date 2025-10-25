@@ -92,11 +92,30 @@
             <!-- Botões de Ação -->
             <div class="chamado-form__buttons">
                 <a href="{{ url_for('main.home') }}" class="chamado-form__btn--voltar" role="button">Voltar</a>
-                <button type="submit" class="chamado-form__btn--ia">Buscar solução com a IA</button>
+                <button type="button" id="btn-buscar-ia" class="chamado-form__btn--ia">Buscar solução com a IA</button>
             </div>
         </form>
     </section>
 </main>
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal fade" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmar Ação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente buscar uma solução com a IA da UpDesk? Seus dados de título e descrição serão enviados para análise.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirm-ia-search" class="btn btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Loading Modal -->
 <div id="loadingModal" class="loading-modal" role="dialog" aria-modal="true" aria-labelledby="loadingModalTitle">

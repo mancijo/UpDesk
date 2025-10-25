@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Chamado Resolvido com IA{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/_chamado-resolvido-ia-page.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="card-container">
+        <div class="card-header">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h1 class="card-title">Chamado Resolvido com IA UPDESK</h1>
+        </div>
+        <div class="card-body">
+            <p class="chamado-info">Seu chamado <span class="chamado-titulo">[{{ chamado.titulo_Chamado }}]</span></p>
+            <p class="agradecimento">
+                foi solucionado com sucesso pela inteligência artificial UPDESK! 🛠️ <br>
+                A solução foi aplicada e validada, garantindo o funcionamento esperado. <br>
+                Caso tenha dúvidas ou precise de suporte adicional, estamos à disposição para ajudar.
+            </p>
+        </div>
+        <div class="card-footer">
+            <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-redirect">
+                <i class="fas fa-home"></i> Ir para a Página Inicial
+            </a>
+            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-secondary btn-redirect">
+                <i class="fas fa-list"></i> Ver meu Chamados
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
