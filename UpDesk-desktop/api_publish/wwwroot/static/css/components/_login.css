@@ -124,11 +124,14 @@ body.login-page-body {
     font-size: var(--fonte-tamanho-s);
 }
 
-.logo {
+a .logo {
     width: 150px;
     height: 150px;
     object-fit: contain;
     font-style: bold;
+    color: var(--cor-primaria);
+    align-items: center;
+    text-align: center;
 }
 
 /* Estilo para o painel principal usado em várias telas (Triagem, Ger. Usuários, etc.) */

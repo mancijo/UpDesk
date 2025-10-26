@@ -22,6 +22,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+/* UI feedback helpers: global loading overlay with spinner + message */
+function showLoading(message) {
+    let el = document.getElementById('global-loading');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'global-loading';
+        el.setAttribute('role', 'status');
+        el.setAttribute('aria-live', 'polite');
+        Object.assign(el.style, {
+            position: 'fixed',
+            top: '20%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(0,0,0,0.75)',
+            color: '#fff',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        });
+
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner-border text-light';
+        spinner.style.width = '1.2rem';
+        spinner.style.height = '1.2rem';
+        spinner.setAttribute('role', 'status');
+        const sr = document.createElement('span');
+        sr.className = 'visually-hidden';
+        sr.textContent = 'Carregando...';
+        spinner.appendChild(sr);
+
+        const msg = document.createElement('div');
+        msg.id = 'global-loading-message';
+        msg.style.fontSize = '0.95rem';
+
+        el.appendChild(spinner);
+        el.appendChild(msg);
+        document.body.appendChild(el);
+    }
+    const msgEl = document.getElementById('global-loading-message');
+    if (msgEl) msgEl.textContent = message || '';
+    el.style.display = 'flex';
+}
+
+function hideLoading() {
+    const el = document.getElementById('global-loading');
+    if (el) el.style.display = 'none';
+}
+
 /**
  * Quando o usuário clica em "Sim, problema resolvido!"
  * cria um chamado com status "Resolvido por IA"
@@ -152,6 +204,8 @@ async function handleFormSubmit(event) {
     }
 
     try {
+        // Show global feedback while submitting the ticket
+        showLoading('Seu chamado está sendo enviado para um técnico...');
         const token = localStorage.getItem('authToken');
         const headers = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
@@ -163,6 +217,7 @@ async function handleFormSubmit(event) {
         });
 
         if (response.ok) {
+            hideLoading();
             alert('Chamado aberto com sucesso!');
             window.location.href = '/templates/verChamado.html';
         } else {
@@ -170,6 +225,7 @@ async function handleFormSubmit(event) {
             throw new Error(errorText);
         }
     } catch (error) {
+        hideLoading();
         showError(error.message);
     } finally {
         if (submitButton) {

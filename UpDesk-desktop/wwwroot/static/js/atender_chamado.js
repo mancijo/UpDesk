@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchChamadoDetails(id) {
     try {
         // ATENÇÃO: Crie o endpoint GET /api/chamados/{id} no backend
-        const response = await fetchWithAuth(`${apiUrl}/api/chamados/${id}`);
+        const response = await fetchWithAuth(`/api/chamados/${id}`);
         if (!response.ok) throw new Error('Chamado não encontrado');
         const chamado = await response.json();
 
@@ -60,7 +60,7 @@ async function loadChatMessages(chamadoId) {
     const chatMessages = document.getElementById('chat-messages');
     try {
         // ATENÇÃO: Crie o endpoint GET /api/chamados/{id}/mensagens no backend
-        const response = await fetchWithAuth(`${apiUrl}/api/chamados/${chamadoId}/mensagens`);
+        const response = await fetchWithAuth(`/api/chamados/5/mensagens`);
         if (!response.ok) throw new Error('Falha ao carregar mensagens.');
         const mensagens = await response.json();
         
@@ -89,7 +89,7 @@ async function handleSendMessage(e) {
     if (mensagemTexto) {
         try {
             // ATENÇÃO: Crie o endpoint POST /api/chamados/{id}/mensagens no backend
-            const response = await fetchWithAuth(`${apiUrl}/api/chamados/${CHAMADO_ID}/mensagens`, {
+            const response = await fetchWithAuth(`/api/chamados/5/mensagens`, {
                 method: 'POST',
                 body: JSON.stringify({ mensagem: mensagemTexto }),
             });
@@ -147,7 +147,7 @@ async function handleEncerrarChamado() {
     if (confirm('Tem certeza que deseja encerrar este chamado?')) {
         try {
             // ATENÇÃO: Crie o endpoint PUT /api/chamados/{id}/status no backend
-            const response = await fetchWithAuth(`${apiUrl}/api/chamados/${CHAMADO_ID}/status`, {
+            const response = await fetchWithAuth(`/api/chamados/${CHAMADO_ID}/status`, {
                 method: 'PUT',
                 body: JSON.stringify({ status: 'Resolvido' })
             });
