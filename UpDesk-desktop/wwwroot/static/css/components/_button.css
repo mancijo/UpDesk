@@ -21,6 +21,7 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-.form-buttons:hover{
+.btn-info:hover{
   background-color: #203A60 !important;
+  color: #fff !important;
 }
