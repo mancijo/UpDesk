@@ -1,13 +1,23 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useChamado } from '../../../context/ChamadoContext';
+import CustomInput from '../../../components/CustomInput';
+import Button from '../../../components/Button';
 
 export default function AbrirChamadoScreen() {
   const router = useRouter();
-  const { chamado, setChamado } = useChamado();
+  const { newChamado, setChamado } = useChamado();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // Pré definindo as opções a quem este chamado afeta
+  const segmentedOptions = [
+    { label: 'Somente eu', value: 'eu' },
+    { label: 'Meu Setor', value: 'setor' },
+    { label: 'A Empresa Toda', value: 'empresa' },
+  ];
+
+  // Atualiza o estado do chamado conforme o usuário digita
   const handleInputChange = (name: string, value: any) => {
     setChamado(prevState => ({ ...prevState, [name]: value }));
     // Clear error for the field when it's being edited
@@ -19,29 +29,34 @@ export default function AbrirChamadoScreen() {
       });
     }
   };
+
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //REMOVER AO SUBIR EM PROD, CONTEUDO PARA TESTES E DEV
   useEffect(() => {
-    handleInputChange('titulo', 'fogo na impressora');
-    handleInputChange('descricao', 'impressora está fazendo faisca e queimando os papeis');
-    handleInputChange('afetados', 'eu');
+    handleInputChange('tituloChamado', 'fogo na impressora');
+    handleInputChange('descricaoChamado', 'impressora está fazendo faisca e queimando os papeis');
+    handleInputChange('afetadosChamado', 'eu');
   }, [])
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  //validação simples dos campos obrigatórios
   const validateForm = () => {
     let newErrors: { [key: string]: string } = {};
-    if (!chamado.titulo) {
-      newErrors.titulo = 'O título do chamado é obrigatório.';
+    if (!newChamado.tituloChamado) {
+      newErrors.tituloChamado = 'O título do chamado é obrigatório.';
     }
-    if (!chamado.descricao) {
-      newErrors.descricao = 'A descrição do chamado é obrigatória.';
+    if (!newChamado.descricaoChamado) {
+      newErrors.descricaoChamado = 'A descrição do chamado é obrigatória.';
     }
-    if (!chamado.afetados) {
-      newErrors.afetados = 'Selecione quem o chamado afeta.';
+    if (!newChamado.afetadosChamado) {
+      newErrors.afetadosChamado = 'Selecione quem o chamado afeta.';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }; 
 
+  // Navega para a próxima tela se o formulário for válido
+  // Inserir envio para API aqui futuramente
   const handleSubmit = () => {
     if (validateForm()) {
       router.push('/chamado/solucaoIA');
@@ -50,64 +65,81 @@ export default function AbrirChamadoScreen() {
     }
   };
 
+  const handleReturn = () => {
+    Alert.alert(
+        "Voce retornará ao menu principal",
+        "As informações serão perdidas. Deseja continuar?",
+        [
+          {
+            text: "Voltar",
+            style: "cancel",
+          },
+          {
+            text: "Prosseguir",
+            onPress: () => router.replace('/menu'),
+          },
+        ]
+      )
+  };
+
+
+
   return (
     <View style={styles.mainContainer}>
       <ScrollView style={styles.container}>
-        <Text style={styles.label}>Título do Chamado</Text>
-        <TextInput
-          style={[styles.input, errors.titulo && styles.inputError]}
-          value={chamado.titulo}
-          onChangeText={(text) => handleInputChange('titulo', text)}
+        {/* Fomulário de chamado */}
+        <CustomInput
+          label="Título do Chamado"
+          value={newChamado.tituloChamado}
+          onChangeText={(text) => handleInputChange('tituloChamado', text)}
           placeholder="Ex: Problema com a impressora"
+          error={errors.tituloChamado}
         />
-        {errors.titulo && <Text style={styles.errorText}>{errors.titulo}</Text>}
 
-        <Text style={styles.label}>Descrição do Chamado</Text>
-        <TextInput
-          style={[styles.input, styles.textArea, errors.descricao && styles.inputError]}
-          value={chamado.descricao}
-          onChangeText={(text) => handleInputChange('descricao', text)}
+        <CustomInput
+          label="Descrição do Chamado"
+          value={newChamado.descricaoChamado}
+          onChangeText={(text) => handleInputChange('descricaoChamado', text)}
           placeholder="Descreva o problema em detalhes..."
           multiline
+          style={styles.textArea}
+          error={errors.descricaoChamado}
         />
-        {errors.descricao && <Text style={styles.errorText}>{errors.descricao}</Text>}
 
         <Text style={styles.label}>Quem esse chamado afeta?</Text>
         <View style={styles.segmentedControlContainer}>
-          <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetados === 'eu' && styles.segmentedControlSelected]}
-            onPress={() => handleInputChange('afetados', 'eu')}
-          >
-            <Text style={[styles.segmentedControlText, chamado.afetados === 'eu' && styles.segmentedControlTextSelected]}>Somente eu</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetados === 'setor' && styles.segmentedControlSelected]}
-            onPress={() => handleInputChange('afetados', 'setor')}
-          >
-            <Text style={[styles.segmentedControlText, chamado.afetados === 'setor' && styles.segmentedControlTextSelected]}>Meu Setor</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.segmentedControl, chamado.afetados === 'empresa' && styles.segmentedControlSelected]}
-            onPress={() => handleInputChange('afetados', 'empresa')}
-          >
-            <Text style={[styles.segmentedControlText, chamado.afetados === 'empresa' && styles.segmentedControlTextSelected]}>A Empresa Toda</Text>
-          </TouchableOpacity>
+          {/* Loop que apresenta as opções pré-definidas */}
+          {segmentedOptions.map(option => (
+            <TouchableOpacity
+              key={option.value}
+              style={[styles.segmentedControl, newChamado.afetadosChamado === option.value && styles.segmentedControlSelected]}
+              onPress={() => handleInputChange('afetadosChamado', option.value)}
+            >
+              <Text style={[styles.segmentedControlText, newChamado.afetadosChamado === option.value && styles.segmentedControlTextSelected]}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-        {errors.afetados && <Text style={styles.errorText}>{errors.afetados}</Text>}
+        {errors.afetadosChamado && <Text style={styles.errorText}>{errors.afetadosChamado}</Text>}
 
         <Text style={styles.label}>Anexo</Text>
         <TouchableOpacity style={styles.anexoButton}>
           <Text style={styles.anexoButtonText}>Adicionar um documento</Text>
         </TouchableOpacity>
       </ScrollView>
+
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.backButton}>
-            <Text style={styles.backButtonText}>Voltar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText} >Buscar Solução com IA</Text>
-          </TouchableOpacity>
-        </View>
+        <Button
+          title="Voltar"
+          onPress={handleReturn}
+          variant="secondary"
+          buttonStyle={{ marginRight: 10 }}
+        />
+        <Button 
+          title="Buscar Solução com IA" 
+          onPress={handleSubmit} 
+          buttonStyle={{ marginLeft: 10 }} 
+        />
+      </View>
     </View>
   );
 }
@@ -127,18 +159,6 @@ const styles = StyleSheet.create({
     color: '#2B4C7E',
     marginBottom: 8,
   },
-  input: {
-    backgroundColor: '#DCE0E6',
-    borderRadius: 5,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 20,
-    color: '#000000',
-  },
-  inputError: {
-    borderColor: '#FF0000',
-    borderWidth: 1,
-  },
   textArea: {
     height: 100,
     textAlignVertical: 'top',
@@ -150,16 +170,17 @@ const styles = StyleSheet.create({
   segmentedControl: {
     flex: 1,
     padding: 10,
-    alignItems: 'center',
-    backgroundColor: '#DCE0E6',
-    borderColor: '#2B4C7E',
+    justifyContent: 'center',
+    textAlign: 'center',
+    backgroundColor: '#FFF',
+    borderColor: '#CCCCCC',
     borderWidth: 1,
   },
   segmentedControlSelected: {
     backgroundColor: '#2B4C7E',
   },
   segmentedControlText: {
-    color: '#2B4C7E',
+    color: '#000',
   },
   segmentedControlTextSelected: {
     color: '#FFFFFF',
@@ -179,34 +200,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  backButton: {
-    backgroundColor: '#606D80',
-    borderRadius: 5,
-    padding: 8,
-    flex: 1,
-    marginRight: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  submitButton: {
-    backgroundColor: '#567EBB',
-    borderRadius: 5,
-    padding: 8,
-    flex: 1,
-    marginLeft: 10,
-    alignItems: 'center',
-  },
-  submitButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center',
   },
   errorText: {
     color: '#FF0000',

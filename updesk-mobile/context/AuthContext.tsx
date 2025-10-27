@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // Define the User type
 export interface User {
-  ID: string;
+  id: string;
   nome: string;
   telefone: string;
   email: string;

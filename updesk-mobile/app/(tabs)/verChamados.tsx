@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import TabelaChamados from '../../components/TabelaChamados';
 
 export default function VerChamadosScreen() {
   return (
     <View style={styles.container}>
-      <Text>Tela de Ver Chamados</Text>
+      <TabelaChamados />
     </View>
   );
 }
@@ -11,7 +12,5 @@ export default function VerChamadosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
