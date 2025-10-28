@@ -32,7 +32,7 @@ def home():
     # Contagem de chamados por status
     chamados_abertos = Chamado.query.filter(Chamado.status_Chamado.in_(['Aberto', 'Em Atendimento', 'Resolvido por IA'])).count()
     chamados_em_triagem = Chamado.query.filter_by(status_Chamado='Aberto').count()
-    chamados_n1_n2 = Chamado.query.filter_by(status_Chamado='Em Atendimento').count()
+    chamados_n1_n2 = Chamado.query.filter(Chamado.status_Chamado == 'Em Atendimento', Chamado.atendenteID.isnot(None)).count()
     chamados_solucao_ia = Chamado.query.filter_by(status_Chamado='Resolvido por IA').count()
     chamados_finalizados = Chamado.query.filter_by(status_Chamado='Resolvido').count()
 

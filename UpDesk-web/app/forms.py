@@ -8,7 +8,7 @@ Responsabilidade:
 """
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, Email, Length, EqualTo
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
 from flask_wtf.file import FileField, FileAllowed
 
 class CriarUsuarioForm(FlaskForm):
@@ -31,10 +31,12 @@ class EditarUsuarioForm(FlaskForm):
     submit = SubmitField('Editar')
 
 class chamadoForm(FlaskForm):
+    solicitante = StringField('Solicitante', render_kw={'readonly': True})
+    status = SelectField('Status', choices=[('Aberto', 'Aberto'), ('Em Andamento', 'Em Andamento'), ('Concluído', 'Concluído'), ('Fechado', 'Fechado')], render_kw={'readonly': True}, validators=[Optional()])
     titulo = StringField('Titulo', validators=[DataRequired('Este campo é obrigatório.'), Length(min=5, max=100)])
     descricao = TextAreaField('Descrição', validators=[DataRequired('Este campo é obrigatório.'), Length(min=10)])
     afetado = SelectField('Quem esse chamado afeta', choices=[('Eu', 'Somente eu'), ('Meu setor', 'Meu setor'), ('Empresa ao todo', 'Empresa ao todo')], validators=[DataRequired()])
-    prioridade = StringField('Prioridade', validators=[DataRequired(), Length(min=3, max=20)])
+    prioridade = SelectField('Prioridade', choices=[('Não Classificada', 'Não Classificada'), ('Baixa', 'Baixa'), ('Média', 'Média'), ('Alta', 'Alta'), ('Urgente', 'Urgente')], validators=[DataRequired()])
     anexo = FileField('Adicionar Anexo', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'xls', 'xlsx'])])
     submit = SubmitField('Buscar solução com a IA')
 
@@ -53,5 +55,7 @@ class LoginForm(FlaskForm):
     # Botão de Submit: Texto que aparecerá no botão.
     Submit =  SubmitField('Login')
 
-
+class FormularioEsqueciSenha(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Recuperar Senha')
     

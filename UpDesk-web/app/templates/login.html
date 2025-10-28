@@ -68,7 +68,7 @@
         <div class="message mt-3" id="mensagem" role="status" aria-live="polite"></div>
 
         <!-- Link para recuperação de senha (atualmente um placeholder) -->
-        <a href="#" class="text-decoration-none mt-3">Esqueceu sua senha?</a>
+        <a href="{{ url_for('auth.esqueci_senha') }}" class="text-decoration-none mt-3">Esqueceu sua senha?</a>
     </main>
 
     <!-- Dependências de JavaScript (Bootstrap) via CDN -->

@@ -39,24 +39,24 @@
                 <!-- Formulário de Transferência -->
                 <div class="main-card">
                     <h5 class="card-title-custom">Prioridade do chamado</h5>
-                    
+                    <form method="POST" action="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}">
                     <ul class="priority-options">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="prioridade" id="prio-baixa">
-                                <label class="form-check-label" for="prio-baixa">Baixa</label> {# Lógica para checar a prioridade atual #}
+                                <input class="form-check-input" type="radio" name="prioridade" id="prio-baixa" value="Baixa" {% if chamado.prioridade_Chamado == 'Baixa' %}checked{% endif %}>
+                                <label class="form-check-label" for="prio-baixa">Baixa</label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="prioridade" id="prio-media" checked>
-                                <label class="form-check-label" for="prio-media">Média</label> {# Lógica para checar a prioridade atual #}
+                                <input class="form-check-input" type="radio" name="prioridade" id="prio-media" value="Média" {% if chamado.prioridade_Chamado == 'Média' %}checked{% endif %}>
+                                <label class="form-check-label" for="prio-media">Média</label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="prioridade" id="prio-alta">
-                                <label class="form-check-label" for="prio-alta">Alta</label> {# Lógica para checar a prioridade atual #}
+                                <input class="form-check-input" type="radio" name="prioridade" id="prio-alta" value="Alta" {% if chamado.prioridade_Chamado == 'Alta' %}checked{% endif %}>
+                                <label class="form-check-label" for="prio-alta">Alta</label>
                             </div>
                         </li>
                     </ul>
@@ -65,29 +65,31 @@
                     <ul class="transferir-opcoes">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n1">
-                                <label class="form-check-label" for="setor-ti-n1">Setor TI N1</label>                          
+                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n1" value="setor-ti-n1">
+                                <label class="form-check-label" for="setor-ti-n1">Transferir para setor TI N1</label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n2" checked>
-                                <label class="form-check-label" for="setor-ti-n2">Setor TI N2</label>                          
+                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n2" value="setor-ti-n2" {% if True %}checked{% endif %}>
+                                <label class="form-check-label" for="setor-ti-n2">Transferir para setor TI N2</label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transferir" id="setor-triagem">
-                                <label class="form-check-label" for="setor-triagem">Setor Triagem</label> 
+                                <input class="form-check-input" type="radio" name="transferir" id="setor-triagem" value="setor-triagem">
+                                <label class="form-check-label" for="setor-triagem">Transferir para setor Triagem</label>
                             </div>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
         
-        <div class="footer-actions">
-            <a href="{{ url_for('triagem') }}" class="btn btn-voltar rounded-pill">Voltar</a>
-            <button class="btn btn-finalizar rounded-pill">Finalizar</button>
+                <div class="footer-actions">
+            <a href="{{ url_for('chamados.triagem') }}" class="btn btn-voltar rounded-pill">Voltar</a>
+            <button type="submit" class="btn btn-finalizar rounded-pill">Finalizar</button>
         </div>
+        </form>
     </div>
 {% endblock %}

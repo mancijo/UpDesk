@@ -3,76 +3,113 @@
 {% block title %}Ver Chamados - UpDesk{% endblock %}
 
 {% block body %}
-
-    <div class="container ver-chamado-container">
+    <!-- Seção principal da página de monitoramento de chamados -->
+    <main class="container ver-chamado-container">
+        <!-- Cabeçalho da página: Título principal do monitoramento de chamados -->
         <header class="header">
-            <h2>Monitoramento de Chamados</h2>
+            <h1 class="h2">Monitoramento de Chamados</h1>
         </header>
 
-    <form class="filtros" method="GET" action="{{ url_for('chamados.ver_chamados') }}">
-            <div class="input-group">
-                <select class="form-select" name="status" onchange="this.form.submit()">
-                    <option value="Todos" {% if status_filtro == 'Todos' %}selected{% endif %}>Todos os Status</option>
-                    <option value="Aberto" {% if status_filtro == 'Aberto' %}selected{% endif %}>Aberto</option>
-                    <option value="Em Atendimento" {% if status_filtro == 'Em Atendimento' %}selected{% endif %}>Em Atendimento</option>
-                    <option value="Resolvido" {% if status_filtro == 'Resolvido' %}selected{% endif %}>Resolvido</option>
-                    <option value="Transferido" {% if status_filtro == 'Transferido' %}selected{% endif %}>Transferido</option>
-                    <option value="Agendado" {% if status_filtro == 'Agendado' %}selected{% endif %}>Agendado</option>
-                </select>
-                <input class="form-control w-50" type="search" name="q" placeholder="Buscar por título do chamado..." value="{{ search_query or '' }}">
-                <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+        <!-- Formulário de filtros e busca de chamados: Permite filtrar chamados por status e buscar por título -->
+        <section class="filters-section mb-4">
+            <form class="row g-3 align-items-center" method="GET" action="{{ url_for('chamados.ver_chamados') }}">
+                <div class="col-12 col-md-4">
+                    <label for="status-filter" class="visually-hidden">Filtrar por Status</label>
+                    <select class="form-select" id="status-filter" name="status" onchange="this.form.submit()">
+                        <option value="Todos" {% if status_filtro == 'Todos' %}selected{% endif %}>Todos os Status</option>
+                        <option value="Aberto" {% if status_filtro == 'Aberto' %}selected{% endif %}>Aberto</option>
+                        <option value="Em Atendimento" {% if status_filtro == 'Em Atendimento' %}selected{% endif %}>Em Atendimento</option>
+                        <option value="Resolvido" {% if status_filtro == 'Resolvido' %}selected{% endif %}>Resolvido</option>
+                        <option value="Transferido" {% if status_filtro == 'Transferido' %}selected{% endif %}>Transferido</option>
+                        <option value="Agendado" {% if status_filtro == 'Agendado' %}selected{% endif %}>Agendado</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="search-query" class="visually-hidden">Buscar por título do chamado</label>
+                    <input class="form-control" id="search-query" type="search" name="q" placeholder="Buscar por título do chamado..." value="{{ search_query or '' }}">
+                </div>
+                <div class="col-12 col-md-2">
+                    <button class="btn btn-outline-secondary w-100" type="submit">Buscar</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Seção da lista de chamados: Exibe os chamados em uma tabela paginada e filtrável -->
+        <section class="calls-list-section container mt-4">
+            <h2 class="h3">Lista de Chamados</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Prioridade</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chamado in chamados %}
+                        <tr>
+                            <td>{{ chamado.titulo_Chamado }}</td>
+                            <td>{{ chamado.prioridade_Chamado }}</td>
+                            <td>{{ chamado.status_Chamado }}</td>
+                            <td>{{ chamado.dataAbertura.strftime("%d/%m/%Y %H:%M") }}</td>
+                            <td class="table__actions">
+                                <!-- Botão para visualizar detalhes do chamado -->
+                                <button class="btn btn-secondary btn-sm me-2 monitoramento__botao" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#visualizarChamadoModal"
+                                    data-chamado-id="{{ chamado.chamado_ID }}"
+                                    data-titulo="{{ chamado.titulo_Chamado }}"
+                                    data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
+                                    data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
+                                    data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
+                                    data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
+                                    data-status="{{ chamado.status_Chamado }}"
+                                    data-categoria="{{ chamado.categoria_Chamado }}"
+                                    data-descricao="{{ chamado.descricao_Chamado }}"
+                                    data-anexo="{{ chamado.anexo_Chamado | to_base64 if chamado.anexo_Chamado else '' }}"
+                                    data-anexo-nome="{{ chamado.nome_anexo if chamado.nome_anexo else '' }}"
+                                    title="Visualizar Detalhes">
+                                    <i class="bi bi-eye"></i> Visualizar
+                                </button>
+
+                                {% if chamado.status_Chamado == 'Aberto' or chamado.status_Chamado == 'Em Atendimento' %}
+                                <!-- Botão para atender o chamado (visível se o chamado estiver aberto ou em atendimento) -->
+                                <a href="{{ url_for('chamados.atender_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-primary btn-sm monitoramento__botao" title="Atender Chamado">
+                                    <i class="bi bi-headset"></i> Atender
+                                </a>
+                                {% elif chamado.status_Chamado == 'Resolvido' or chamado.status_Chamado == 'Resolvido por IA' %}
+                                <!-- Botão para reabrir o chamado (visível se o chamado estiver resolvido ou resolvido por IA) -->
+                                <form action="{{ url_for('chamados.reabrir_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-warning btn-sm monitoramento__botao" onclick="return confirm('Tem certeza que deseja reabrir este chamado?')" title="Reabrir Chamado">
+                                        <i class="bi bi-arrow-clockwise"></i> Reabrir
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">Nenhum chamado encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </form>
+        </section>
 
-        <div class="container mt-4">
-            <h2>Lista de Chamados</h2>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Prioridade</th>
-                        <th>Status</th>
-                        <th>Data </th>
-                        <th>Ações</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for chamado in chamados %}
-                    <tr>
-                        <td>{{ chamado.titulo_Chamado }}</td>
-                        <td>{{ chamado.prioridade_Chamado }}</td>
-                        <td>{{ chamado.status_Chamado }}</td>
-                        <td>{{ chamado.dataAbertura.strftime("%d/%m/%Y %H:%M") }}</td>
-                        <td>
-                            <button class="btn btn-secondary btn-sm"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#visualizarChamadoModal"
-                                data-titulo="{{ chamado.titulo_Chamado }}"
-                                data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
-                                data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
-                                data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
-                                data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
-                                data-status="{{ chamado.status_Chamado }}"
-                                data-categoria="{{ chamado.categoria_Chamado }}"
-                                data-descricao="{{ chamado.descricao_Chamado }}">Ver detalhes</button>
-                            <a href="{{ url_for('chamados.atender_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-primary btn-sm">Atender</a>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="7" class="text-center">Nenhum chamado encontrado.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="bottom-bar">
-            <button class="btn" onclick="window.location.href='/home'">Página inicial</button>
-            <button class="btn btn-gestao" data-bs-toggle="modal" data-bs-target="#modalRelatorio">Relatório Gestão</button>
-        </div>
-    </div>
+        <!-- Barra inferior com botões de navegação e relatório -->
+        <footer class="bottom-bar d-flex justify-content-between align-items-center mt-4 p-3 bg-light rounded">
+            <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Página inicial
+            </a>
+            <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#modalRelatorio">
+                <i class="bi bi-file-earmark-text"></i> Relatório Gestão
+            </button>
+        </footer>
+    </main>
 
     <!-- Modal de Relatório de Gestão -->
     <div class="modal fade" id="modalRelatorio" tabindex="-1" aria-labelledby="modalRelatorioLabel" aria-hidden="true">
@@ -113,46 +150,72 @@
         </div>
     </div>
 
-    <!-- Modal de Visualização de Chamado (copiado de triagem.html) -->
+    <!-- Modal de Visualização de Chamado: Exibe detalhes completos de um chamado selecionado -->
     <div class="modal fade" id="visualizarChamadoModal" tabindex="-1" aria-labelledby="visualizarChamadoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Adicionado modal-lg para telas maiores -->
             <div class="modal-content">
+                <!-- Cabeçalho do modal com título e botão de fechar -->
                 <div class="modal-header">
                     <div>
                         <h1 class="modal-title fs-5" id="visualizarChamadoModalLabel">Dados do Chamado</h1>
                         <h2 class="modal-subtitle" id="modal-data-abertura">Aberto em: ...</h2>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
+                <!-- Corpo do modal com as informações do chamado -->
                 <div class="modal-body">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon"><i class="bi bi-person"></i></span>
-                        <strong>Solicitante:</strong><br>
-                        <span id="modal-solicitante-nome">...</span><br>
-                        <span id="modal-solicitante-email">...</span><br>
-                        Ramal: <span id="modal-solicitante-ramal">...</span>
+                    <div class="row">
+                        <!-- Coluna para informações do solicitante -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <section class="info-box p-3 border rounded h-100" aria-labelledby="solicitante-info-heading">
+                                <h3 id="solicitante-info-heading" class="visually-hidden">Informações do Solicitante</h3>
+                                <span class="info-box-icon me-2"><i class="bi bi-person"></i></span>
+                                <strong>Solicitante:</strong><br>
+                                <span id="modal-solicitante-nome">...</span><br>
+                                <span id="modal-solicitante-email">...</span><br>
+                                Ramal: <span id="modal-solicitante-ramal">...</span>
+                            </section>
+                        </div>
+                        <!-- Coluna para título, status e categoria do chamado -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <section class="info-box p-3 border rounded h-100" aria-labelledby="chamado-info-heading">
+                                <h3 id="chamado-info-heading" class="visually-hidden">Informações do Chamado</h3>
+                                <div class="text-center mb-2">
+                                    <span class="title-badge-modal fs-4 fw-bold" id="modal-titulo">...</span>
+                                </div>
+                                <div class="d-flex justify-content-between text-muted mb-2">
+                                    <span><strong>Status:</strong> <span id="modal-status">...</span></span>
+                                    <span><strong>Categoria:</strong> <span id="modal-categoria">...</span></span>
+                                </div>
+                            </section>
+                        </div>
                     </div>
-
-                    <div class="text-center my-4">
-                        <span class="title-badge-modal" id="modal-titulo">...</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between text-muted mb-2">
-                        <span><strong>Status:</strong> <span id="modal-status">...</span></span>
-                        <span><strong>Categoria:</strong> <span id="modal-categoria">...</span></span>
-                    </div>
-
-                    <p class="mt-3"><strong>Descrição:</strong></p>
-                    <div class="description-box" id="modal-descricao">
-                        ...
+                    <div class="row mt-3">
+                        <!-- Coluna para a descrição do chamado -->
+                        <div class="col-12">
+                            <p class="mb-2"><strong>Descrição:</strong></p>
+                            <div class="description-box p-3 border rounded" id="modal-descricao">
+                                ...
+                            </div>
+                            <div id="modal-anexo-container" class="mt-3" style="display: none;">
+                                <p class="mb-2"><strong>Anexo:</strong></p>
+                                <a id="modal-anexo-link" href="#" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-paperclip"></i> Visualizar Anexo
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Rodapé do modal com botões de ação -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
-                    <button type="button" class="btn btn-iniciar-modal rounded-pill">Atender Chamado</button>
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Voltar</button>
+                    <!-- O botão "Atender Chamado" no modal é exibido dinamicamente via JavaScript, dependendo do status do chamado -->
+                    <a href="#" id="modal-atender-chamado-btn" class="btn btn-primary rounded-pill d-none">Atender Chamado</a>
                 </div>
             </div>
         </div>
+        <!-- Script para preencher o modal de visualização de chamado -->
+        <script src="{{ url_for('static', filename='js/ver_chamado_modal.js') }}"></script>
     </div>
 
 {% endblock %}

@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Função para carregar as mensagens do chamado
     async function carregarMensagens() {
         try {
-            const response = await fetch(`/api/${chamadoId}/mensagens`);
+            const response = await fetch(`/chamados/api/${chamadoId}/mensagens`);
             if (!response.ok) {
                 throw new Error('Falha ao carregar mensagens.');
             }
@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             scrollChatToBottom();
         } catch (error) {
-            console.error('Erro:', error);
-            chatMessages.innerHTML = '<p class="text-center text-danger">Não foi possível carregar o chat.</p>';
+            console.error('Erro ao carregar mensagens:', error);
+            chatMessages.innerHTML = '<p class="text-center text-danger">Não foi possível carregar o chat. Verifique o console para detalhes.</p>';
         }
     }
 

@@ -9,6 +9,7 @@ Responsabilidade:
 from flask import Blueprint, request, jsonify, session, redirect, url_for, render_template
 from werkzeug.security import check_password_hash
 from ..models import Usuario, db # Import db aqui se for fazer commits
+from ..forms import FormularioEsqueciSenha
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -65,3 +66,20 @@ def logout():
     """
     session.clear()
     return redirect(url_for('main.index'))
+
+@bp.route('/esqueci_senha', methods=['GET', 'POST'])
+def esqueci_senha():
+    form = FormularioEsqueciSenha()
+    if form.validate_on_submit():
+        email = form.email.data
+        # Lógica para encontrar o supervisor e enviar o e-mail
+        # Por enquanto, apenas um placeholder
+        print(f"E-mail de recuperação solicitado para: {email}")
+        # TODO: Implementar a lógica real de envio de e-mail para o supervisor.
+        # 1. Buscar o usuário pelo e-mail.
+        # 2. Se o usuário existir, buscar o supervisor responsável.
+        # 3. Gerar um token de redefinição de senha.
+        # 4. Salvar o token no banco de dados associado ao usuário.
+        # 5. Enviar um e-mail para o supervisor com o link de redefinição de senha (contendo o token).
+        return render_template('mensagem_esqueci_senha.html', mensagem="Se o e-mail estiver cadastrado, um link de recuperação foi enviado ao supervisor responsável.")
+    return render_template('esqueci_senha.html', form=form)

@@ -1,1 +1,150 @@
-/* Arquivo custom.css vazio para resolver 404 */
+/* Arquivo custom.css */
+
+.btn-iniciar-modal {
+    background-color: #28a745; /* Verde */
+    color: white;
+    border: none;
+}
+
+.btn-iniciar-modal:hover {
+    background-color: #218838; /* Verde mais escuro no hover */
+    color: white;
+}
+
+.btn-warning {
+    background-color: #ffc107; /* Amarelo */
+    color: #212529; /* Texto escuro */
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800; /* Amarelo mais escuro no hover */
+    color: #212529;
+}
+
+/* Estilos para a página de Triagem */
+.tickets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tickets-header, .ticket-row {
+    display: grid;
+    grid-template-columns: 50px 2fr 1fr 1fr 1fr 1fr 1fr 1fr; /* 8 colunas */
+    gap: 15px;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.ticket-row:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tickets-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.tickets-header a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.tickets-header a:hover {
+    color: #0056b3;
+}
+
+.ticket-row > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actions-header {
+    text-align: end;
+}
+
+.ticket-actions {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+/* Estilos para os Status */
+.status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+.status-resolvido {
+    background-color: #d4edda; /* Verde claro */
+    color: #155724; /* Verde escuro */
+}
+
+.status-pendente {
+    background-color: #fff3cd; /* Amarelo claro */
+    color: #856404; /* Amarelo escuro */
+}
+
+.status-atendimento {
+    background-color: #cce5ff; /* Azul claro */
+    color: #004085; /* Azul escuro */
+}
+
+/* Responsividade para a tabela */
+@media (max-width: 992px) {
+    .tickets-header, .ticket-row {
+        grid-template-columns: 50px 2fr 1fr 1fr 1fr; /* Reduz colunas */
+    }
+    .ticket-row > div:nth-child(3), /* Oculta Solicitante */
+    .ticket-row > div:nth-child(4), /* Oculta Categoria */
+    .ticket-row > div:nth-child(6) { /* Oculta Data */
+        display: none;
+    }
+    .tickets-header > div:nth-child(3),
+    .tickets-header > div:nth-child(4),
+    .tickets-header > div:nth-child(6) {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .ticket-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        position: relative;
+    }
+    .ticket-row > div {
+        white-space: normal;
+        margin-bottom: 5px;
+    }
+    .ticket-row > div::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        display: inline-block;
+        width: 100px; /* Ajuste conforme necessário */
+    }
+    .d-md-grid {
+        display: none !important; /* Oculta o header em grid */
+    }
+    .ticket-actions {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        flex-direction: row;
+    }
+}

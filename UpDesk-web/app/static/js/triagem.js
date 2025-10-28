@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var modalStatus = visualizarChamadoModal.querySelector('#modal-status');
         var modalCategoria = visualizarChamadoModal.querySelector('#modal-categoria');
         var modalDescricao = visualizarChamadoModal.querySelector('#modal-descricao');
-        var iniciarTriagemBtn = visualizarChamadoModal.querySelector('#iniciarTriagemBtn');
+        var iniciarTriagemBtn = visualizarChamadoModal.querySelector('#triarChamadoBtn');
+        var devolverTriagemBtn = visualizarChamadoModal.querySelector('#devolverTriagemBtn');
 
         modalTitle.textContent = 'Dados do Chamado #' + chamadoId;
         modalDataAbertura.textContent = 'Aberto em: ' + dataAbertura;
@@ -37,7 +38,9 @@ document.addEventListener('DOMContentLoaded', function () {
         modalCategoria.textContent = categoria;
         modalDescricao.innerHTML = descricao.replace(/\n/g, '<br>'); // Substitui quebras de linha por <br>
         
-        // Atualiza o link do botão "Iniciar Atendimento" para a rota correta
-        iniciarTriagemBtn.href = `/atender_chamado/${chamadoId}`;
+    // Atualiza o link do botão "Triar Chamado" para abrir a página de transferência
+    iniciarTriagemBtn.href = `/chamados/transferir/${chamadoId}`;
+        // Atualiza o link do botão "Devolver para Triagem" para a rota correta
+        devolverTriagemBtn.href = `/chamados/devolver_triagem/${chamadoId}`;
     });
 });

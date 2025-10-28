@@ -6,14 +6,119 @@
 <div class="container my-4">
     <div class="main-panel">
         <h2 class="text-center panel-title">Painel de Triagem</h2>
-        <h5>Chamados Aguardando Atendimento</h5>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-center bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Aguardando Triagem</h5>
+                        <p class="card-text fs-3">{{ total_aguardando_triagem }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Triados Hoje</h5>
+                        <p class="card-text fs-3">{{ triados_hoje }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center bg-danger text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Pendentes > 24h</h5>
+                        <p class="card-text fs-3">{{ pendentes_mais_24h }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="GET" class="mb-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="search_query" class="form-label">Buscar por Título/ID</label>
+                    <input type="text" class="form-control" id="search_query" name="q" value="{{ search_query }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="prioridade_filtro" class="form-label">Prioridade</label>
+                    <select class="form-select" id="prioridade_filtro" name="prioridade">
+                        <option value="Todos" {% if prioridade_filtro == 'Todos' %}selected{% endif %}>Todas</option>
+                        <option value="Baixa" {% if prioridade_filtro == 'Baixa' %}selected{% endif %}>Baixa</option>
+                        <option value="Média" {% if prioridade_filtro == 'Média' %}selected{% endif %}>Média</option>
+                        <option value="Alta" {% if prioridade_filtro == 'Alta' %}selected{% endif %}>Alta</option>
+                        <option value="Crítica" {% if prioridade_filtro == 'Crítica' %}selected{% endif %}>Crítica</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="status_filtro" class="form-label">Status</label>
+                    <select class="form-select" id="status_filtro" name="status">
+                        <option value="Aberto" {% if status_filtro == 'Aberto' %}selected{% endif %}>Aberto</option>
+                        <option value="Em Atendimento" {% if status_filtro == 'Em Atendimento' %}selected{% endif %}>Em Atendimento</option>
+                        <option value="Pendente" {% if status_filtro == 'Pendente' %}selected{% endif %}>Pendente</option>
+                        <option value="Resolvido" {% if status_filtro == 'Resolvido' %}selected{% endif %}>Resolvido</option>
+                        <option value="Resolvido por IA" {% if status_filtro == 'Resolvido por IA' %}selected{% endif %}>Resolvido por IA</option>
+                        <option value="Todos" {% if status_filtro == 'Todos' %}selected{% endif %}>Todos</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="data_filtro" class="form-label">Data de Abertura</label>
+                    <select class="form-select" id="data_filtro" name="data">
+                        <option value="Todos" {% if data_filtro == 'Todos' %}selected{% endif %}>Todas</option>
+                        <option value="Hoje" {% if data_filtro == 'Hoje' %}selected{% endif %}>Hoje</option>
+                        <option value="Ultimos 7 Dias" {% if data_filtro == 'Ultimos 7 Dias' %}selected{% endif %}>Últimos 7 Dias</option>
+                        <option value="Ultimos 30 Dias" {% if data_filtro == 'Ultimos 30 Dias' %}selected{% endif %}>Últimos 30 Dias</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 text-end">
+                    <a href="{{ url_for('chamados.triagem') }}" class="btn btn-outline-secondary">Limpar Filtros</a>
+                </div>
+            </div>
+        </form>
+
+        <h5 class="mt-4">Chamados Aguardando Atendimento</h5>
 
         <div class="tickets-list mt-4">
             <div class="tickets-header d-none d-md-grid">
-                <div>Id</div>
-                <div>Título</div>
-                <div>Status</div>
-                <div>Data</div>
+                <div>
+                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='chamado_ID', direction='asc' if order_by == 'chamado_ID' and direction == 'desc' else 'desc') }}">
+                        Id {% if order_by == 'chamado_ID' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='titulo_Chamado', direction='asc' if order_by == 'titulo_Chamado' and direction == 'desc' else 'desc') }}">
+                        Título {% if order_by == 'titulo_Chamado' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='solicitanteID', direction='asc' if order_by == 'solicitanteID' and direction == 'desc' else 'desc') }}">
+                        Solicitante {% if order_by == 'solicitanteID' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='categoria_Chamado', direction='asc' if order_by == 'categoria_Chamado' and direction == 'desc' else 'desc') }}">
+                        Categoria {% if order_by == 'categoria_Chamado' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='prioridade_Chamado', direction='asc' if order_by == 'prioridade_Chamado' and direction == 'desc' else 'desc') }}">
+                        Prioridade {% if order_by == 'prioridade_Chamado' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='dataAbertura', direction='asc' if order_by == 'dataAbertura' and direction == 'desc' else 'desc') }}">
+                        Data {% if order_by == 'dataAbertura' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='status_Chamado', direction='asc' if order_by == 'status_Chamado' and direction == 'desc' else 'desc') }}">
+                        Status {% if order_by == 'status_Chamado' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                </div>
                 <div class="actions-header">Ações</div>
             </div>
 
@@ -22,16 +127,29 @@
             <div class="ticket-row">
                 <div>{{ chamado.chamado_ID }}</div>
                 <div>{{ chamado.titulo_Chamado }}</div>
+                <div>{{ chamado.solicitante.nome if chamado.solicitante else 'N/A' }}</div>
+                <div>{{ chamado.categoria_Chamado }}</div>
+                <div>
+                    <span class="badge 
+                        {% if chamado.prioridade_Chamado == 'Crítica' %}bg-danger
+                        {% elif chamado.prioridade_Chamado == 'Alta' %}bg-warning
+                        {% elif chamado.prioridade_Chamado == 'Média' %}bg-info
+                        {% else %}bg-secondary
+                        {% endif %}">
+                        {{ chamado.prioridade_Chamado }}
+                    </span>
+                </div>
+                <div>{{ chamado.dataAbertura.strftime("%d/%m/%Y") }}</div>
                 <div>
                     <span class="status 
                         {% if chamado.status_Chamado == 'Resolvido' %}status-resolvido
                         {% elif chamado.status_Chamado == 'Aberto' %}status-pendente
                         {% elif chamado.status_Chamado == 'Em Atendimento' %}status-atendimento
+                        {% elif chamado.status_Chamado == 'Pendente' %}status-pendente
                         {% endif %}">
                         {{ chamado.status_Chamado }}
                     </span>
                 </div>
-                <div>{{ chamado.dataAbertura.strftime("%d/%m/%Y") }}</div>
                 <div class="ticket-actions text-end">
                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#visualizarChamadoModal"
                         data-id="{{ chamado.chamado_ID }}"
@@ -45,42 +163,43 @@
                         data-descricao="{{ chamado.descricao_Chamado }}">
                         Visualizar
                     </button>
-                    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}">
-                        Transferir
+                    <a class="btn btn-sm btn-success" href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}">
+                        Triar
                     </a>
                 </div>
             </div>
             {% else %}
             <div class="ticket-row">
-                <div style="grid-column: 1 / -1; text-align: center; padding: 20px;">Nenhum chamado aberto encontrado.</div>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 20px;">Nenhum chamado aguardando triagem no momento 🎉</div>
             </div>
             {% endfor %}
         </div>
 
-        {# 2. Bloco de navegação da paginação adicionado #}
-        <div class="mt-4 d-flex justify-content-center">
-            <nav aria-label="Navegação das páginas de chamados">
-              <ul class="pagination">
+        {# Controles de Paginação #}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {# Link para a página anterior #}
                 <li class="page-item {% if not chamados_paginados.has_prev %}disabled{% endif %}">
-                  <a class="page-link" href="{{ url_for('chamados.triagem', page=chamados_paginados.prev_num) }}">Anterior</a>
+                    <a class="page-link" href="{{ url_for('chamados.triagem', page=chamados_paginados.prev_num, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by=order_by, direction=direction) }}">Anterior</a>
                 </li>
-            
+
+                {# Links para as páginas individuais #}
                 {% for page_num in chamados_paginados.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                  {% if page_num %}
-                    <li class="page-item {% if page_num == chamados_paginados.page %}active{% endif %}">
-                      <a class="page-link" href="{{ url_for('chamados.triagem', page=page_num) }}">{{ page_num }}</a>
-                    </li>
-                  {% else %}
-                    <li class="page-item disabled"><span class="page-link">…</span></li>
-                  {% endif %}
+                    {% if page_num %}
+                        <li class="page-item {% if chamados_paginados.page == page_num %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('chamados.triagem', page=page_num, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by=order_by, direction=direction) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                    {% endif %}
                 {% endfor %}
-            
+
+                {# Link para a próxima página #}
                 <li class="page-item {% if not chamados_paginados.has_next %}disabled{% endif %}">
-                  <a class="page-link" href="{{ url_for('chamados.triagem', page=chamados_paginados.next_num) }}">Próxima</a>
+                    <a class="page-link" href="{{ url_for('chamados.triagem', page=chamados_paginados.next_num, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by=order_by, direction=direction) }}">Próxima</a>
                 </li>
-              </ul>
-            </nav>
-        </div>
+            </ul>
+        </nav>
 
     </div>
 </div>
@@ -115,7 +234,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
-                <a href="#" id="iniciarTriagemBtn" class="btn btn-iniciar-modal rounded-pill">Iniciar Atendimento</a>
+                <a href="#" id="devolverTriagemBtn" class="btn btn-warning rounded-pill">Devolver para Triagem</a>
+                <a href="#" id="triarChamadoBtn" class="btn btn-iniciar-modal rounded-pill">Triar Chamado</a>
             </div>
         </div>
     </div>

@@ -42,3 +42,12 @@ input[type="text"] {
     font-weight: var(--fonte-peso-semi-bold);
     font-style: bold;
 }
+
+.monitoramento__botao {
+    padding: 0.5rem 1rem;
+    transition: filter 0.2s ease-in-out;
+}
+
+.monitoramento__botao:hover {
+    filter: brightness(0.95);
+}

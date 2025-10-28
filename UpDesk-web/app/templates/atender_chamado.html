@@ -12,13 +12,16 @@
                     <p><strong>Título:</strong> {{ chamado.titulo_Chamado }}</p>
                     <p><strong>Aberto em:</strong> {{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}</p>
                     {% if chamado.solicitante %}
-                    <p><strong>Solicitante:</strong><br>
-                        {{ chamado.solicitante.nome }}<br>
-                        {{ chamado.solicitante.email }}<br>
-                        Ramal: {{ chamado.solicitante.telefone }}
-                    </p>
+                    <dl>
+                        <dt>Solicitante:</dt>
+                        <dd>{{ chamado.solicitante.nome }}</dd>
+                        <dt>Email:</dt>
+                        <dd>{{ chamado.solicitante.email }}</dd>
+                        <dt>Ramal:</dt>
+                        <dd>{{ chamado.solicitante.telefone }}</dd>
+                    </dl>
                     {% endif %}
-                    <p><strong>Status:</strong> <span class="badge bg-primary">{{ chamado.status_Chamado }}</span></p>
+                    <p><strong>Status:</strong> <span class="badge bg-primary" role="status" aria-live="polite">{{ chamado.status_Chamado }}</span></p>
                     <p><strong>Prioridade:</strong> {{ chamado.prioridade_Chamado }}</p>
                     <p><strong>Categoria:</strong> {{ chamado.categoria_Chamado }}</p>
                     <hr>
@@ -31,13 +34,8 @@
                 <div class="main-card">
                     <h5 class="card-title-custom">Chat de Atendimento</h5>
                     <div class="chat-container" data-chamado-id="{{ chamado.chamado_ID }}" data-user-id="{{ session['usuario_id'] }}">
-                        <div class="chat-messages" id="chat-messages">
+                        <div class="chat-messages" id="chat-messages" style="max-height: 400px; overflow-y: auto;">
                             <!-- Mensagens serão carregadas aqui via JS -->
-                            <div class="text-center p-5">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Carregando...</span>
-                                </div>
-                            </div>
                         </div>
                         <form class="chat-input" id="form-enviar-mensagem">
                             <div class="input-group">
@@ -54,14 +52,14 @@
 
         <!-- Ações no Rodapé -->
         <div class="footer-actions">
-            <a href="{{ url_for('ver_chamado') }}" class="btn btn-secondary btn-action rounded-pill">
+            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-secondary btn-action rounded-pill">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
             <div>
-                <a href="{{ url_for('transferir_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-info text-white btn-action rounded-pill">
+                <a href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-info text-white btn-action rounded-pill">
                     <i class="bi bi-arrow-right-square"></i> Transferir Chamado
                 </a>
-                <form action="{{ url_for('encerrar_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
+                <form action="{{ url_for('chamados.encerrar_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
                     <button type="submit" class="btn btn-success btn-action rounded-pill" onclick="return confirm('Tem certeza que deseja encerrar este chamado?')">
                         <i class="bi bi-check-circle"></i> Encerrar Chamado
                     </button>

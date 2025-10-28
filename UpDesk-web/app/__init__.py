@@ -36,6 +36,14 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     cors.init_app(app)
 
+    # Filtro Jinja2 para codificar em base64
+    import base64
+    def to_base64(data):
+        if isinstance(data, bytes):
+            return base64.b64encode(data).decode('utf-8')
+        return data
+    app.jinja_env.filters['to_base64'] = to_base64
+
     # O `app_context` é necessário para operações que dependem da aplicação, como interagir com o banco.
     with app.app_context():
         # Inicializa serviços customizados, como o serviço de IA.
