@@ -6,19 +6,19 @@ import Card from '../../../components/Card';
 import { useChamado } from '../../../context/ChamadoContext';
 
 export default function PlaceholderScreen() {
-  const { chamado, setChamado } = useChamado();
+  const { newChamado, setChamado } = useChamado();
 
   return (
     <SafeAreaView style={styles.container}>
       <Card>
         <Text style={styles.text}>Chamado enviado com sucesso!</Text>
-        <Text style={styles.summaryText}><Text style={styles.bold}>Descrição:</Text> {chamado.descricaoChamado}</Text>
+        <Text style={styles.summaryText}><Text style={styles.bold}>Descrição:</Text> {newChamado.descricaoChamado}</Text>
       </Card>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.push('../menu')}>
           <Text style={styles.backButtonText}>Ir para o menu</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.submitButton} onPress={() => router.push('../menu')}>
+        <TouchableOpacity style={styles.submitButton} onPress={() => router.push('../verChamados')}>
           <Text style={styles.submitButtonText} >Ver meus chamados</Text>
         </TouchableOpacity>
       </View>

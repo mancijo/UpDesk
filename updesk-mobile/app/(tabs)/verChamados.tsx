@@ -54,133 +54,152 @@ export default function VerChamadosScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>ID Chamado</Text>
-        <Text style={styles.headerText}>Usuário</Text>
-        <Text style={styles.headerText}>Título</Text>
-        <Text style={styles.headerText}>Status</Text>
-        <Text style={styles.headerText}>Ação</Text>
-      </View>
-      {mockChamados.map((chamado) => (
-        <View key={chamado.chamadoId} style={styles.row}>
-          <Text style={styles.cell}>{chamado.chamadoId}</Text>
-          <Text style={styles.cell}>{chamado.solicitante!.nome}</Text>
-          <Text style={styles.cell}>{chamado.tituloChamado}</Text>
-          <Text style={styles.cell}>{chamado.statusChamado}</Text>
-          <TouchableOpacity style={styles.button} onPress={() => handleVerChamado(chamado)}>
-            <Text style={styles.buttonText}>Ver Chamado</Text>
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <ScrollView>
+        {/* Cabeçalho da Tabela */}
+        <View style={styles.tableRowHeader}>
+          <Text style={[styles.headerText, styles.idColumn]}>ID</Text>
+          <Text style={[styles.headerText, styles.userColumn]}>Usuário</Text>
+          <Text style={[styles.headerText, styles.titleColumn]}>Título</Text>
+          <Text style={[styles.headerText, styles.actionColumn]}>Ação</Text>
         </View>
-      ))}
-      {selectedChamado && (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}><Text style={styles.modalLabel}>Solicitante:</Text> {selectedChamado.solicitante!.nome}</Text>
-              <Text style={styles.modalText}><Text style={styles.modalLabel}>Título:</Text> {selectedChamado.tituloChamado}</Text>
-              <Text style={styles.modalText}><Text style={styles.modalLabel}>Descrição:</Text> {selectedChamado.descricaoChamado}</Text>
-              <Text style={styles.modalText}><Text style={styles.modalLabel}>Status:</Text> {selectedChamado.statusChamado}</Text>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Fechar</Text>
+
+        {/* Linhas da Tabela */}
+        {mockChamados.map((chamado) => (
+          <View key={chamado.chamadoId} style={styles.tableRow}>
+            <Text style={[styles.cellText, styles.idColumn]}>{chamado.chamadoId}</Text>
+            <Text style={[styles.cellText, styles.userColumn]}>{chamado.solicitante?.nome}</Text>
+            <Text style={[styles.cellText, styles.titleColumn]}>{chamado.tituloChamado}</Text>
+            <View style={[styles.cellText, styles.actionColumn]}>
+              <TouchableOpacity style={styles.actionButton} onPress={() => handleVerChamado(chamado)}>
+                <Text style={styles.actionButtonText}>Ver</Text>
               </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      )}
-    </ScrollView>
+        ))}
+      </ScrollView>
+
+      {/* Modal para Detalhes do Chamado */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Detalhes do Chamado</Text>
+            {selectedChamado && (
+              <>
+                <Text style={styles.modalText}><Text style={styles.modalLabel}>ID:</Text> {selectedChamado.chamadoId}</Text>
+                <Text style={styles.modalText}><Text style={styles.modalLabel}>Solicitante:</Text> {selectedChamado.solicitante?.nome}</Text>
+                <Text style={styles.modalText}><Text style={styles.modalLabel}>Descrição:</Text> {selectedChamado.descricaoChamado}</Text>
+              </>
+            )}
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFFFFF',
+    padding: 10
   },
-  header: {
+  tableRowHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingBottom: 10,
+    backgroundColor: '#2B4C7E',
+    paddingVertical: 10,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5
+  },
+  tableRow: {
+    flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginBottom: 10,
+    borderBottomColor: '#EEE',
+    alignItems: 'center',
+    paddingVertical: 8
   },
   headerText: {
+    color: '#FFFFFF',
     fontWeight: 'bold',
-    fontSize: 16,
-    flex: 1,
+    textAlign: 'center'
+  },
+  cellText: {
+    color: '#333',
     textAlign: 'center',
+    paddingHorizontal: 4
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+  idColumn: {
+    flex: 0.15
   },
-  cell: {
-    flex: 1,
-    textAlign: 'center',
+  userColumn: {
+    flex: 0.3
   },
-  button: {
-    backgroundColor: '#007bff',
-    padding: 10,
+  titleColumn: {
+    flex: 0.35
+  },
+  actionColumn: {
+    flex: 0.2
+  },
+  actionButton: {
+    backgroundColor: '#567EBB',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     borderRadius: 5,
-    flex: 1,
-    marginHorizontal: 5,
+    alignSelf: 'center'
   },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
+  actionButtonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 12
   },
-  centeredView: {
+  modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
-  modalView: {
-    margin: 20,
+  modalContent: {
+    width: '90%',
     backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    borderRadius: 10,
+    padding: 20,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-    marginTop: 15,
-  },
-  textStyle: {
-    color: 'white',
+  modalTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
+    color: '#2B4C7E',
+    marginBottom: 15,
+    textAlign: 'center'
   },
   modalText: {
-    marginBottom: 15,
-    textAlign: 'left',
-    alignSelf: 'flex-start',
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 10,
+    lineHeight: 22
   },
   modalLabel: {
-    fontWeight: 'bold',
+    fontWeight: 'bold'
+  },
+  closeButton: {
+    backgroundColor: '#606D80',
+    padding: 12,
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: 'center'
+  },
+  closeButtonText: {
+    color: 'white', fontWeight: 'bold', fontSize: 16
   },
 });
