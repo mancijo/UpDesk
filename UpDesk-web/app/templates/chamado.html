@@ -3,49 +3,130 @@
 {% block title %}Abrir Chamado - UpDesk{% endblock %}
 
 {% block head %}
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/_chamado-page.css') }}">
 {% endblock %}
 
 {% block body %}
-    <div class="chamado-page__container">
-        <h2 class="chamado-page__title">Abertura do chamado</h2>
+<main class="main-content">
+    <section class="chamado-page__container" aria-labelledby="titulo-chamado">
+        <h2 id="titulo-chamado" class="chamado-page__title">Abertura do Chamado</h2>
 
-        <form action="{{ form_action or url_for('chamado') }}" method="post" enctype="multipart/form-data">
+        <form 
+            action="{{ url_for('chamados.abrir_chamado') }}" 
+            method="post" 
+            enctype="multipart/form-data" 
+            class="chamado-form"
+            novalidate
+        >
             {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.titulo.label(for="titulo") }}
-                {{ form.titulo(id="titulo", placeholder="Digite o titulo do chamado", required=true) }}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {%- if form.errors -%}
+            <div class="alert alert-danger" role="alert">
+                <strong>Corrija os erros abaixo:</strong>
+                <ul>
+                {%- for field, errors in form.errors.items() -%}
+                    {%- for error in errors -%}
+                        <li>{{ (form[field].label.text if field in form else field) }}: {{ error }}</li>
+                    {%- endfor -%}
+                {%- endfor -%}
+                </ul>
+            </div>
+            {%- endif -%}
+
+            <!-- Título do Chamado -->
+            <div class="chamado-form__group">
+                {{ form.titulo.label(for="titulo", class="chamado-form__label") }}
+                {{ form.titulo(
+                    id="titulo", 
+                    placeholder="Digite o título do chamado", 
+                    required=true, 
+                    class="chamado-form__input"
+                ) }}
             </div>
 
-            <div class="form-group">
-                {{ form.descricao.label(for="descricao") }}
-                {{ form.descricao(id="descricao", placeholder="Digite a descrição do chamado", rows=4, required=true) }}
+            <!-- Descrição -->
+            <div class="chamado-form__group">
+                {{ form.descricao.label(for="descricao", class="chamado-form__label") }}
+                {{ form.descricao(
+                    id="descricao", 
+                    placeholder="Digite a descrição do chamado", 
+                    rows=4, 
+                    required=true, 
+                    class="chamado-form__textarea"
+                ) }}
             </div>
 
-            <div class="form-group">
-                {{ form.afetado.label(for="afetado") }}
-                {{ form.afetado(id="afetado") }}
+            <!-- Categoria/Afetado -->
+            <div class="chamado-form__group">
+                {{ form.afetado.label(for="afetado", class="chamado-form__label") }}
+                {{ form.afetado(
+                    id="afetado", 
+                    class="chamado-form__select"
+                ) }}
             </div>
 
-            <div class="form-group" style="display: none;">
-                {{ form.prioridade.label }}
-                {{ form.prioridade(value='Baixa') }}
+            <!-- Prioridade Oculta -->
+            <div class="chamado-form__group visually-hidden">
+                {{ form.prioridade.label(class="chamado-form__label") }}
+                {{ form.prioridade(value='Baixa', class="chamado-form__input") }}
             </div>
 
-            <div class="form-group">
-                {{ form.anexo.label(for="anexo") }}
-                <div class="file-input-wrapper">
-                    {{ form.anexo(id="anexo") }}
-                    <button type="button" class="btn-browse">Procurar</button>
+            <!-- Upload de Anexo -->
+            <div class="chamado-form__group">
+                {{ form.anexo.label(for="anexo", class="chamado-form__label") }}
+                <div class="chamado-form__file-input-wrapper">
+                    {{ form.anexo(id="anexo", class="chamado-form__file-input") }}
+                    <span class="chamado-form__file-name" aria-live="polite">Nenhum arquivo selecionado</span>
+                    <button type="button" class="chamado-form__btn--browse">Procurar</button>
                 </div>
             </div>
 
-            <div class="form-buttons">
-                {{ form.submit(class="btn-submit") }}
-                <a href="/home" class="btn-back">Voltar</a>
+            <!-- Botões de Ação -->
+            <div class="chamado-form__buttons">
+                <a href="{{ url_for('main.home') }}" class="chamado-form__btn--voltar" role="button">Voltar</a>
+                <button type="button" id="btn-buscar-ia" class="chamado-form__btn--ia">Buscar solução com a IA</button>
             </div>
         </form>
+    </section>
+</main>
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal fade" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmar Ação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente buscar uma solução com a IA da UpDesk? Seus dados de título e descrição serão enviados para análise.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirm-ia-search" class="btn btn-primary">Confirmar</button>
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Loading Modal -->
+<div id="loadingModal" class="loading-modal" role="dialog" aria-modal="true" aria-labelledby="loadingModalTitle">
+    <div class="loading-modal__content">
+        <h3 id="loadingModalTitle" class="loading-modal__message">Buscando solução com a IA...</h3>
+        <div class="loading-modal__spinner spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}

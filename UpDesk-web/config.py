@@ -34,13 +34,24 @@ class Config:
     # Monta a string de conexão (ConnectionString) para o SQLAlchemy.
     # `urllib.parse.quote_plus` é usado para codificar caracteres especiais na string de conexão,
     # prevenindo erros e possíveis ataques de injeção.
-    _params = urllib.parse.quote_plus(
-        f"Driver={{{DB_DRIVER}}};"
-        f"Server={DB_SERVER};"
-        f"Database={DB_DATABASE};"
-        f"UID={DB_UID};"
-        f"PWD={{{DB_PWD}}};"
-    )
+    if DB_UID:
+        # Conexão com Autenticação do SQL Server
+        _params = urllib.parse.quote_plus(
+            f"Driver={{{DB_DRIVER}}};"
+            f"Server={DB_SERVER};"
+            f"Database={DB_DATABASE};"
+            f"UID={DB_UID};"
+            f"PWD={{{DB_PWD}}};"
+        )
+    else:
+        # Conexão com Autenticação do Windows
+        _params = urllib.parse.quote_plus(
+            f"Driver={{{DB_DRIVER}}};"
+            f"Server={DB_SERVER};"
+            f"Database={DB_DATABASE};"
+            f"Trusted_Connection=yes;"
+        )
+
     SQLALCHEMY_DATABASE_URI = f"mssql+pyodbc:///?odbc_connect={_params}"
     
     # Desativa um recurso do SQLAlchemy que emite sinais a cada modificação no banco.
@@ -49,3 +60,7 @@ class Config:
 
     # Chave da API do Google Gemini, lida a partir das variáveis de ambiente.
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+    # --- Configurações de Upload de Arquivos ---
+    UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'uploads')
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'doc', 'docx'}

@@ -1,0 +1,90 @@
+/* /static/css/components/_transferir-chamado-page.css */
+
+
+
+.ticket-message-box {
+    background-color: var(--cor-fundo-cinza);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    height: 100%;
+    position: relative;
+}
+
+.ticket-title-badge {
+    background-color: var(--cor-fundo-cinza);
+    color: var(--cor-texto-principal);
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: var(--fonte-peso-medio);
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ticket-message-box blockquote {
+    font-size: 1rem;
+    color: var(--cor-texto-secundario);
+    border-left: 3px solid var(--cor-borda);
+    padding-left: 1rem;
+    margin-top: 2rem;
+}
+
+.priority-options,
+.transferir-opcoes {
+    list-style: none;
+    padding-left: 0;
+}
+
+.priority-options li,
+.transferir-opcoes li {
+    margin-bottom: 1rem;
+}
+
+.priority-options .form-check-label,
+.transferir-opcoes .form-check-label {
+     cursor: pointer;
+}
+
+.priority-options .form-check-input,
+.transferir-opcoes .form-check-input {
+    display: none;
+}
+
+.priority-options .form-check-label::before,
+.transferir-opcoes .form-check-label::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--cor-borda);
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.priority-options .form-check-input:checked + .form-check-label::before,
+.transferir-opcoes .form-check-input:checked + .form-check-label::before {
+     background-color: var(--bs-primary);
+}
+
+.footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.btn-voltar {
+    background-color: var(--cor-fundo-cinza);
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-texto-principal);
+    padding: 0.6rem 2rem;
+}
+
+.btn-finalizar {
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-claro);
+    padding: 0.6rem 2.5rem;
+}

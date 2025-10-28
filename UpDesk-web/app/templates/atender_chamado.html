@@ -1,123 +1,27 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atender Chamado #{{ chamado.chamado_ID }} - UpDesk</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+{% extends 'base.html' %}
 
-    <style>
-        body {
-            background-color: #eef2f5;
-            font-family: 'Poppins', sans-serif;
-            color: #495057;
-            padding-top: 70px;
-        }
-        .main-card {
-            background-color: #ffffff;
-            border-radius: 1rem;
-            padding: 2rem;
-            border: 1px solid #e0e5e9;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            height: 100%;
-        }
-        .card-title-custom {
-            font-weight: 600;
-            color: #343a40;
-            margin-bottom: 1.5rem;
-        }
-        .ticket-data p {
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-        .ticket-data strong {
-            color: #343a40;
-            font-weight: 500;
-        }
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 500px; /* Altura fixa para o chat */
-        }
-        .chat-messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 1rem;
-            background-color: #f8f9fa;
-            border-radius: 0.75rem;
-            border: 1px solid #e9ecef;
-        }
-        .message {
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-        }
-        .message.sent {
-            align-items: flex-end;
-        }
-        .message.received {
-            align-items: flex-start;
-        }
-        .message .bubble {
-            max-width: 70%;
-            padding: 0.75rem 1rem;
-            border-radius: 1rem;
-            font-size: 0.9rem;
-        }
-        .message.sent .bubble {
-            background-color: #0d6efd;
-            color: white;
-            border-bottom-right-radius: 0.25rem;
-        }
-        .message.received .bubble {
-            background-color: #e9ecef;
-            color: #212529;
-            border-bottom-left-radius: 0.25rem;
-        }
-        .message .author {
-            font-size: 0.75rem;
-            color: #6c757d;
-            margin-bottom: 0.25rem;
-            padding: 0 0.5rem;
-        }
-        .chat-input {
-            margin-top: 1rem;
-        }
-        .footer-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-        }
-        .btn-action {
-            padding: 0.6rem 2rem;
-        }
-    </style>
-</head>
-<body>
-    {% include 'navbar.html' %}
+{% block title %}Atender Chamado #{{ chamado.chamado_ID }} - UpDesk{% endblock %}
 
+{% block body %}
     <div class="container mt-4 mb-4">
         <div class="row">
             <!-- Coluna de Detalhes do Chamado -->
-            <div class="col-lg-4 mb-4">
+            <div class="col-12 mb-4">
                 <div class="main-card ticket-data">
                     <h5 class="card-title-custom">Detalhes do Chamado #{{ chamado.chamado_ID }}</h5>
                     <p><strong>Título:</strong> {{ chamado.titulo_Chamado }}</p>
                     <p><strong>Aberto em:</strong> {{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}</p>
                     {% if chamado.solicitante %}
-                    <p><strong>Solicitante:</strong><br>
-                        {{ chamado.solicitante.nome }}<br>
-                        {{ chamado.solicitante.email }}<br>
-                        Ramal: {{ chamado.solicitante.telefone }}
-                    </p>
+                    <dl>
+                        <dt>Solicitante:</dt>
+                        <dd>{{ chamado.solicitante.nome }}</dd>
+                        <dt>Email:</dt>
+                        <dd>{{ chamado.solicitante.email }}</dd>
+                        <dt>Ramal:</dt>
+                        <dd>{{ chamado.solicitante.telefone }}</dd>
+                    </dl>
                     {% endif %}
-                    <p><strong>Status:</strong> <span class="badge bg-primary">{{ chamado.status_Chamado }}</span></p>
+                    <p><strong>Status:</strong> <span class="badge bg-primary" role="status" aria-live="polite">{{ chamado.status_Chamado }}</span></p>
                     <p><strong>Prioridade:</strong> {{ chamado.prioridade_Chamado }}</p>
                     <p><strong>Categoria:</strong> {{ chamado.categoria_Chamado }}</p>
                     <hr>
@@ -126,17 +30,12 @@
             </div>
 
             <!-- Coluna do Chat -->
-            <div class="col-lg-8 mb-4">
+            <div class="col-12 mb-4">
                 <div class="main-card">
                     <h5 class="card-title-custom">Chat de Atendimento</h5>
                     <div class="chat-container" data-chamado-id="{{ chamado.chamado_ID }}" data-user-id="{{ session['usuario_id'] }}">
-                        <div class="chat-messages" id="chat-messages">
+                        <div class="chat-messages" id="chat-messages" style="max-height: 400px; overflow-y: auto;">
                             <!-- Mensagens serão carregadas aqui via JS -->
-                            <div class="text-center p-5">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Carregando...</span>
-                                </div>
-                            </div>
                         </div>
                         <form class="chat-input" id="form-enviar-mensagem">
                             <div class="input-group">
@@ -153,14 +52,14 @@
 
         <!-- Ações no Rodapé -->
         <div class="footer-actions">
-            <a href="{{ url_for('ver_chamado') }}" class="btn btn-secondary btn-action rounded-pill">
+            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-secondary btn-action rounded-pill">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
             <div>
-                <a href="{{ url_for('transferir_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-info text-white btn-action rounded-pill">
+                <a href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-info text-white btn-action rounded-pill">
                     <i class="bi bi-arrow-right-square"></i> Transferir Chamado
                 </a>
-                <form action="{{ url_for('encerrar_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
+                <form action="{{ url_for('chamados.encerrar_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
                     <button type="submit" class="btn btn-success btn-action rounded-pill" onclick="return confirm('Tem certeza que deseja encerrar este chamado?')">
                         <i class="bi bi-check-circle"></i> Encerrar Chamado
                     </button>
@@ -168,104 +67,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-                document.addEventListener('DOMContentLoaded', function() {
-            const chamadoId = {{ chamado.chamado_ID|tojson }};
-            const currentUserId = {{ session['usuario_id']|tojson }};
-            const chatMessages = document.getElementById('chat-messages');
-            const form = document.getElementById('form-enviar-mensagem');
-            const input = document.getElementById('input-mensagem');
-
-            // Função para rolar o chat para a última mensagem
-            function scrollChatToBottom() {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            // Função para renderizar uma mensagem na tela
-            function renderizarMensagem(msg) {
-                const messageDiv = document.createElement('div');
-                const authorSpan = document.createElement('span');
-                const bubbleDiv = document.createElement('div');
-
-                // Define o autor e a data
-                authorSpan.className = 'author';
-                authorSpan.textContent = `${msg.usuario_nome} - ${msg.data_criacao}`;
-
-                // Define o balão da mensagem
-                bubbleDiv.className = 'bubble';
-                bubbleDiv.textContent = msg.mensagem;
-
-                // Define a classe principal da mensagem (enviada ou recebida)
-                messageDiv.className = 'message';
-                if (msg.usuario_id === currentUserId) {
-                    messageDiv.classList.add('sent');
-                } else {
-                    messageDiv.classList.add('received');
-                }
-
-                messageDiv.appendChild(authorSpan);
-                messageDiv.appendChild(bubbleDiv);
-                chatMessages.appendChild(messageDiv);
-            }
-
-            // Função para carregar as mensagens do chamado
-            async function carregarMensagens() {
-                try {
-                    const response = await fetch(`/api/chamado/${chamadoId}/mensagens`);
-                    if (!response.ok) {
-                        throw new Error('Falha ao carregar mensagens.');
-                    }
-                    const mensagens = await response.json();
-                    
-                    // Limpa a área de mensagens (removendo o spinner de "carregando")
-                    chatMessages.innerHTML = '';
-
-                    if (mensagens.length === 0) {
-                        chatMessages.innerHTML = '<p class="text-center text-muted">Nenhuma mensagem ainda. Inicie a conversa!</p>';
-                    } else {
-                        mensagens.forEach(renderizarMensagem);
-                    }
-                    scrollChatToBottom();
-                } catch (error) {
-                    console.error('Erro:', error);
-                    chatMessages.innerHTML = '<p class="text-center text-danger">Não foi possível carregar o chat.</p>';
-                }
-            }
-
-            // Função para enviar uma nova mensagem
-            async function enviarMensagem(e) {
-                e.preventDefault(); // Impede o recarregamento da página
-                const mensagemTexto = input.value.trim();
-
-                if (mensagemTexto) {
-                    try {
-                        const response = await fetch(`/api/chamado/${chamadoId}/mensagens`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ mensagem: mensagemTexto }),
-                        });
-
-                        if (response.ok) {
-                            input.value = ''; // Limpa o campo de texto
-                            await carregarMensagens(); // Recarrega as mensagens para exibir a nova
-                        } else {
-                            alert('Erro ao enviar mensagem.');
-                        }
-                    } catch (error) {
-                        console.error('Erro ao enviar mensagem:', error);
-                    }
-                }
-            }
-
-            // Event Listeners
-            form.addEventListener('submit', enviarMensagem);
-            setInterval(carregarMensagens, 5000); // Atualiza o chat a cada 5 segundos
-            carregarMensagens(); // Carrega as mensagens iniciais
-        });
-    </script>
-</body>
-</html>
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/atender_chamado.js') }}"></script>
+{% endblock %}

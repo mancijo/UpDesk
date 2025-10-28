@@ -1,0 +1,169 @@
+﻿
+/* static/css/pages/_chamado-page.css */
+
+/*
+    Estilos específicos para a página de Abertura de Chamado.
+    Utilizamos a convenção BEM para nomes de classe (chamado-page__*, chamado-form__*).
+    Salve este arquivo em UTF-8 para preservar acentuação nos comentários.
+*/
+
+.chamado-page__container {
+    max-width: 720px;
+    margin: var(--espaco-l, 32px) auto;
+    padding: var(--espaco-l, 32px);
+    background-color: var(--cor-fundo-claro, #ffffff);
+    border-radius: var(--raio-borda-l, 0.5rem); /* Usando variável de borda */
+    box-shadow: var(--sombra-discreta, 0 1px 8px rgba(0, 0, 0, 0.08)); /* Usando variável de sombra */
+    --raio-borda-s: 4px;
+}
+
+/* Utility: visually hide elements but keep them accessible to screen readers and in layout */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.chamado-page__title {
+    text-align: center;
+    color: var(--cor-primaria, #2b4c7e);
+    margin-bottom: var(--espaco-l, 24px);
+    margin-top: 0;
+    font-size: var(--fonte-tamanho-xl, 26px);
+    font-weight: var(--fonte-peso-bold, 700);
+}
+
+@media (max-width: 768px) {
+    .chamado-page__container {
+        margin: var(--espaco-m, 16px);
+        padding: var(--espaco-m, 16px);
+    }
+}
+
+/* ==========================
+     Estilos do formulário
+     ========================== */
+.chamado-form__group {
+    margin-bottom: var(--espaco-m, 1.25rem); /* Usando variável de espaçamento */
+}
+
+.chamado-form__label {
+    display: block;
+    margin-bottom: var(--espaco-xs, 0.4rem); /* Usando variável de espaçamento */
+    font-weight: var(--fonte-peso-medio, 500);
+    color: var(--cor-texto-escuro, #444);
+}
+
+.chamado-form__input,
+.chamado-form__textarea,
+.chamado-form__select {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--cor-borda, #d0d7de);
+    border-radius: var(--raio-borda);
+    font-size: var(--fonte-tamanho-base, 1rem);
+    background: var(--cor-fundo-claro, #fff);
+    color: var(--cor-texto-principal, #222);
+}
+
+.chamado-form__textarea { resize: vertical; min-height: 120px; }
+
+.chamado-form__file-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-xs, 0.5rem);
+    border: 1px solid var(--cor-borda, #d0d7de);
+    border-radius: var(--raio-borda, 6px);
+    padding: var(--espaco-xs, 0.5rem);
+    background: var(--cor-fundo-cinza, #fafafa);
+    position: relative;
+}
+
+.chamado-form__file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    /* keep the input interactive but behind the visible browse button
+       so the button's click handler can run and call fileInput.click() */
+    z-index: 1;
+}
+
+.chamado-form__file-name {
+    flex: 1;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--cor-borda, #d0d7de);
+    border-radius: var(--raio-borda, 6px);
+    background-color: var(--cor-fundo-claro, #fff);
+    color: var(--cor-texto-secundario, #888);
+    font-size: var(--fonte-tamanho-s, 0.9rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+}
+
+.chamado-form__btn--browse {
+    background-color: var(--cor-secundaria, #6c757d);
+    color: var(--cor-texto-claro, #fff);
+    padding: 0.45rem 0.9rem;
+    border: none;
+    border-radius: var(--raio-borda, 6px);
+    cursor: pointer;
+    font-weight: var(--fonte-peso-medio, 500);
+    transition: background-color 0.3s ease;
+    /* place the visible button above the invisible file input so
+       user's click triggers the button handler (which calls fileInput.click()) */
+    position: relative;
+    z-index: 20;
+}
+
+/* Estados de foco para acessibilidade */
+.chamado-form__input:focus,
+.chamado-form__textarea:focus,
+.chamado-form__select:focus,
+.chamado-form__btn--browse:focus,
+.chamado-form__btn--ia:focus,
+.chamado-form__btn--voltar:focus {
+    outline: 3px solid rgba(43,76,126,0.15);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(43,76,126,0.08);
+}
+
+.chamado-form__btn--browse:hover { background-color: var(--cor-primaria-escura, #5b6368); }
+
+.chamado-form__buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--espaco-s, 0.75rem);
+    margin-top: var(--espaco-l, 1.5rem);
+}
+
+.chamado-form__btn--ia,
+.chamado-form__btn--voltar {
+    padding: 0.6rem 1.1rem;
+    border: none;
+    border-radius: var(--raio-borda, 6px);
+    cursor: pointer;
+    font-size: var(--fonte-tamanho-s, 0.95rem);
+    font-weight: var(--fonte-peso-semi-bold, 600);
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.chamado-form__btn--ia { background-color: var(--cor-primaria, #2b4c7e); color: var(--cor-texto-claro, #fff); }
+.chamado-form__btn--ia:hover { background-color: var(--cor-primaria-escura, #223e6b); }
+
+.chamado-form__btn--voltar { background-color: var(--cor-secundaria, #6c757d); color: var(--cor-texto-claro, #fff); }
+.chamado-form__btn--voltar:hover { background-color: var(--cor-primaria-escura, #5b6368); }
+

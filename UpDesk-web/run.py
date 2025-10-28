@@ -20,5 +20,4 @@ if __name__ == '__main__':
     # `debug=True` ativa o modo de depuração, que oferece recarregamento automático
     # a cada alteração no código e um depurador interativo no navegador em caso de erro.
     # O valor é pego do arquivo de configuração para facilitar a mudança entre ambientes.
-    app.run(debug=app.config.get('DEBUG', False))
-    
+    app.run(debug=app.config.get('DEBUG', False), host='0.0.0.0')

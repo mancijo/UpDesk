@@ -1,0 +1,100 @@
+/* c:\UpDesk\UpDesk-web\app\static\css\components\_loading-modal.css */
+
+/*
+ * Componente: Modal de Carregamento
+ * Descrição: Estilos para o modal que aparece durante o carregamento de dados ou processamento da IA.
+ * Utiliza BEM para organização e é totalmente responsivo.
+ */
+
+/* Bloco principal do modal de carregamento */
+.loading-modal {
+    display: none; /* Oculto por padrão */
+    position: fixed; /* Fica no lugar */
+    z-index: 1050; /* Fica acima de outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largura total */
+    height: 100%; /* Altura total */
+    overflow: auto; /* Habilita rolagem se necessário */
+    background-color: rgba(0,0,0,0.6); /* Fundo preto com opacidade */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modificador para exibir o modal */
+.loading-modal--show {
+    display: flex; /* Exibe o modal */
+}
+
+/* Elemento: Conteúdo interno do modal */
+.loading-modal__content {
+    background-color: #fefefe;
+    margin: auto; /* Centraliza o modal */
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    max-width: 90%; /* Largura responsiva */
+    width: 25rem; /* Largura máxima para telas maiores */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Elemento: Mensagem de carregamento */
+.loading-modal__message {
+    color: var(--color-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Elemento: Spinner de carregamento */
+.loading-modal__spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 0.3em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite;
+}
+
+/* Animação do spinner */
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .loading-modal__content {
+        padding: 1.5rem;
+        width: 95%;
+    }
+
+    .loading-modal__message {
+        font-size: 1.1rem;
+    }
+
+    .loading-modal__spinner {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-modal__content {
+        padding: 1rem;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .loading-modal__message {
+        font-size: 1rem;
+    }
+
+    .loading-modal__spinner {
+        width: 2rem;
+        height: 2rem;
+    }
+}

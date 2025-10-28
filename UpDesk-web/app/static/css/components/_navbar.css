@@ -1,60 +1,160 @@
-/* /static/css/components/_navbar.css */
+/* c:\UpDesk\UpDesk-web\app\static\css\components\_navbar.css */
+/* 
+Este arquivo contém os estilos para a barra de navegação responsiva da aplicação UpDesk,
+implementada usando CSS puro para estrutura semântica e manutenibilidade.
+*/
 
-nav.navbar {
-  background-color: #FFFFFF !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  padding: 8px 20px; /* Reduced padding slightly */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  min-height: 60px; /* Reduced min-height */
+:root {
+    --color-primary: #2B4C7E;
+    --color-background: #f8f9fa;
+    --color-text: #333;
+    --color-border: #e7e7e7;
+    --color-hover-background: #f1f1f1;
+    --color-border-light: #eee;
 }
 
+/* Estilos gerais para o container da barra de navegação */
+header.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.625rem 1.25rem;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    min-height: 3.75rem;
+}
+
+/* 2 Logo centralizada */
 .navbar-brand {
-    font-size: 20px; /* Slightly reduced font size for logo */
+    flex: 0; /* não cresce nem encolhe */
+    order: 2;
     font-weight: bold;
-    color: var(--cor-primaria) !important;
-    text-decoration: none !important;
-    line-height: 1; /* Ensure consistent line height */
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    text-align: center;
+    position: absolute; /* centraliza perfeitamente */
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.nav-link {
-  color: var(--cor-primaria) !important;
-  font-weight: 500;
-  padding: 5px 0; /* Reduced padding for links */
-  line-height: 1; /* Ensure consistent line height */
+/* 1 Menu à esquerda */
+.navbar-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    order: 1;
+    flex: 1; /* ocupa espaço proporcional à esquerda */
 }
 
-/* Adjustments for the user dropdown button */
-.navbar .dropdown .btn-outline-secondary {
-    border-color: var(--cor-primaria);
-    color: var(--cor-primaria);
-    border-radius: 12px;
-    background-color: transparent;
-    padding: 5px 10px; /* Reduced padding for dropdown button */
-    line-height: 1; /* Ensure consistent line height */
-}
-.navbar .dropdown .btn-outline-secondary:hover,
-.navbar .dropdown .btn-outline-secondary:focus {
-    background-color: var(--cor-primaria);
-    color: #FFFFFF;
+.navbar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Links em linha no desktop */
+    flex-direction: row; /* Links um ao lado do outro em desktop */
 }
 
-/* Adjustments for dropdown menu items */
-.dropdown-menu {
+.navbar-menu li {
+    margin-left: 1rem;
+}
+
+.navbar-menu a {
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 0.5rem 1rem;
+    display: block;
+}
+
+.navbar-menu a:hover,
+.navbar-menu a.active {
+    color: var(--color-primary); /* Cor de destaque ao passar o mouse ou ativo */
+    border-bottom: 2px solid var(--color-primary); /* Adiciona uma linha abaixo do link ativo */
+    padding-bottom: 0.3rem; /* Ajusta o padding para compensar a borda */
+}
+
+/*  Dropdown à direita */
+.navbar-user-dropdown {
+    order: 3;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navbar-user-dropdown button {
+    background-color: var(--color-primary); /* Cor de fundo do botão */
+    color: white;
+    padding: 0.625rem 1.25rem;
     border: none;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    display: flex; /* Para alinhar texto e ícone */
+    align-items: center;
 }
 
-.dropdown-menu .dropdown-item {
-    padding: 10px 20px; /* Reduced padding for dropdown items */
-    color: var(--cor-primaria);
-    font-weight: 500;
+.navbar-user-dropdown .dropdown-arrow {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
 }
-.dropdown-menu .dropdown-item:hover,
-.dropdown-menu .dropdown-item:focus {
-    background-color: var(--cor-primaria);
-    color: #FFFFFF;
+
+.navbar-user-dropdown button[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.navbar-user-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--color-background);
+    min-width: 10rem;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0; /* Alinha o dropdown à direita */
+    list-style: none; /* Remove os marcadores de lista */
+}
+
+.navbar-user-dropdown-content a {
+    color: var(--color-text);
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    display: block;
+}
+
+.navbar-user-dropdown-content a:hover {
+    background-color: var(--color-hover-background);
+}
+
+.navbar-user-dropdown-content.show {
+    display: block; /* Mostra o dropdown quando a classe 'show' é adicionada */
+}
+
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none; /* Esconde o menu em mobile por padrão */
+    }
+
+    .navbar-brand {
+        position: static;
+        transform: none;
+        text-align: center; /* Centraliza a logo em mobile */
+        flex-grow: 1;
+        order: 0; /* Ordem padrão */
+    }
+
+    .navbar-user-dropdown {
+        margin-left: 0; /* Remove a margem automática */
+        order: 1; /* Coloca o dropdown à direita em mobile */
+    }
+
+    .navbar-user-dropdown-content {
+        left: auto;
+        right: 0; /* Alinha o dropdown à direita em mobile */
+    }
 }
