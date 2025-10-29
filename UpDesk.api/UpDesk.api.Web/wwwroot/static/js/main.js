@@ -1,0 +1,110 @@
+// /static/js/main.js
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Carrega a barra de navegação e verifica a autenticação ao carregar a página.
+    loadNavbar();
+});
+
+function loadNavbar() {
+    const navbarPlaceholder = document.getElementById('navbar-placeholder');
+    if (navbarPlaceholder) {
+        fetch('/templates/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                navbarPlaceholder.innerHTML = html;
+                // Após a navbar ser carregada, atualiza seu conteúdo dinâmico.
+                updateNavbar();
+                // Carrega e executa o script do navbar (scripts inseridos via innerHTML não são executados automaticamente)
+                const existing = document.querySelector('script[data-generated="navbar-loader"]');
+                if (!existing) {
+                    const s = document.createElement('script');
+                    s.setAttribute('src', '/static/js/navbar.js');
+                    s.setAttribute('defer', '');
+                    s.setAttribute('data-generated', 'navbar-loader');
+                    document.head.appendChild(s);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao carregar a navbar:', error);
+                if (navbarPlaceholder) {
+                    navbarPlaceholder.innerHTML = '<p>Erro ao carregar o menu.</p>';
+                }
+            });
+    }
+}
+
+function updateNavbar() {
+    try {
+        const userData = JSON.parse(localStorage.getItem('usuario'));
+        const usernameElement = document.getElementById('navbar-username');
+        const logoutButton = document.getElementById('logout-button');
+
+        if (userData && userData.nome) {
+            if (usernameElement) {
+                usernameElement.textContent = userData.nome;
+            }
+        }
+
+        if (logoutButton) {
+            logoutButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                // Limpa os dados de autenticação do localStorage.
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('usuario');
+                // Redireciona para a página de login.
+                window.location.href = '/templates/login.html';
+            });
+        }
+    } catch (e) {
+        console.error("Erro ao processar dados do usuário:", e);
+        // Se houver erro nos dados do localStorage, limpa e redireciona para o login.
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('usuario');
+        window.location.href = '/templates/login.html';
+    }
+}
+
+
+/**
+ * Função auxiliar para fazer chamadas à API com o token de autenticação.
+ * @param {string} endpoint O endpoint da API para o qual fazer a chamada (ex: '/api/chamados').
+ * @param {object} options As opções para a chamada fetch (method, body, etc.).
+ * @returns {Promise<Response>} A resposta da chamada fetch.
+ */
+async function fetchWithAuth(endpoint, options = {}) {
+    const token = localStorage.getItem('authToken');
+
+    const headers = {
+        'Content-Type': 'application/json',
+        ...options.headers,
+    };
+
+    // Adiciona o token de autorização se ele existir.
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    // Usa a origem da janela atual (http://localhost:PORTA) como base.
+    // Isso torna a URL da API dinâmica e resolve o problema da porta.
+    const baseUrl = window.location.origin;
+    const url = new URL(endpoint, baseUrl).href;
+
+    // Se o body for um objeto, stringify aqui para evitar formatações incorretas
+    const finalOptions = { ...options, headers: headers };
+    if (finalOptions.body && typeof finalOptions.body === 'object') {
+        finalOptions.body = JSON.stringify(finalOptions.body);
+    }
+
+    const response = await fetch(url, finalOptions);
+
+    // Se a resposta for 401 (Não Autorizado), o token é inválido ou expirou.
+    if (response.status === 401) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('usuario');
+        window.location.href = '/templates/login.html';
+        // Lança um erro para interromper a execução do código que chamou a função.
+        throw new Error('Não autorizado');
+    }
+
+    return response;
+}

@@ -1,0 +1,10 @@
+/* static/css/components/_footer.css */
+
+.footer {
+  margin-top: var(--espaco-xl, 40px);
+  padding: var(--espaco-m, 20px) 0;
+  text-align: center;
+  font-size: var(--fonte-tamanho-s, 14px);
+  color: var(--cor-texto-secundario, #888);
+  border-top: 1px solid var(--cor-borda, #EEE);
+}

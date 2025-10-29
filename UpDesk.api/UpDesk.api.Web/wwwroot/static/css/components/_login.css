@@ -1,0 +1,144 @@
+@import url("_home-page.css");
+/**
+ * CSS para a Página de Login (_login.css)
+ *
+ * Responsabilidade:
+ * - Este arquivo contém estilos que são APLICADOS APENAS à página de login.
+ * - Ele utiliza as variáveis globais definidas em `_variables.css` para manter a consistência com o Design System.
+ * - Define o layout principal, a aparência do card de login e estiliza os elementos do formulário
+ *   dentro do contexto específico desta página.
+ */
+
+/* Body styles for the login page */
+body.login-page-body {
+    font-family: var(--fonte-principal);
+    background-color: var(--cor-fundo-principal); /* #F4F6F8 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 0; /* Override the global padding */
+}
+
+/* The main login container card */
+.login-card {
+    width: 450px;
+    max-width: 95%;
+    padding: var(--espaco-xl); /* Generous padding */
+    background: var(--cor-fundo-claro); /* #FFFFFF */
+    box-shadow: var(--sombra-discreta); /* Subtle shadow */
+    border-radius: var(--raio-borda-l); /* Rounded corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--espaco-m); /* Space between logo and form */
+}
+
+/* Text-based brand/logo */
+.login-card__brand {
+    font-size: 2.5rem; /* Larger font size */
+    font-weight: var(--fonte-peso-bold);
+    color: var(--cor-primaria);
+    margin-bottom: var(--espaco-s);
+}
+
+/* Form adjustments */
+.login-card form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: var(--espaco-s); /* Space between form elements */
+}
+
+/* Input group styling for icons */
+.login-card .input-group-text {
+    background-color: transparent;
+    border-right: none;
+    border-color: #ced4da; /* Softer, default Bootstrap color */
+}
+
+/* Ensure icon color is applied */
+.login-card .input-group-text i {
+    color: var(--cor-primaria);
+}
+
+.login-card .form-control {
+    border-left: none;
+    background-color: var(--cor-fundo-claro);
+    border-color: #ced4da; /* Softer, default Bootstrap color */
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.login-card .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(43, 76, 112, 0.25); /* Focus shadow with primary color */
+    border-color: var(--cor-primaria);
+}
+
+/* Placeholder styling */
+.login-card .form-control::placeholder {
+    color: var(--cor-texto-secundario);
+    opacity: 0.8;
+}
+
+/* Checkbox styling */
+.login-card .form-check-label {
+    font-size: var(--fonte-tamanho-s);
+    color: var(--cor-texto-principal);
+}
+
+.login-card .form-check-input:checked {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+}
+
+/* Login button (CTA) styling */
+.login-card .btn-login {
+    background-color: var(--cor-primaria); /* #2B4C70 */
+    border-color: var(--cor-primaria);
+    font-weight: var(--fonte-peso-bold);
+    padding: 12px;
+    margin-top: var(--espaco-s);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.login-card .btn-login:hover {
+    background-color: var(--cor-primaria-escura);
+    border-color: var(--cor-primaria-escura);
+}
+
+/* "Forgot password" link styling */
+.login-card a {
+    color: var(--cor-primaria);
+    text-decoration: none;
+    font-size: var(--fonte-tamanho-s);
+    transition: text-decoration 0.2s ease;
+}
+
+.login-card a:hover {
+    text-decoration: underline;
+}
+
+/* Message area for errors */
+.login-card .message {
+    font-size: var(--fonte-tamanho-s);
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: var(--fonte-peso-bold);
+    color: var(--cor-primaria);
+    margin-bottom: var(--espaco-s);
+}
+
+/* Estilo para o painel principal usado em várias telas (Triagem, Ger. Usuários, etc.) */
+.main-panel {
+    background-color: var(--cor-fundo-claro); /* Fundo branco */
+    padding: var(--espaco-l); /* Espaçamento interno generoso */
+    border-radius: var(--raio-borda-l); /* Bordas arredondadas */
+    box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
+    width: 100%;
+    max-width: 1200px; /* Largura máxima para telas grandes */
+    margin-left: auto;
+    margin-right: auto;
+}
