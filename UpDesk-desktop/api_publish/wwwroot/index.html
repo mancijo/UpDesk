@@ -16,7 +16,7 @@
 
 <body class="login-page-body">
     <div class="login-card">
-        <a href="#" class="logo">UpDesk</a>
+        <h1 class="logo">UpDesk</h1> 
         <form id="loginForm">
             <div class="mb-3">
                 <label for="email" class="form-label visually-hidden">Email</label>
@@ -29,9 +29,50 @@
             <button type="submit" class="btn btn-primary btn-login">Login</button>
         </form>
 
-        <div class="message" id="mensagem"></div>
-        <a href="#" class="text-decoration-none text-primary mt-3">Esqueceu sua senha?</a>
+                <div class="message" id="mensagem"></div>
+                <!-- Trigger modal -->
+                <a href="#" id="forgotLink" class="text-decoration-none text-primary mt-3" data-bs-toggle="modal" data-bs-target="#forgotModal">Esqueceu sua senha?</a>
     </div>
+
+        <!-- modal esqueci senha -->
+        <div class="modal fade" id="forgotModal" tabindex="-1" aria-labelledby="forgotModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="forgotModalLabel">Recuperação de senha</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                                <div class="modal-body">
+                                    <!-- FORM: entrada de e-mail -->
+                                    <form id="forgotForm" class="forgot__form" novalidate>
+                                        <div class="mb-3">
+                                            <label for="forgotEmail" class="form-label">Digite seu e-mail</label>
+                                            <input type="email" class="form-control" id="forgotEmail" name="email" placeholder="seu email@empresa.com" required aria-describedby="forgotHelp">
+                                            <div id="forgotHelp" class="form-text">Será notificado o seu supervisor com o link de recuperação.</div>
+                                        </div>
+                                        <div id="forgotMessage" class="mb-3" aria-live="polite" style="display:none;"></div>
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" id="forgotSubmit" class="btn btn-primary">Enviar</button>
+                                        </div>
+                                    </form>
+
+                                    <!-- CONFIRMATION: substitui o form após envio -->
+                                    <section id="forgotConfirmation" class="forgot__confirm" role="status" aria-live="polite" style="display:none;">
+                                        <div class="card border-0">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Solicitação enviada com sucesso! ✅</h5>
+                                                <p class="card-text">Um link de recuperação de senha foi enviado para o e-mail do seu supervisor para recuperação da sua senha.</p>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" id="confirmBack" class="btn btn-primary">Ok, Voltar para página de login</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                </div>
+            </div>
+        </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"

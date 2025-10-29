@@ -54,4 +54,73 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // --- Forgot password handling ---
+    const forgotForm = document.getElementById('forgotForm');
+    if (forgotForm) {
+        forgotForm.addEventListener('submit', (ev) => {
+            ev.preventDefault();
+            const emailInput = document.getElementById('forgotEmail');
+            const forgotMessage = document.getElementById('forgotMessage');
+            const submitBtn = document.getElementById('forgotSubmit');
+            const forgotConfirmation = document.getElementById('forgotConfirmation');
+
+            if (!emailInput || !forgotMessage || !submitBtn || !forgotConfirmation) return;
+
+            const email = emailInput.value.trim();
+            if (!email) {
+                forgotMessage.style.display = 'block';
+                forgotMessage.classList.remove('text-success');
+                forgotMessage.classList.add('text-danger');
+                forgotMessage.innerText = 'Por favor, informe um e‑mail válido.';
+                emailInput.focus();
+                return;
+            }
+
+            // Simula envio: desabilita botão e substitui o formulário pelo cartão de confirmação.
+            submitBtn.setAttribute('disabled', 'disabled');
+            // esconder o form sem remover do DOM (para manter foco gerenciável)
+            forgotForm.style.display = 'none';
+            // mostrar a confirmação (card)
+            forgotConfirmation.style.display = 'block';
+
+            // coloca foco no botão de confirmação para acessibilidade
+            const confirmBtn = document.getElementById('confirmBack');
+            if (confirmBtn) confirmBtn.focus();
+        });
+
+        // Ao fechar o modal, limpar mensagens e formulário
+        const forgotModalEl = document.getElementById('forgotModal');
+        if (forgotModalEl) {
+            // Quando o modal for fechado, restaurar o estado inicial
+            forgotModalEl.addEventListener('hidden.bs.modal', () => {
+                const emailInput = document.getElementById('forgotEmail');
+                const forgotMessage = document.getElementById('forgotMessage');
+                const submitBtn = document.getElementById('forgotSubmit');
+                const forgotConfirmation = document.getElementById('forgotConfirmation');
+                if (emailInput) emailInput.value = '';
+                if (forgotMessage) {
+                    forgotMessage.style.display = 'none';
+                    forgotMessage.innerText = '';
+                }
+                if (submitBtn) submitBtn.removeAttribute('disabled');
+                if (forgotConfirmation) forgotConfirmation.style.display = 'none';
+                // mostra o form novamente para próxima vez
+                if (forgotForm) forgotForm.style.display = '';
+            });
+
+            // handler do botão de confirmação: fecha modal e foca o campo de email do login
+            const confirmBtn = document.getElementById('confirmBack');
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', () => {
+                    // fecha o modal via API do Bootstrap
+                    const modalInstance = bootstrap.Modal.getInstance(forgotModalEl) || new bootstrap.Modal(forgotModalEl);
+                    modalInstance.hide();
+                    // volta o foco para o campo de email da tela de login
+                    const loginEmail = document.getElementById('email');
+                    if (loginEmail) setTimeout(() => loginEmail.focus(), 200);
+                });
+            }
+        }
+    }
 });

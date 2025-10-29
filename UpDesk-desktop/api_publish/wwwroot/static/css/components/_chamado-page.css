@@ -33,6 +33,7 @@
 .btn-info {
   background-color: #2B4C7E;
   color: #FFFFFF;
+  border-radius: var(--raio-borda-pílula);
 }
 
 .form-buttons{
@@ -43,4 +44,25 @@
 
 .btn-secondary {
   padding: auto;
+  border-radius: var(--raio-borda-pílula);
+  
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+  border-radius: var(--raio-borda-pequeno, 5px);
+  padding: var(--espaco-m, 15px);
+  margin-bottom: var(--espaco-m, 15px);
+}
+
+.btn-success {
+  background-color: var(--cor-primaria);
+  color: #FFFFFF;
+}
+
+btn-danger {
+  background-color: var(--cor-secundaria);
+  color: #FFFFFF;
 }

@@ -4,6 +4,7 @@ using UpDesk.Api.Data;
 using UpDesk.Api.Dtos;
 using UpDesk.Api.Models;
 using UpDesk.Api.Services;
+using Microsoft.Extensions.Logging;
 
 namespace UpDesk.Api.Controllers;
 
@@ -14,11 +15,13 @@ public class ChamadosController : ControllerBase
     private readonly ApplicationDbContext _context;
 
     private readonly IaiService _iaService;
+    private readonly ILogger<ChamadosController> _logger;
 
-    public ChamadosController(ApplicationDbContext context, IaiService iaService)
+    public ChamadosController(ApplicationDbContext context, IaiService iaService, ILogger<ChamadosController> logger)
     {
         _context = context;
         _iaService = iaService;
+        _logger = logger;
     }
 
     // GET: api/chamados
@@ -139,7 +142,7 @@ public class ChamadosController : ControllerBase
             SolicitanteId = chamadoDto.SolicitanteId,
             TituloChamado = chamadoDto.Titulo,
             DescricaoChamado = chamadoDto.Descricao,
-            CategoriaChamado = chamadoDto.Categoria,
+            CategoriaChamado = chamadoDto.Categoria ?? "Outros", // valor padrão caso front-end não envie; a IA pode sobrescrever
             PrioridadeChamado = chamadoDto.Prioridade,
             StatusChamado = "Aberto",
             DataAbertura = DateTime.UtcNow,
@@ -149,17 +152,55 @@ public class ChamadosController : ControllerBase
         // 🔹 Envia a descrição do problema para a IA Gemini
         try
         {
+            // Primeiro, solicita classificação de categoria à IA (caso o campo tenha sido removido no front-end)
+            try
+            {
+                var categoria = await _iaService.ClassifyCategoryAsync(chamadoDto.Titulo, chamadoDto.Descricao ?? string.Empty);
+                if (!string.IsNullOrWhiteSpace(categoria))
+                {
+                    novoChamado.CategoriaChamado = categoria;
+                    _logger.LogInformation("Categoria definida pela IA: {Categoria}", categoria);
+                }
+            }
+            catch (Exception cex)
+            {
+                _logger.LogWarning(cex, "Falha ao classificar categoria com IA; mantendo categoria nula ou padrão.");
+            }
+
             // Usa o serviço de IA via contrato IaiService (pode ser mock ou Gemini)
-            string respostaIa = await _iaService.BuscarSolucaoAsync(chamadoDto.Titulo, chamadoDto.Descricao);
+            var promptPreview = (chamadoDto.Titulo + " - " + (chamadoDto.Descricao ?? string.Empty)).Trim();
+            if (promptPreview.Length > 400) promptPreview = promptPreview.Substring(0, 400) + "...";
+            _logger.LogInformation("Enviando prompt para IA ao criar chamado: {Preview}", promptPreview);
+
+            string respostaIa = await _iaService.BuscarSolucaoAsync(chamadoDto.Titulo, chamadoDto.Descricao ?? string.Empty);
 
             if (!string.IsNullOrWhiteSpace(respostaIa))
             {
-                novoChamado.SolucaoSugerida = respostaIa;
+                // Filtra respostas que são mensagens de erro provenientes do serviço para evitar salvar texto de erro como sugestão
+                if (respostaIa.StartsWith("Erro", StringComparison.OrdinalIgnoreCase) || respostaIa.Contains("Tempo esgotado") || respostaIa.Contains("formato inesperado"))
+                {
+                    _logger.LogWarning("Resposta da IA indica erro ou formato inesperado. Não salvando como solução. Resposta (trunc): {Resp}", respostaIa.Length > 500 ? respostaIa.Substring(0, 500) + "..." : respostaIa);
+                }
+                else
+                {
+                    novoChamado.SolucaoSugerida = respostaIa;
+                    _logger.LogInformation("Sugestão da IA recebida e atribuída ao chamado (trunc): {Resp}", respostaIa.Length > 500 ? respostaIa.Substring(0, 500) + "..." : respostaIa);
+                }
+            }
+            else
+            {
+                _logger.LogInformation("IA retornou resposta vazia para o prompt.");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erro ao consultar a IA: {ex.Message}");
+            _logger.LogError(ex, "Erro ao consultar a IA ao criar chamado");
+        }
+
+        // Se a UI ainda enviou uma categoria (por compatibilidade), respeitamos; caso contrário, o campo já foi preenchido pela IA acima
+        if (string.IsNullOrWhiteSpace(novoChamado.CategoriaChamado) && !string.IsNullOrWhiteSpace(chamadoDto.Categoria))
+        {
+            novoChamado.CategoriaChamado = chamadoDto.Categoria;
         }
 
         _context.Chamados.Add(novoChamado);
@@ -168,7 +209,7 @@ public class ChamadosController : ControllerBase
         var resultDto = new ChamadoSummaryDto(
             novoChamado.ChamadoId,
             novoChamado.TituloChamado,
-            novoChamado.CategoriaChamado,
+            novoChamado.CategoriaChamado ?? "Outros",
             novoChamado.PrioridadeChamado,
             novoChamado.StatusChamado,
             novoChamado.DataAbertura,
@@ -231,19 +272,24 @@ public class ChamadosController : ControllerBase
             return NotFound(new { message = "Chamado não encontrado." });
         }
 
-        return await _context.Interacoes
+        // Materialize the Interacoes after ordering by DataCriacao so EF Core can translate
+        // the ordering on the entity. Project to DTOs in-memory to allow null handling for Usuario.
+        var interacoes = await _context.Interacoes
             .Include(i => i.Usuario)
             .Where(i => i.ChamadoId == id)
-            .Select(i => new MensagemDto(
-                i.Id,
-                i.ChamadoId,
-                i.UsuarioId,
-                i.Usuario.Nome,
-                i.Mensagem,
-                i.DataCriacao
-            ))
-            .OrderBy(m => m.DataCriacao)
+            .OrderBy(i => i.DataCriacao)
             .ToListAsync();
+
+        var dtos = interacoes.Select(i => new MensagemDto(
+            i.Id,
+            i.ChamadoId,
+            i.UsuarioId,
+            i.Usuario != null ? i.Usuario.Nome : "Usuário Desconhecido",
+            i.Mensagem,
+            i.DataCriacao
+        )).ToList();
+
+        return Ok(dtos);
     }
 
     // POST: api/chamados/5/mensagens

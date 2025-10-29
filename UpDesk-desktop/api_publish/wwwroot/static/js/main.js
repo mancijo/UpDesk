@@ -14,6 +14,15 @@ function loadNavbar() {
                 navbarPlaceholder.innerHTML = html;
                 // Após a navbar ser carregada, atualiza seu conteúdo dinâmico.
                 updateNavbar();
+                // Carrega e executa o script do navbar (scripts inseridos via innerHTML não são executados automaticamente)
+                const existing = document.querySelector('script[data-generated="navbar-loader"]');
+                if (!existing) {
+                    const s = document.createElement('script');
+                    s.setAttribute('src', '/static/js/navbar.js');
+                    s.setAttribute('defer', '');
+                    s.setAttribute('data-generated', 'navbar-loader');
+                    document.head.appendChild(s);
+                }
             })
             .catch(error => {
                 console.error('Erro ao carregar a navbar:', error);

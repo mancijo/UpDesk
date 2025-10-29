@@ -33,6 +33,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Registra HttpClient factory para injeção em serviços que fazem chamadas HTTP externas
+builder.Services.AddHttpClient();
+
 // Registra o serviço JWT
 builder.Services.AddScoped<JwtService>();
 

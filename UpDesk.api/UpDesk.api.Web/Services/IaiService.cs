@@ -6,5 +6,6 @@ namespace UpDesk.Api.Services;
 public interface IaiService
 {
     Task<string> BuscarSolucaoAsync(string titulo, string descricao);
+    Task<string> ClassifyCategoryAsync(string titulo, string descricao);
 }
 

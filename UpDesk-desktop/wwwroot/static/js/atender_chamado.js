@@ -21,7 +21,64 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     document.getElementById('form-enviar-mensagem').addEventListener('submit', handleSendMessage);
     document.getElementById('encerrar-btn').addEventListener('click', handleEncerrarChamado);
-    // A lógica de transferência será adicionada se houver um botão/modal para isso.
+    // Transferir
+    const transferBtn = document.getElementById('transferir-btn');
+    if (transferBtn) transferBtn.addEventListener('click', handleTransferirChamado);
+
+    // Wire transfer modal confirm button
+    const transferConfirmBtn = document.getElementById('transferirConfirmBtn');
+    if (transferConfirmBtn) {
+        transferConfirmBtn.addEventListener('click', async (ev) => {
+            ev.preventDefault();
+            const input = document.getElementById('transferirAtendenteInput');
+            const errorEl = document.getElementById('transferirError');
+            if (!input) return;
+            const raw = input.value.trim();
+            errorEl.style.display = 'none';
+
+            // validar número
+            const novoId = Number(raw);
+            if (!raw || Number.isNaN(novoId) || novoId <= 0) {
+                errorEl.textContent = 'Informe um ID de técnico válido (número).';
+                errorEl.style.display = 'block';
+                input.focus();
+                return;
+            }
+
+            // confirma e chama a API
+            try {
+                transferConfirmBtn.setAttribute('disabled', 'disabled');
+                const response = await fetchWithAuth(`/api/chamados/${CHAMADO_ID}/transferir`, {
+                    method: 'POST',
+                    body: JSON.stringify({ NovoAtendenteId: novoId })
+                });
+
+                if (!response.ok) {
+                    const txt = await response.text();
+                    throw new Error(txt || 'Falha ao transferir o chamado.');
+                }
+
+                // success: fechar modal e atualizar
+                const modalEl = document.getElementById('transferirChamadoModal');
+                const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                modalInstance.hide();
+                alert('Chamado transferido com sucesso.');
+                await fetchChamadoDetails(CHAMADO_ID);
+            } catch (err) {
+                console.error('Erro ao transferir:', err);
+                const txt = err && err.message ? err.message : 'Erro ao transferir.';
+                const errorEl2 = document.getElementById('transferirError');
+                if (errorEl2) {
+                    errorEl2.textContent = txt;
+                    errorEl2.style.display = 'block';
+                } else {
+                    alert(txt);
+                }
+            } finally {
+                transferConfirmBtn.removeAttribute('disabled');
+            }
+        });
+    }
 });
 
 /**
@@ -59,9 +116,15 @@ async function fetchChamadoDetails(id) {
 async function loadChatMessages(chamadoId) {
     const chatMessages = document.getElementById('chat-messages');
     try {
-        // ATENÇÃO: Crie o endpoint GET /api/chamados/{id}/mensagens no backend
-        const response = await fetchWithAuth(`/api/chamados/5/mensagens`);
-        if (!response.ok) throw new Error('Falha ao carregar mensagens.');
+    // ATENÇÃO: Crie o endpoint GET /api/chamados/{id}/mensagens no backend
+    const response = await fetchWithAuth(`/api/chamados/${chamadoId}/mensagens`);
+        if (!response.ok) {
+            // tentar ler corpo de erro para debugging
+            let errText = '';
+            try { errText = await response.text(); } catch (e) { /* ignore */ }
+            console.error('Server error loading messages', response.status, errText);
+            throw new Error(`Falha ao carregar mensagens. (${response.status}) ${errText}`);
+        }
         const mensagens = await response.json();
         
         chatMessages.innerHTML = ''; // Limpa o spinner
@@ -74,7 +137,8 @@ async function loadChatMessages(chamadoId) {
         scrollChatToBottom();
     } catch (error) {
         console.error('Erro:', error);
-        chatMessages.innerHTML = '<p class="text-center text-danger">Não foi possível carregar o chat.</p>';
+        const msg = error && error.message ? error.message : 'Não foi possível carregar o chat.';
+        chatMessages.innerHTML = `<p class="text-center text-danger">${msg}</p>`;
     }
 }
 
@@ -89,16 +153,19 @@ async function handleSendMessage(e) {
     if (mensagemTexto) {
         try {
             // ATENÇÃO: Crie o endpoint POST /api/chamados/{id}/mensagens no backend
-            const response = await fetchWithAuth(`/api/chamados/5/mensagens`, {
+            const payload = { UsuarioId: CURRENT_USER_ID, Mensagem: mensagemTexto };
+            const response = await fetchWithAuth(`/api/chamados/${CHAMADO_ID}/mensagens`, {
                 method: 'POST',
-                body: JSON.stringify({ mensagem: mensagemTexto }),
+                body: payload,
             });
 
             if (response.ok) {
                 input.value = '';
                 await loadChatMessages(CHAMADO_ID);
             } else {
-                alert('Erro ao enviar mensagem.');
+                let txt = 'Erro ao enviar mensagem.';
+                try { txt = await response.text(); } catch (e) { /* ignore */ }
+                alert(txt || 'Erro ao enviar mensagem.');
             }
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
@@ -116,13 +183,17 @@ function renderChatMessage(msg) {
     const bubbleDiv = document.createElement('div');
 
     authorSpan.className = 'author';
-    authorSpan.textContent = `${msg.usuarioNome} - ${new Date(msg.dataCriacao).toLocaleString('pt-BR')}`;
+    // Os campos chegam em camelCase: usuarioNome, dataCriacao, mensagem, usuarioId
+    const author = msg.usuarioNome || msg.usuarioNome || 'Usuário';
+    const dateStr = msg.dataCriacao ? new Date(msg.dataCriacao).toLocaleString('pt-BR') : '';
+    authorSpan.textContent = `${author}${dateStr ? ' - ' + dateStr : ''}`;
 
     bubbleDiv.className = 'bubble';
-    bubbleDiv.textContent = msg.mensagem;
+    bubbleDiv.textContent = msg.mensagem || msg.Mensagem || '';
 
     messageDiv.className = 'message';
-    if (msg.usuarioId === CURRENT_USER_ID) {
+    // comparar como números/string de forma robusta
+    if (String(msg.usuarioId) === String(CURRENT_USER_ID)) {
         messageDiv.classList.add('sent');
     } else {
         messageDiv.classList.add('received');
@@ -149,17 +220,37 @@ async function handleEncerrarChamado() {
             // ATENÇÃO: Crie o endpoint PUT /api/chamados/{id}/status no backend
             const response = await fetchWithAuth(`/api/chamados/${CHAMADO_ID}/status`, {
                 method: 'PUT',
-                body: JSON.stringify({ status: 'Resolvido' })
+                body: JSON.stringify({ NovoStatus: 'Resolvido' })
             });
             if (!response.ok) throw new Error('Falha ao encerrar o chamado.');
 
             alert('Chamado encerrado com sucesso!');
             // Atualiza o status na tela
             document.getElementById('chamado-status').textContent = 'Resolvido';
-            document.getElementById('chamado-status').className = 'badge bg-success';
+            const statusEl = document.getElementById('chamado-status');
+            statusEl.textContent = 'Resolvido';
+            statusEl.className = 'badge bg-success';
         } catch (error) {
             console.error(error);
             alert(error.message);
         }
     }
+}
+
+/**
+ * Transferir chamado para outro atendente (prompt simples).
+ * Melhorar futuramente para exibir um modal com lista de técnicos.
+ */
+async function handleTransferirChamado() {
+    // Mostrar modal de transferência (evita uso de prompt(), incompatível em alguns ambientes)
+    const modalEl = document.getElementById('transferirChamadoModal');
+    if (!modalEl) return;
+    // reset form
+    const input = document.getElementById('transferirAtendenteInput');
+    const errorEl = document.getElementById('transferirError');
+    if (input) input.value = '';
+    if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; }
+
+    const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modalInstance.show();
 }

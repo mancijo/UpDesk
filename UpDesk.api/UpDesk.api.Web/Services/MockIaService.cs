@@ -90,4 +90,26 @@ public class MockIaService : IaiService
 
         return SolutionFormatter.Summarize(generic);
     }
+
+    public async Task<string> ClassifyCategoryAsync(string titulo, string descricao)
+    {
+        await Task.Delay(200); // simula latência
+
+        var text = (titulo + " " + descricao).ToLowerInvariant();
+
+        if (text.Contains("mouse") || text.Contains("teclado") || text.Contains("monitor") || text.Contains("hardware"))
+            return "Hardware";
+        if (text.Contains("impressora") || text.Contains("cartucho") || text.Contains("papel"))
+            return "Impressora";
+        if (text.Contains("lentid") || text.Contains("lento") || text.Contains("desempenho"))
+            return "Performance";
+        if (text.Contains("login") || text.Contains("senha") || text.Contains("autent"))
+            return "Autenticação";
+        if (text.Contains("rede") || text.Contains("wifi") || text.Contains("internet") || text.Contains("conex"))
+            return "Rede";
+        if (text.Contains("erro") || text.Contains("exceção") || text.Contains("bug") || text.Contains("falha"))
+            return "Software";
+
+        return "Outros";
+    }
 }

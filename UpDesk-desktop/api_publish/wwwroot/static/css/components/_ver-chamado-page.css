@@ -53,3 +53,59 @@ input[type="text"] {
     margin-left: auto;
     margin-right: auto;
 }
+
+.btn-voltar-modal {
+    background-color: var(--cor-secundaria); 
+    color: #FFFFFF;  
+    border: none; 
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-voltar-modal:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-iniciar-modal {
+    background-color: var(--cor-primaria); 
+    color: #FFFFFF;  
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;   
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-iniciar-modal:hover {
+    background-color: var(--cor-primaria-escura); 
+    color: #FFFFFF;  
+}
+
+.btn-home{
+    background-color: var(--cor-secundaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-home:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-gestao {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-gestao:hover {
+    background-color: var(--cor-primaria-escura);   
+    color: #FFFFFF;
+}
