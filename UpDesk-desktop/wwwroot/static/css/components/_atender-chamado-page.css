@@ -1,57 +1,71 @@
 /* /static/css/components/_atender-chamado-page.css */
-
-
-.chat-input {
-    margin-top: 1rem;
+.atendimento-page {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: var(--cor-fundo-principal);
+  min-height: calc(100vh - 56px); /* Altura da viewport menos a navbar */
 }
 
-.panel-details {
-    background-color: var(--cor-fundo-claro); /* Fundo branco */
-    padding: var(--espaco-l); /* Espaçamento interno generoso */
-    display: grid;
-    grid-template-rows: auto auto; 
-
-    border-radius: var(--raio-borda-l); /* Bordas arredondadas */
-    box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
-    width: 100%;
-    max-width: 1200px; /* Largura máxima para telas grandes */
-    margin-left: auto;
-    margin-right: auto;
+/* Container principal que agrupa os detalhes e o chat */
+.atendimento-page__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: var(--sombra-intensa);
 }
 
-.panel-chat {
-    background-color: var(--cor-fundo-claro); /* Fundo branco */
-    display: grid;
-    grid-template-rows: auto 1fr auto; 
-    
-    padding: var(--espaco-l); /* Espaçamento interno generoso */
-    border-radius: var(--raio-borda-l); /* Bordas arredondadas */
-    box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
-    width: 100%;
-    max-width: 1200px; /* Largura máxima para telas grandes */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.footer-actions {
-    margin-top: 1rem;
-    text-align: right;
+/* Título da página */
+.atendimento-page__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--cor-primaria);
+    padding: auto;
+    margin-bottom: 1rem;
 
 }
 
-.btn-voltar {
-    margin-right: auto;
+
+.atendimento-page .container-fluid {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 80px; /* Espaço para o rodapé fixo */
 }
 
-.form-control {
-    border: 1px solid var(--cor-borda);
-    border-radius: var(--raio-borda-m);
-    padding: 0.5rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    width: 100%;
+/* botoes de ação */
+.container-fluid{
+    margin-bottom: 1rem;
 }
 
-.form-control:focus {
-    border-color: var(--cor-primaria);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+/* Detalhes do chamado */
+.atendimento-page__details-content {
+  overflow-y: auto;
+  padding-right: 10px; /* Para a barra de rolagem não colar no texto */
+  padding-bottom: 10px;
+
+}
+
+/* Chat */
+.atendimento-page__chat .chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 10px;
+}
+
+.atendimento-page__chat .chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  background-color: #fff;
+}
+
+.atendimento-page__chat .chat-input {
+  margin-top: 1rem;
 }

@@ -1,5 +1,3 @@
-// /static/js/atender_chamado.js
-
 let CHAMADO_ID;
 let CURRENT_USER_ID;
 
@@ -30,18 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (transferConfirmBtn) {
         transferConfirmBtn.addEventListener('click', async (ev) => {
             ev.preventDefault();
-            const input = document.getElementById('transferirAtendenteInput');
+            const select = document.getElementById('tecnico-select');
             const errorEl = document.getElementById('transferirError');
-            if (!input) return;
-            const raw = input.value.trim();
+            if (!select) return;
+            const novoId = select.value;
             errorEl.style.display = 'none';
 
             // validar número
-            const novoId = Number(raw);
-            if (!raw || Number.isNaN(novoId) || novoId <= 0) {
-                errorEl.textContent = 'Informe um ID de técnico válido (número).';
+            if (!novoId) {
+                errorEl.textContent = 'Por favor, selecione um técnico para a transferência.';
                 errorEl.style.display = 'block';
-                input.focus();
+                select.focus();
                 return;
             }
 
@@ -50,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 transferConfirmBtn.setAttribute('disabled', 'disabled');
                 const response = await fetchWithAuth(`/api/chamados/${CHAMADO_ID}/transferir`, {
                     method: 'POST',
-                    body: JSON.stringify({ NovoAtendenteId: novoId })
+                    body: JSON.stringify({ NovoAtendenteId: Number(novoId) })
                 });
 
                 if (!response.ok) {
@@ -81,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+
 /**
  * Busca os detalhes do chamado e preenche a coluna da esquerda.
  */
@@ -94,9 +93,9 @@ async function fetchChamadoDetails(id) {
         document.getElementById('chamado-id').textContent = chamado.chamadoId;
         document.getElementById('chamado-titulo').textContent = chamado.tituloChamado;
         document.getElementById('chamado-data-abertura').textContent = new Date(chamado.dataAbertura).toLocaleString('pt-BR');
-        document.getElementById('chamado-solicitante-nome').textContent = chamado.solicitante?.nome || 'N/A';
-        document.getElementById('chamado-solicitante-email').textContent = chamado.solicitante?.email || 'N/A';
-        document.getElementById('chamado-solicitante-ramal').textContent = chamado.solicitante?.telefone || 'N/A';
+        document.getElementById('chamado-solicitante-nome').textContent = chamado.solicitanteNome || 'N/A';
+        document.getElementById('chamado-solicitante-email').textContent = chamado.solicitanteEmail || 'N/A';
+        document.getElementById('chamado-solicitante-ramal').textContent = chamado.solicitanteTelefone || 'N/A';
         document.getElementById('chamado-status').textContent = chamado.statusChamado;
         document.getElementById('chamado-prioridade').textContent = chamado.prioridadeChamado;
         document.getElementById('chamado-categoria').textContent = chamado.categoriaChamado;
@@ -242,14 +241,39 @@ async function handleEncerrarChamado() {
  * Melhorar futuramente para exibir um modal com lista de técnicos.
  */
 async function handleTransferirChamado() {
-    // Mostrar modal de transferência (evita uso de prompt(), incompatível em alguns ambientes)
     const modalEl = document.getElementById('transferirChamadoModal');
     if (!modalEl) return;
-    // reset form
-    const input = document.getElementById('transferirAtendenteInput');
+
+    // Reset form
+    const select = document.getElementById('tecnico-select');
     const errorEl = document.getElementById('transferirError');
-    if (input) input.value = '';
     if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; }
+
+    // Popular o select com os técnicos
+    if (select) {
+        select.innerHTML = '<option value="" selected disabled>Carregando...</option>';
+        try {
+            // ATENÇÃO: Crie o endpoint GET /api/usuarios/tecnicos no backend
+            const response = await fetchWithAuth('/api/usuarios/tecnicos');
+            if (!response.ok) throw new Error('Falha ao carregar técnicos.');
+            
+            const tecnicos = await response.json();
+            
+            select.innerHTML = '<option value="" selected disabled>Selecione um técnico</option>';
+            tecnicos.forEach(tecnico => {
+                // Evitar que o técnico atual apareça na lista para não transferir para si mesmo
+                if (tecnico.id !== CURRENT_USER_ID) {
+                    const option = new Option(tecnico.nome, tecnico.id);
+                    select.add(option);
+                }
+            });
+        } catch (error) {
+            console.error('Erro ao buscar técnicos:', error);
+            select.innerHTML = '<option value="" selected disabled>Erro ao carregar</option>';
+            errorEl.textContent = 'Não foi possível carregar a lista de técnicos.';
+            errorEl.style.display = 'block';
+        }
+    }
 
     const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
     modalInstance.show();

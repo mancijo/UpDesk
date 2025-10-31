@@ -28,7 +28,7 @@ visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
             chamado.dataAbertura ? `Aberto em: ${new Date(chamado.dataAbertura).toLocaleDateString('pt-BR')}` : '';
         visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = chamado.solicitanteNome || 'N/A';
         visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = chamado.solicitanteEmail || 'N/A';
-        visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = chamado.solicitanteRamal || 'N/A';
+        visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = chamado.solicitanteTelefone || 'N/A';
         visualizarChamadoModal.querySelector('#modal-status').textContent = chamado.statusChamado || '---';
         visualizarChamadoModal.querySelector('#modal-categoria').textContent = chamado.categoriaChamado || '---';
         visualizarChamadoModal.querySelector('#modal-descricao').textContent = chamado.descricaoChamado || 'Sem descrição disponível';

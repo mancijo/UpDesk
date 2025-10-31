@@ -1,16 +1,88 @@
 /* /static/css/components/_atender-chamado-page.css */
+.atendimento-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px); /* 56px é a altura padrão da navbar */
+  background-color: var(--cor-fundo-claro);
+}
+
+.atendimento-page .container-wrapper {
+  max-width: 1200px !important;        /* Largura máxima para manter layout compacto */
+  margin: 0 auto !important;            /* Centraliza horizontalmente */
+  background-color: #ffffff !important; /* Fundo branco */
+  padding: 2rem !important;             /* Espaçamento interno */
+  border-radius: 1rem !important;       /* Bordas arredondadas */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important; /* Sombra suave */
+}
+
+.h1 {
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1.5rem !important;
+    color: var(--cor-primaria) !important;
+    font-style: var(--fonte-peso-bold) !important;
+}
 
 
-.chat-input {
-    margin-top: 1rem;
+.atendimento-page .container-fluid {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 80px; /* Espaço para o rodapé fixo */
+}
+
+/* Estilo para os cards principais */
+.atendimento-page .card {
+  border: none;
+  border-radius: 0.75rem;
+  height: 100%;
+}
+
+/* Detalhes do chamado */
+.atendimento-page__details-content {
+  overflow-y: auto;
+  padding-right: 10px; /* Para a barra de rolagem não colar no texto */
+}
+
+/* Chat */
+.atendimento-page__chat .chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.atendimento-page__chat .chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  background-color: #fff;
+}
+
+.atendimento-page__chat .chat-input {
+  margin-top: 1rem;
+}
+
+/* Rodapé de ações */
+.atendimento-page__footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-top: 1px solid #dee2e6;
+  z-index: 1000;
+}
+
+.atendimento-page__footer .actions-group {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .panel-details {
     background-color: var(--cor-fundo-claro); /* Fundo branco */
     padding: var(--espaco-l); /* Espaçamento interno generoso */
-    display: grid;
-    grid-template-rows: auto auto; 
-
     border-radius: var(--raio-borda-l); /* Bordas arredondadas */
     box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
     width: 100%;
@@ -21,9 +93,6 @@
 
 .panel-chat {
     background-color: var(--cor-fundo-claro); /* Fundo branco */
-    display: grid;
-    grid-template-rows: auto 1fr auto; 
-    
     padding: var(--espaco-l); /* Espaçamento interno generoso */
     border-radius: var(--raio-borda-l); /* Bordas arredondadas */
     box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
@@ -54,4 +123,38 @@
 .form-control:focus {
     border-color: var(--cor-primaria);
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Container principal centralizado */
+.container-wrapper {
+  display: flex !important;
+  flex-direction: column!important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-height: 100vh !important;
+  background-color: #f8f9fa !important; /* cor neutra de fundo */
+  padding-top: 2rem !important;
+  padding-bottom: 5rem !important;
+}
+
+/* Container do conteúdo interno */
+.container-conteudo {
+  background-color: #ffffff !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+  padding: 2rem !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+}
+
+/* Ajusta espaçamento e equilíbrio das colunas */
+.container-conteudo .row {
+  margin: 0;
+}
+
+/* Melhora visual dos cards */
+.container-conteudo .card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }

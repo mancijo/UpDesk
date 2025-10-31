@@ -7,88 +7,114 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../static/css/main.css">
-    <link rel="stylesheet" href="../static/css/atender_chamado.css">
+    <link rel="stylesheet" href="../static/css/_atender-chamado-page.css">
 </head>
 <body>
     <div id="navbar-placeholder"></div>
 
-    <div class="panel-details">
-    <div class="container mt-4 mb-4">
-        <div class="row">
-            <!-- Coluna de Detalhes do Chamado -->
-            <div class="col-lg-4 mb-4">
-                <div class="main-card ticket-data">
-                    <h5 class="card-title-custom">Detalhes do Chamado #<span id="chamado-id"></span></h5>
-                    <p><strong>Título:</strong><br><span id="chamado-titulo"></span></p>
-                    <p><strong>Aberto em:</strong> <span id="chamado-data-abertura"></span></p>
-                    <p><strong>Solicitante:</strong><br>
-                        <span id="chamado-solicitante-nome"></span><br>
-                        <span id="chamado-solicitante-email"></span><br>
-                        Ramal: <span id="chamado-solicitante-ramal"></span>
-                    </p>
-                    <p><strong>Status:</strong> <span class="badge bg-primary" id="chamado-status"></span></p>
-                    <p><strong>Prioridade:</strong> <span id="chamado-prioridade"></span></p>
-                    <p><strong>Categoria:</strong> <span id="chamado-categoria"></span></p>
-                    <hr>
-                    <p><strong>Descrição:</strong></p>
-                    <blockquote class="blockquote-sm" id="chamado-descricao"></blockquote>
-                </div>
-            </div>
-            </div>
+    <main class="atendimento-page">
+        <div class="atendimento-page__container">
 
-            <!-- Coluna do Chat -->
-            <div class="panel-chat">
-            <div class="col-lg-8 mb-4">
-                <div class="main-card">
-                    <h5 class="card-title-custom">Chat Atendimento</h5>
-                    <div class="chat-container">
-                        <div class="chat-messages" id="chat-messages">
-                            <div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Carregando...</span></div></div>
-                        </div>
-                        <form class="chat-input" id="form-enviar-mensagem">
-                            <div class="input-group">
-                                <input type="text" id="input-mensagem" class="form-control" placeholder="Digite sua mensagem..." required>
-                                <button class="btn btn-primary" type="submit"><i class="bi bi-send-fill"></i> Enviar</button>
+            <div class="atendimento-page__content row g-4">
+            <h1 class="atendimento-page__title text-center mb-1">Atender Chamado</h1>
+
+
+                <!-- Coluna de Detalhes do Chamado -->
+                <section class="col-lg-5 col-xl-4 atendimento-page__details">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h2 class="card-title-custom h5 mb-3">Detalhes do Chamado #<span id="chamado-id"></span></h2>
+                            <div class="atendimento-page__details-content">
+                                <p><strong>Título:</strong><br><span id="chamado-titulo">Carregando...</span></p>
+                                <p><strong>Aberto em:</strong> <span id="chamado-data-abertura"></span></p>
+                                <p><strong>Solicitante:</strong><br>
+                                    <span id="chamado-solicitante-nome"></span><br>
+                                    <a href="#" id="chamado-solicitante-email-link"><span id  ="chamado-solicitante-email"></span></a><br>              
+                                    Ramal: <span id="chamado-solicitante-ramal"></span>
+                                </p>
+                                <p><strong>Status:</strong> <span class="badge bg-primary" id="chamado-status"></span></p>
+                                <p><strong>Prioridade:</strong> <span id="chamado-prioridade"></span></p>
+                                <p><strong>Categoria:</strong> <span id="chamado-categoria"></span></p>
+                                <hr>
+                                <p><strong>Descrição:</strong></p>
+                                <blockquote class="blockquote-sm" id="chamado-descricao"></blockquote>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ações no Rodapé -->
-        <div class="footer-actions">
-            <a href="/templates/verChamado.html" class="btn btn-secondary btn-action rounded-pill"><i class="bi bi-arrow-left"></i> Voltar</a>
-            <div>
-                <button id="transferir-btn" class="btn btn-info text-white btn-action rounded-pill"><i class="bi bi-arrow-right-square"></i> Transferir</button>
-                <button id="encerrar-btn" class="btn btn-success btn-action rounded-pill"><i class="bi bi-check-circle"></i> Encerrar Chamado</button>
-            </div>
-        </div>
-    </div>
-    </div>
-        <!-- Modal de transferência: substitui prompt() para compatibilidade com navegadores/electron -->
-        <div class="modal fade" id="transferirChamadoModal" tabindex="-1" aria-labelledby="transferirChamadoModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="transferirChamadoModalLabel">Transferir Chamado</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Informe o ID do técnico para quem deseja transferir o chamado. Você também pode informar o e‑mail.</p>
-                        <div class="mb-3">
-                            <label for="transferirAtendenteInput" class="form-label">ID do Técnico ou E‑mail</label>
-                            <input type="text" id="transferirAtendenteInput" class="form-control" placeholder="ex: 42 ou tecnico@empresa.com">
                         </div>
-                        <div id="transferirError" class="text-danger" style="display:none;"></div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" id="transferirConfirmBtn" class="btn btn-primary">Transferir</button>
+                </section>
+
+                <!-- Coluna do Chat de Atendimento -->
+                <section class="col-lg-7 col-xl-8 atendimento-page__chat">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h2 class="card-title-custom h5 mb-3">Chat de Atendimento</h2>
+                            <div class="chat-container flex-grow-1">
+                                <div class="chat-messages" id="chat-messages">
+                                    <div class="d-flex justify-content-center align-items-center h-100">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Carregando mensagens...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form class="chat-input" id="form-enviar-mensagem" aria-label="Formulário de envio de mensagem">
+                                    <div class="input-group">
+                                        <input type="text" id="input-mensagem" class="form-control" placeholder="Digite sua mensagem..." required aria-label="Mensagem">
+                                        <button class="btn btn-primary" type="submit" aria-label="Enviar mensagem">
+                                            <i class="bi bi-send-fill"></i> Enviar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
+                </section>
+
+            </div> <!-- .atendimento-page__content -->
+
+            <!-- Ações da Página -->
+            <div class="atendimento-page__footer-actions d-flex justify-content-between align-items-center mt-4">
+                <a href="/templates/verChamado.html" class="btn btn-secondary btn-action rounded-pill">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+                <div>
+                    <button id="transferir-btn" class="btn btn-info text-white btn-action rounded-pill">
+                        <i class="bi bi-arrow-right-square"></i> Transferir
+                    </button>
+                    <button id="encerrar-btn" class="btn btn-success btn-action rounded-pill">
+                        <i class="bi bi-check-circle"></i> Encerrar Chamado
+                    </button>
+                </div>
+            </div>
+
+        </div> <!-- .atendimento-page__container -->
+    </main>
+
+    <!-- Modal de Transferência -->
+    <div class="modal fade" id="transferirChamadoModal" tabindex="-1" aria-labelledby="transferirChamadoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title h5" id="transferirChamadoModalLabel">Transferir Chamado</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Selecione o técnico ou setor para quem deseja transferir o chamado.</p>
+                    <div class="mb-3">
+                        <label for="tecnico-select" class="form-label">Técnico ou Setor</label>
+                        <select class="form-select" id="tecnico-select" required>
+                            <option value="" selected disabled>Carregando...</option>
+                        </select>
+                    </div>
+                    <div id="transferirError" class="text-danger" style="display:none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="transferirConfirmBtn" class="btn btn-primary">Confirmar Transferência</button>
                 </div>
             </div>
         </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../static/js/auth_guard.js"></script>
