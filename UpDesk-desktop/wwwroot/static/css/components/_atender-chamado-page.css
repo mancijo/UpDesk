@@ -1,32 +1,29 @@
 /* /static/css/components/_atender-chamado-page.css */
+
 .atendimento-page {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 2rem; /* Mantém o espaçamento inferior */
   background-color: var(--cor-fundo-principal);
   min-height: calc(100vh - 56px); /* Altura da viewport menos a navbar */
 }
 
+
+
 /* Container principal que agrupa os detalhes e o chat */
 .atendimento-page__container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 2rem auto; /* Centraliza e adiciona margem em cima/baixo */
   background-color: #ffffff;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 1rem;
   box-shadow: var(--sombra-intensa);
 }
 
 /* Título da página */
 .atendimento-page__title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 2rem;
-    font-weight: 600;
+    font-weight: var(--fonte-peso-semi-bold);
     color: var(--cor-primaria);
-    padding: auto;
-    margin-bottom: 1rem;
-
+    padding: 10px; /* Remove padding extra */
+    margin-bottom: 10px; /* Reduz o espaçamento abaixo do título */
 }
 
 
@@ -46,7 +43,6 @@
   overflow-y: auto;
   padding-right: 10px; /* Para a barra de rolagem não colar no texto */
   padding-bottom: 10px;
-
 }
 
 /* Chat */
@@ -55,6 +51,8 @@
   flex-direction: column;
   height: 100%;
   padding-bottom: 10px;
+  border-radius: var(--raio-borda-xl);
+
 }
 
 .atendimento-page__chat .chat-messages {
@@ -68,4 +66,24 @@
 
 .atendimento-page__chat .chat-input {
   margin-top: 1rem;
+  border-radius: var(--raio-borda-xl);
+
+}
+
+.form-control{
+  background-color: #ffffff;
+}
+
+.atendimento-page__content {
+    margin-top: 0;
+}
+
+.btn-success {
+  background-color: var(--cor-primaria);
+  color: #ffffff;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: var(--cor-primaria-escura);
 }

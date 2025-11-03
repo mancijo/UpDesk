@@ -106,11 +106,11 @@ async function fetchAndDisplayChamados() {
                 <td>${chamado.statusChamado || 'N/A'}</td>
                 <td>${dataAbertura}</td>
                 <td>
-                    <button class="btn btn-secondary btn-sm visualizar-btn" 
+                    <button class="btn btn-vizualizar visualizar-btn" 
                         data-bs-toggle="modal" 
                         data-bs-target="#visualizarChamadoModal"
                         data-id="${chamado.chamadoId}">Ver detalhes</button>
-                    <a href="/templates/atender_chamado.html?id=${chamado.chamadoId}" class="btn btn-primary btn-sm">Atender</a>
+                    <a href="/templates/atender_chamado.html?id=${chamado.chamadoId}" class="btn btn-atender"> <i class="bi bi-person-circle"></i> Atender</a>
                 </td>
             `;
             tableBody.appendChild(row);

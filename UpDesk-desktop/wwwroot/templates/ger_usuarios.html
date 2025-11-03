@@ -13,7 +13,7 @@
     <div id="navbar-placeholder"></div>
     <div class="main-panel">
     <div class="user-page__container">
-        <h2 class="user-page__title">Gerenciamento de Usuários</h2>
+        <h1 class="user-page__title">Gerenciamento de Usuários</h1>
 
         <div class="user-page__tools">
             <div class="d-flex m-2">
@@ -39,7 +39,7 @@
                 </tbody>
             </table>
         </div>
-        <a href="/templates/home.html" class="btn btn-secondary btn-sm user-page__voltar-btn">Voltar</a>
+        <a href="/templates/home.html" class="btn btn-secondary user-page__voltar-btn"><i class="bi bi-house"></i> Página Inicial</a>
     </div>
 
     <!-- Modal de Criar Usuário -->
@@ -48,7 +48,7 @@
             <div class="modal-content">
                 <form id="formCriarUsuario" novalidate>
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalCriarUsuarioLabel">Criar Novo Usuário</h5>
+                        <h2 class="modal-title" id="modalCriarUsuarioLabel">Criar Novo Usuário</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
@@ -61,7 +61,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Criar Usuário</button>
+                        <button type="submit" class="btn btn-criar-user">Criar Usuário</button>
                     </div>
                 </form>
             </div>
@@ -75,7 +75,7 @@
                 <form id="formEditarUsuario" novalidate>
                     <input type="hidden" id="edit-id" name="id">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuário</h5>
+                        <h2 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuário</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
@@ -88,7 +88,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        <button type="submit" class="btn btn-salvar">Salvar Alterações</button>
                     </div>
                 </form>
             </div>

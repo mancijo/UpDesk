@@ -7,7 +7,7 @@ using UpDesk.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- IN�CIO DA ADI��O DO CORS ---
+// --- IN�CIO DA ADIcaO DO CORS ---
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
@@ -21,7 +21,7 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod();
                       });
 });
-// --- FIM DA ADI��O DO CORS ---
+// --- FIM DA ADIcaO DO CORS ---
 
 
 // Configura��o do Banco de Dados
@@ -67,7 +67,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(myAllowSpecificOrigins); // Habilita a pol�tica de CORS
+app.UseCors(myAllowSpecificOrigins); // Habilita a politica de CORS
 
 app.UseAuthorization();
 app.MapControllers();

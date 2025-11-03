@@ -76,10 +76,10 @@ async function fetchAndDisplayUsers() {
                         data-email='${user.email}'
                         data-telefone='${user.telefone || ""}'
                         data-setor='${user.setor || ""}'
-                        data-cargo='${user.cargo || ""}'>Editar</button>
+                        data-cargo='${user.cargo || ""}'><i class="bi bi-pencil-square"></i> Editar</button>
                     <button class="btn btn-danger btn-sm delete-user-btn" 
                         data-id='${user.id}' 
-                        data-nome='${user.nome}'>Excluir</button>
+                        data-nome='${user.nome}'><i class="bi bi-trash"></i> Excluir</button>
                 </td>
             `;
             tableBody.appendChild(row);

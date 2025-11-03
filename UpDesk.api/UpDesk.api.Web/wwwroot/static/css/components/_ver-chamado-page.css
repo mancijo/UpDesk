@@ -67,12 +67,39 @@ input[type="text"] {
     background-color: var(--cor-secundaria-escura);
     color: #FFFFFF;
 }
+.btn-atender {
+    background-color: var(--cor-primaria); 
+    color: #FFFFFF;  
+    border: solid 1px #000;
+    padding: 20px 20px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-atender:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-vizualizar {
+    background-color: var(--cor-secundaria); 
+    color: #FFFFFF;  
+    border: solid 1px #000;
+    padding: 20px 20px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-vizualizar:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+}
 
 .btn-iniciar-modal {
     background-color: var(--cor-primaria); 
     color: #FFFFFF;  
-    border: none;
-    border-radius: var(--raio-borda-pílula) !important;   
+    border: none; 
+    border-radius: var(--raio-borda-pílula) !important;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -107,5 +134,15 @@ input[type="text"] {
 
 .btn-gestao:hover {
     background-color: var(--cor-primaria-escura);   
+    color: #FFFFFF;
+}
+
+.btn-outline-secondary {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--cor-primaria-escura);
     color: #FFFFFF;
 }
