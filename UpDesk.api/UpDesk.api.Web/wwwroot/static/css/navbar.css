@@ -11,7 +11,7 @@ header.navbar {
     display: flex;
     justify-content: space-between; /* Espaça os itens: logo, menu e dropdown */
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px 10px;
     background-color: #f8f9fa; /* Cor de fundo */
     border-bottom: 1px solid #e7e7e7;
     flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas pequenas */
@@ -25,15 +25,12 @@ header.navbar {
 
 /* Logo da UpDesk */
 .navbar-brand {
-    font-weight: bold;
-    font-size: 24px;
-    color: #333;
-    text-decoration: none;
-    text-align: center; /* Centraliza a logo por padrão */
-    flex-grow: 1; /* Permite que a logo ocupe espaço disponível */
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    font-size: 2.5rem;
+    font-weight: var(--fonte-peso-bold);
+    color: var(--cor-primaria);
+    margin-bottom: var(--espaco-s);
+    box-shadow: var(--sombra-padrao);
+    
 }
 
 /* Links de Navegação (Container) */

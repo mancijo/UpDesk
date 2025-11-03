@@ -93,15 +93,15 @@ async function fetchTriagemChamados() {
                 <td><span class="status status-pendente">${chamado.statusChamado}</span></td>
                 <td>${dataAbertura}</td>
                 <td class="ticket-actions text-end">
-                    <button class="btn btn-primary btn-sm visualizar-btn"
+                    <button class="btn btn-vizualizar-triagem btn-sm visualizar-btn"
                         data-id="${chamado.chamadoId}"
                         data-bs-toggle="modal" 
-                        data-bs-target="#visualizarChamadoModal">
+                        data-bs-target="#visualizarChamadoModal"><i class="bi bi-eye"></i><br>
                         Visualizar
                     </button>
-                    <button class="btn btn-secondary btn-sm transferir-btn" 
+                    <button class="btn btn-transferir-triagem btn-sm transferir-btn" 
                         data-id="${chamado.chamadoId}" 
-                        data-titulo="${chamado.tituloChamado}">
+                        data-titulo="${chamado.tituloChamado}"><i class="bi bi-headset"></i><br>
                         Transferir
                     </button>
                 </td>
