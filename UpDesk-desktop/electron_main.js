@@ -145,7 +145,7 @@ function createWindow() {
     // Limpa o cache para garantir que as alterações mais recentes sejam carregadas
     mainWindow.webContents.session.clearCache();
 
-    mainWindow.loadURL(`http://localhost:${webPort}/index.html`);
+    mainWindow.loadURL(`http://localhost:${webPort}/templates/index.html`);
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();

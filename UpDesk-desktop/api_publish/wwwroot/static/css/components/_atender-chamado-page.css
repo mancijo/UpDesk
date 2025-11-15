@@ -1,26 +1,29 @@
 /* /static/css/components/_atender-chamado-page.css */
+
 .atendimento-page {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 56px); /* 56px é a altura padrão da navbar */
-  background-color: var(--cor-fundo-claro);
+  padding-bottom: 2rem; /* Mantém o espaçamento inferior */
+  background-color: var(--cor-fundo-principal);
+  min-height: calc(100vh - 56px); /* Altura da viewport menos a navbar */
 }
 
-.atendimento-page .container-wrapper {
-  max-width: 1200px !important;        /* Largura máxima para manter layout compacto */
-  margin: 0 auto !important;            /* Centraliza horizontalmente */
-  background-color: #ffffff !important; /* Fundo branco */
-  padding: 2rem !important;             /* Espaçamento interno */
-  border-radius: 1rem !important;       /* Bordas arredondadas */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important; /* Sombra suave */
+
+
+/* Container principal que agrupa os detalhes e o chat */
+.atendimento-page__container {
+  max-width: 1200px;
+  margin: 2rem auto; /* Centraliza e adiciona margem em cima/baixo */
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: var(--sombra-intensa);
 }
 
-.h1 {
-    font-size: 2rem !important;
-    font-weight: 600 !important;
-    margin-bottom: 1.5rem !important;
-    color: var(--cor-primaria) !important;
-    font-style: var(--fonte-peso-bold) !important;
+/* Título da página */
+.atendimento-page__title {
+    font-weight: var(--fonte-peso-semi-bold);
+    color: var(--cor-primaria);
+    padding: 10px; /* Remove padding extra */
+    margin-bottom: 10px; /* Reduz o espaçamento abaixo do título */
 }
 
 
@@ -30,17 +33,16 @@
   padding-bottom: 80px; /* Espaço para o rodapé fixo */
 }
 
-/* Estilo para os cards principais */
-.atendimento-page .card {
-  border: none;
-  border-radius: 0.75rem;
-  height: 100%;
+/* botoes de ação */
+.container-fluid{
+    margin-bottom: 1rem;
 }
 
 /* Detalhes do chamado */
 .atendimento-page__details-content {
   overflow-y: auto;
   padding-right: 10px; /* Para a barra de rolagem não colar no texto */
+  padding-bottom: 10px;
 }
 
 /* Chat */
@@ -48,6 +50,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-bottom: 10px;
+  border-radius: var(--raio-borda-xl);
+
 }
 
 .atendimento-page__chat .chat-messages {
@@ -61,100 +66,24 @@
 
 .atendimento-page__chat .chat-input {
   margin-top: 1rem;
+  border-radius: var(--raio-borda-xl);
+
 }
 
-/* Rodapé de ações */
-.atendimento-page__footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+.form-control{
   background-color: #ffffff;
-  padding: 1rem;
-  border-top: 1px solid #dee2e6;
-  z-index: 1000;
 }
 
-.atendimento-page__footer .actions-group {
-  display: flex;
-  gap: 0.5rem;
+.atendimento-page__content {
+    margin-top: 0;
 }
 
-.panel-details {
-    background-color: var(--cor-fundo-claro); /* Fundo branco */
-    padding: var(--espaco-l); /* Espaçamento interno generoso */
-    border-radius: var(--raio-borda-l); /* Bordas arredondadas */
-    box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
-    width: 100%;
-    max-width: 1200px; /* Largura máxima para telas grandes */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.panel-chat {
-    background-color: var(--cor-fundo-claro); /* Fundo branco */
-    padding: var(--espaco-l); /* Espaçamento interno generoso */
-    border-radius: var(--raio-borda-l); /* Bordas arredondadas */
-    box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
-    width: 100%;
-    max-width: 1200px; /* Largura máxima para telas grandes */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.footer-actions {
-    margin-top: 1rem;
-    text-align: right;
-
-}
-
-.btn-voltar {
-    margin-right: auto;
-}
-
-.form-control {
-    border: 1px solid var(--cor-borda);
-    border-radius: var(--raio-borda-m);
-    padding: 0.5rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    width: 100%;
-}
-
-.form-control:focus {
-    border-color: var(--cor-primaria);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-/* Container principal centralizado */
-.container-wrapper {
-  display: flex !important;
-  flex-direction: column!important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  min-height: 100vh !important;
-  background-color: #f8f9fa !important; /* cor neutra de fundo */
-  padding-top: 2rem !important;
-  padding-bottom: 5rem !important;
-}
-
-/* Container do conteúdo interno */
-.container-conteudo {
-  background-color: #ffffff !important;
-  border-radius: 1rem !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
-  padding: 2rem !important;
-  width: 100% !important;
-  max-width: 1200px !important;
-}
-
-/* Ajusta espaçamento e equilíbrio das colunas */
-.container-conteudo .row {
-  margin: 0;
-}
-
-/* Melhora visual dos cards */
-.container-conteudo .card {
+.btn-success {
+  background-color: var(--cor-primaria);
+  color: #ffffff;
   border: none;
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.btn-success:hover {
+  background-color: var(--cor-primaria-escura);
 }

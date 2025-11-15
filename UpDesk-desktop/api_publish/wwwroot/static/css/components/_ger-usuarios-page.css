@@ -29,7 +29,7 @@
 
 .user-page__search-input {
     background-color: var(--cor-fundo-principal);
-    width: 260px;
+    width: 320px;
 }
 
 /* Responsividade para ocultar colunas em telas menores que 992px */
@@ -66,3 +66,65 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+h1 {
+    font-weight: var(--fonte-peso-semi-bold);
+}
+
+.btn-primary {
+    background-color: var(--cor-primaria); 
+    color: #FFFFFF;  
+    border: solid 1px #000;
+    padding: 20px 20px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-danger {
+    background-color: var(--cor-secundaria); 
+    color: #FFFFFF;
+    border: solid 1px #000;
+    padding: 20px 20px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-danger:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+    border: solid 1px #000;
+}
+
+.btn-criar-user {
+    background-color: var(--cor-primaria); 
+    border-radius: var(--raio-borda-pílula);
+    color: #FFFFFF;  
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-criar-user:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-salvar {
+    background-color: var(--cor-primaria); 
+    border-radius: var(--raio-borda-pílula);
+    color: #FFFFFF;  
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-salvar:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}
+

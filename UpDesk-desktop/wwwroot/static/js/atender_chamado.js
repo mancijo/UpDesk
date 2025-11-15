@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(localStorage.getItem('usuario'));
     CURRENT_USER_ID = user ? user.id : null;
 
-    if (!CHAMADO_ID || !CURRENT_USER_ID) {
+    /*if (!CHAMADO_ID || !CURRENT_USER_ID) {
         document.body.innerHTML = '<div class="alert alert-danger">Erro: ID do chamado ou do usuário não encontrado. Volte e tente novamente.</div>';
         return;
-    }
+    }*/
 
     fetchChamadoDetails(CHAMADO_ID);
     loadChatMessages(CHAMADO_ID);

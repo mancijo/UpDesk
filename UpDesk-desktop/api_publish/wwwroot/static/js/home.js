@@ -2,7 +2,50 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchDashboardStats();
-});
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+            if (!usuario || !usuario.cargo) {
+                console.warn("Usuário não encontrado ou sem cargo definido.");
+                return;
+            }
+
+
+const cargo = usuario.cargo.trim().toLowerCase();
+            console.log(`Permissões carregadas para o cargo: ${cargo}`);
+
+            // Oculta todos inicialmente
+            const btnGerUsuarios = document.getElementById('btn-gerenciar-usuarios');
+            const btnTriagem = document.getElementById('btn-triagem');
+            const btnMonitoramento = document.getElementById('btn-monitoramento');
+
+            // Define permissões
+            switch (cargo) {
+                case 'supervisor':
+                case 'administrador':
+                    // Acesso total — todos os botões visíveis
+                    break;
+
+                case 'tecnico N1':
+                case 'tecnico N2':
+                    if (btnGerUsuarios) btnGerUsuarios.style.display = 'none'; // sem acesso a gerenciamento
+                    if (btnTriagem) btnTriagem.style.display = 'none'; // sem acesso ao painel de triagem
+                    break;
+
+                case 'aux. administrativo':
+                    if (btnGerUsuarios) btnGerUsuarios.style.display = 'none';
+                    if (btnTriagem) btnTriagem.style.display = 'none';
+                    break;
+
+                case 'triagem':
+                    if (btnGerUsuarios) btnGerUsuarios.style.display = 'none';
+                    break;
+
+                default:
+                    console.warn(`Cargo '${cargo}' não reconhecido — aplicando acesso mínimo.`);
+                    if (btnGerUsuarios) btnGerUsuarios.style.display = 'none';
+                    if (btnTriagem) btnTriagem.style.display = 'none';
+                    break;
+            }
 
 async function fetchDashboardStats() {
     try {
@@ -29,3 +72,4 @@ async function fetchDashboardStats() {
         console.error('Falha ao carregar estatísticas do dashboard:', error);
     }
 }
+});

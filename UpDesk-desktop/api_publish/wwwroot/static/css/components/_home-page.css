@@ -25,3 +25,8 @@
   padding: var(--espaco-m);
 
 }
+
+.card-body {
+  box-shadow: 1rem 1rem 3rem rgba(0, 0, 0, 0.15);
+  border-radius: var(--raio-borda-m);
+}

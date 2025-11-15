@@ -79,6 +79,17 @@ async function fetchAndDisplayChamados() {
     }
     if (query) params.append('q', query);
 
+    // --- LÓGICA DE HIERARQUIA ---
+    // Verifica o cargo do usuário para decidir se deve buscar todos os chamados ou apenas os seus.
+    const userData = JSON.parse(localStorage.getItem('usuario'));
+    const userRole = userData && userData.cargo ? userData.cargo.trim() : null;
+    const techRoles = ['Supervisor', 'Técnico N1', 'Técnico N2', 'Triagem'];
+
+    // Se o usuário não tiver um cargo técnico, adiciona um parâmetro para a API filtrar
+    if (userRole && !techRoles.includes(userRole)) {
+        params.append('meus_chamados', 'true');
+    }
+
     try {
         const response = await fetchWithAuth(`/api/chamados?${params.toString()}`);
         if (!response.ok) {
@@ -100,6 +111,13 @@ async function fetchAndDisplayChamados() {
             // Formata a data para o padrão brasileiro
             const dataAbertura = new Date(chamado.dataAbertura).toLocaleString('pt-BR');
 
+            // --- LÓGICA DE HIERARQUIA PARA AÇÕES ---
+            // Define se o botão "Atender" deve ser exibido
+            let atenderButtonHtml = ''; // O userRole já foi definido acima, podemos reutilizá-lo
+            if (userRole && techRoles.includes(userRole)) {
+                atenderButtonHtml = `<a href="/templates/atender_chamado.html?id=${chamado.chamadoId}" class="btn btn-atender"> <i class="bi bi-person-circle"></i> Atender</a>`;
+            }
+
             row.innerHTML = `
                 <td>${chamado.tituloChamado || 'N/A'}</td>
                 <td>${chamado.prioridadeChamado || 'N/A'}</td>
@@ -110,7 +128,7 @@ async function fetchAndDisplayChamados() {
                         data-bs-toggle="modal" 
                         data-bs-target="#visualizarChamadoModal"
                         data-id="${chamado.chamadoId}">Ver detalhes</button>
-                    <a href="/templates/atender_chamado.html?id=${chamado.chamadoId}" class="btn btn-atender"> <i class="bi bi-person-circle"></i> Atender</a>
+                    ${atenderButtonHtml}
                 </td>
             `;
             tableBody.appendChild(row);
