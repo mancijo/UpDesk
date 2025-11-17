@@ -121,6 +121,10 @@ export default function AbrirChamadoScreen() {
         </View>
         {errors.afetadosChamado && <Text style={styles.errorText}>{errors.afetadosChamado}</Text>}
 
+        {/* <Text style={styles.label}>Anexo</Text>
+        <TouchableOpacity style={styles.anexoButton}>
+          <Text style={styles.anexoButtonText}>Adicionar um documento</Text>
+        </TouchableOpacity> */}
       </ScrollView>
 
       <View style={styles.buttonContainer}>
