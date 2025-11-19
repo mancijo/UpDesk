@@ -86,7 +86,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="export-pdf-button" class="btn btn-primary">Exportar para PDF</button>
+                    <button type="button" id="export-pdf-button" class="btn btn-export">Exportar para PDF</button>
                 </div>
             </div>
         </div>
@@ -121,7 +121,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
-                    <a href="/templates/atender_chamado.html" id="modal-atender-chamado-link" class="btn btn-iniciar-modal rounded-pill">Atender Chamado</a>
+                        <a href="/templates/atender_chamado.html?id=${chamadoId}" id="modal-atender-chamado-link" 
+                            class="btn btn-iniciar-modal rounded-pill">Atender Chamado</a>
                 </div>
             </div>
         </div>

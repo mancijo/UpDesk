@@ -142,3 +142,33 @@ body.login-page-body {
     margin-left: auto;
     margin-right: auto;
 }
+
+.btn-send {
+    background-color: var(--cor-primaria); 
+    color: #FFFFFF;  
+    border: none; 
+    border-radius: var(--raio-borda-pílula) !important;
+    padding: 10px 20px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-send:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF; 
+}
+
+.btn-cancel {
+    background-color: var(--cor-secundaria); 
+    color: #FFFFFF;  
+    border: none; 
+    border-radius: var(--raio-borda-pílula) !important;
+    padding: 10px 20px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF; 
+}

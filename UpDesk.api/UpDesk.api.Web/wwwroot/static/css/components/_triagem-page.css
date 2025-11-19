@@ -106,3 +106,17 @@
     color: #FFFFFF;
     
 }
+
+.btn-confirm {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+}
+
+.btn-confirm:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+    
+}

@@ -134,15 +134,20 @@ function createWindow() {
         height: 720,
         show: false,
         webPreferences: {
+            preload: path.join(__dirname, "electron_preload.js"),
             nodeIntegration: false,
-            contextIsolation: true,
+            contextIsolation: true
         },
         icon: app.isPackaged
             ? path.join(process.resourcesPath, 'app', 'api', 'wwwroot', 'favicon.ico')
             : path.join(__dirname, '..', 'UpDesk.api', 'UpDesk.api.Web', 'wwwroot', 'favicon.ico')
     });
 
-    // Limpa o cache para garantir que as alterações mais recentes sejam carregadas
+    // GARANTE QUE QUALQUER PÁGINA (até vindo do servidor C#) tenha preload
+    mainWindow.webContents.session.setPreloads([
+        path.join(__dirname, "electron_preload.js")
+    ]);
+
     mainWindow.webContents.session.clearCache();
 
     mainWindow.loadURL(`http://localhost:${webPort}/templates/index.html`);
@@ -153,6 +158,7 @@ function createWindow() {
 
     mainWindow.webContents.openDevTools();
 }
+
 
 app.whenReady().then(async () => {
     try {
@@ -251,6 +257,89 @@ app.on('will-quit', () => {
     }
 });
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+// ------------------------ PDF EXPORT SYSTEM ------------------------
+
+const { ipcMain, dialog } = require("electron");
+const PDFDocument = require("pdfkit");
+const fsExtra = require("fs");
+const fetch = require("node-fetch");
+
+// Listener vindo do preload.js → window.electronAPI.exportarPDF()
+ipcMain.on("gerar-relatorio-pdf", async (event, filtros) => {
+    try {
+        // Usa **a porta real detectada no bootstrap da API**
+        let url = `http://localhost:${webPort}/api/chamados?intervalo=${filtros.intervalo}`;
+
+        if (filtros.status)
+            url += `&status=${filtros.status}`;
+
+        console.log("🔎 Consulta API para gerar relatório:", url);
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Erro HTTP ${response.status}`);
+        }
+
+        const chamados = await response.json();
+
+        // Janela para salvar PDF
+        const { filePath } = await dialog.showSaveDialog({
+            title: "Salvar relatório",
+            defaultPath: "relatorio_chamados.pdf",
+            filters: [{ name: "PDF", extensions: ["pdf"] }],
+        });
+
+        if (!filePath) return;
+
+        // Gerar PDF
+        const pdf = new PDFDocument({ margin: 40 });
+        const stream = fsExtra.createWriteStream(filePath);
+        pdf.pipe(stream);
+
+        // Cabeçalho do relatório
+        pdf.fontSize(20).text("Relatório de Gestão - UpDesk", { align: "center" });
+        pdf.moveDown();
+
+        pdf.fontSize(12).text(`Intervalo selecionado: ${filtros.intervalo} dias`);
+        pdf.text(`Status filtrado: ${filtros.status || "Todos"}`);
+        pdf.moveDown();
+
+        pdf.fontSize(16).text("Chamados Encontrados:");
+        pdf.moveDown();
+
+        if (chamados.length === 0) {
+            pdf.fontSize(14).text("Nenhum chamado encontrado para os filtros selecionados.");
+        }
+
+        // Listagem de chamados
+        chamados.forEach((c) => {
+            pdf.fontSize(12).text(`Título: ${c.tituloChamado}`);
+            pdf.text(`Status: ${c.statusChamado}`);
+            pdf.text(`Prioridade: ${c.prioridadeChamado}`);
+            pdf.text(`Abertura: ${new Date(c.dataAbertura).toLocaleString("pt-BR")}`);
+            pdf.moveDown();
+        });
+
+        pdf.end();
+
+        stream.on("finish", () => {
+            dialog.showMessageBox({
+                type: "info",
+                message: "Relatório gerado com sucesso!"
+            });
+        });
+
+    } catch (error) {
+        console.error("❌ Erro ao gerar PDF:", error);
+        dialog.showErrorBox("Erro ao gerar PDF", String(error));
+    }
 });
+
+// Fecha app no Windows
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") app.quit();
+});
+
+
+

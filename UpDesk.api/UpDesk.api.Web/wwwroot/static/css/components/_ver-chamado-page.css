@@ -137,6 +137,20 @@ input[type="text"] {
     color: #FFFFFF;
 }
 
+.btn-export {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-export:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}
+
 .btn-outline-secondary {
     background-color: var(--cor-primaria);
     color: #FFFFFF;

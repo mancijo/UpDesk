@@ -155,7 +155,8 @@ async function handleSendMessage(e) {
             const payload = { UsuarioId: CURRENT_USER_ID, Mensagem: mensagemTexto };
             const response = await fetchWithAuth(`/api/chamados/${CHAMADO_ID}/mensagens`, {
                 method: 'POST',
-                body: payload,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ UsuarioId: CURRENT_USER_ID, Mensagem: mensagemTexto })
             });
 
             if (response.ok) {

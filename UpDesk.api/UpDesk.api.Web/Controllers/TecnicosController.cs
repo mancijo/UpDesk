@@ -24,7 +24,7 @@ public class TecnicosController : ControllerBase
         // Filtra usuários ativos que são técnicos. 
         // Ajuste o valor de "Cargo" se o nome da role for diferente.
         var tecnicos = await _context.Usuarios
-            .Where(u => u.Ativo && (u.Cargo.ToLower() == "técnico" || u.Cargo.ToLower() == "tecnico"))
+            .Where(u => u.Ativo && (u.Cargo.ToLower() == "Tecnico N1" || u.Cargo.ToLower() == "Tecnico N2"))
             .Select(u => new TecnicoDto(u.Id, u.Nome))
             .ToListAsync();
 

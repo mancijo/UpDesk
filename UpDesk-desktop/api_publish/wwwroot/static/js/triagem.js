@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carrega a lista de chamados para triagem
     fetchTriagemChamados();
+    // Carrega a lista de técnicos para o select    
+    carregarTecnicos();
+
 
     // Delegação de eventos para os botões na lista
     const ticketsContainer = document.getElementById('tickets-list-container');
@@ -118,57 +121,89 @@ async function fetchTriagemChamados() {
 /**
  * Prepara e abre o modal de transferência.
  */
-async function prepareTransferModal(button) {
+function prepareTransferModal(button) {
     const chamadoId = button.dataset.id;
     const chamadoTitulo = button.dataset.titulo;
 
     document.getElementById('transfer-chamado-id').value = chamadoId;
     document.getElementById('transfer-chamado-titulo').textContent = `"${chamadoTitulo}"`;
 
-    const tecnicoSelect = document.getElementById('tecnico-select');
-    tecnicoSelect.innerHTML = '<option value="">Carregando...</option>';
-
-    try {
-        const response = await fetchWithAuth(`/api/tecnicos`);
-        if (!response.ok) throw new Error('Falha ao carregar técnicos');
-        const tecnicos = await response.json();
-
-        tecnicoSelect.innerHTML = '<option value="" disabled selected>Selecione um técnico</option>';
-        tecnicos.forEach(tecnico => {
-            tecnicoSelect.innerHTML += `<option value="${tecnico.id}">${tecnico.nome}</option>`;
-        });
-
-        transferModal.show();
-    } catch (error) {
-        console.error(error);
-        alert(error.message);
-    }
+    // Apenas mostra o modal, já que o select é fixo
+    transferModal.show();
 }
+
 
 /**
  * Manipula o envio do formulário de transferência.
  */
 async function handleTransferSubmit(event) {
     event.preventDefault();
-    const chamadoId = document.getElementById('transfer-chamado-id').value;
-    const tecnicoId = document.getElementById('tecnico-select').value;
 
-    if (!tecnicoId) {
+    const chamadoId = document.getElementById('transfer-chamado-id').value;
+    const novoAtendenteId = document.getElementById('tecnico-select').value; // <-- CORRETO
+
+    if (!novoAtendenteId) {
         alert('Por favor, selecione um técnico.');
         return;
     }
 
     try {
-        const response = await fetchWithAuth(`/api/chamados/${chamadoId}/transferir`, {
-            method: 'POST',
-            body: JSON.stringify({ tecnicoId: tecnicoId })
+        const response = await fetchWithAuth(`http://localhost:5291/api/chamados/${chamadoId}/transferir`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                novoAtendenteId: novoAtendenteId  // <-- agora a variável existe
+            })
         });
-        if (!response.ok) throw new Error('Erro ao transferir chamado');
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error("Backend retornou erro:", text);
+            throw new Error('Erro ao transferir chamado');
+        }
 
         transferModal.hide();
-        await fetchTriagemChamados(); // Atualiza a lista
+        mostrarPopupSucesso("Chamado transferido com sucesso!");
+
+        await fetchTriagemChamados(); // Atualizar tabela
+
     } catch (error) {
         console.error(error);
         alert(error.message);
     }
+}
+
+function mostrarPopupSucesso(mensagem) {
+    const toastContainer = document.createElement('div');
+    toastContainer.className = "toast-container position-fixed bottom-0 end-0 p-3";
+    toastContainer.innerHTML = `
+        <div class="toast align-items-center text-bg-success border-0 show">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${mensagem}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(toastContainer);
+
+    setTimeout(() => toastContainer.remove(), 3000);
+}
+
+async function carregarTecnicos() {
+    const response = await fetchWithAuth("/api/tecnicos");
+    const tecnicos = await response.json();
+
+    const select = document.getElementById("tecnico-select");
+    select.innerHTML = `<option value="" disabled selected>Selecione um técnico</option>`;
+
+    tecnicos.forEach(t => {
+        const option = document.createElement("option");
+        option.value = t.id;     // <-- agora é INT
+        option.textContent = t.nome;
+        select.appendChild(option);
+    });
 }

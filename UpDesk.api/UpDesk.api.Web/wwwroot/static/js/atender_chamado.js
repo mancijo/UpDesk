@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(localStorage.getItem('usuario'));
     CURRENT_USER_ID = user ? user.id : null;
 
-    /*if (!CHAMADO_ID || !CURRENT_USER_ID) {
+    if (!CHAMADO_ID || !CURRENT_USER_ID) {
         document.body.innerHTML = '<div class="alert alert-danger">Erro: ID do chamado ou do usuário não encontrado. Volte e tente novamente.</div>';
         return;
-    }*/
+    }
 
     fetchChamadoDetails(CHAMADO_ID);
     loadChatMessages(CHAMADO_ID);
@@ -155,7 +155,8 @@ async function handleSendMessage(e) {
             const payload = { UsuarioId: CURRENT_USER_ID, Mensagem: mensagemTexto };
             const response = await fetchWithAuth(`/api/chamados/${CHAMADO_ID}/mensagens`, {
                 method: 'POST',
-                body: payload,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ UsuarioId: CURRENT_USER_ID, Mensagem: mensagemTexto })
             });
 
             if (response.ok) {
@@ -254,7 +255,7 @@ async function handleTransferirChamado() {
         select.innerHTML = '<option value="" selected disabled>Carregando...</option>';
         try {
             // ATENÇÃO: Crie o endpoint GET /api/usuarios/tecnicos no backend
-            const response = await fetchWithAuth('/api/usuarios/tecnicos');
+            const response = await fetchWithAuth('/api/tecnicos');
             if (!response.ok) throw new Error('Falha ao carregar técnicos.');
             
             const tecnicos = await response.json();
