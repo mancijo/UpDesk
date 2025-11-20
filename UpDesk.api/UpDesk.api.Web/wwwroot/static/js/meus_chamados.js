@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user?.id;
+
+    const user = JSON.parse(localStorage.getItem("usuario"));
+    const userId = user.id;
+    console.log(userId);
+    
 
     if (!userId) {
         alert("Usuário não encontrado. Faça login novamente.");
@@ -10,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function carregarChamados() {
-        const response = await fetch(`/api/chamados?solicitanteId=${userId}`);
+        const response = await fetch(`/api/chamados?chamado.SolicitanteId=${userId}`);
         const chamados = await response.json();
         renderTabela(chamados);
     }
@@ -23,12 +26,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             const tr = document.createElement("tr");
 
             tr.innerHTML = `
-                <td>${ch.titulo}</td>
-                <td>${ch.prioridade}</td>
-                <td>${ch.status}</td>
-                <td>${new Date(ch.data_abertura).toLocaleString()}</td>
+                <td>${ch.tituloChamado}</td>
+                <td>${ch.prioridadeChamado}</td>
+                <td>${ch.statusChamado}</td>
+                <td>${new Date(ch.dataAbertura).toLocaleString()}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm ver-detalhes" data-id="${ch.id}">
+                    <button id="visualizarChamadoModal" class="btn btn-primary btn-sm ver-detalhes" data-id="${ch.id}">
                         Ver detalhes
                     </button>
                 </td>
@@ -43,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (e.target.classList.contains("ver-detalhes")) {
             const id = e.target.getAttribute("data-id");
 
-            const response = await fetch(`/api/chamados/${id}`);
+            const response = await fetch(`/api/chamados/`);
             const chamado = await response.json();
 
             preencherModal(chamado);
@@ -59,13 +62,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("modal-data-abertura").textContent =
             new Date(ch.data_abertura).toLocaleString();
 
-        document.getElementById("modal-solicitante-nome").textContent = ch.solicitante.nome;
-        document.getElementById("modal-solicitante-email").textContent = ch.solicitante.email;
-        document.getElementById("modal-solicitante-ramal").textContent = ch.solicitante.ramal;
+        document.getElementById("modal-solicitante-nome").textContent = ch.solicitante?.nome;
+        document.getElementById("modal-solicitante-email").textContent = ch.solicitante?.email;
+        document.getElementById("modal-solicitante-ramal").textContent = ch.solicitante?.ramal;
 
-        document.getElementById("modal-status").textContent = ch.status;
-        document.getElementById("modal-categoria").textContent = ch.categoria;
-        document.getElementById("modal-descricao").textContent = ch.descricao;
+        document.getElementById("modal-status").textContent = ch.statusChamado;
+        document.getElementById("modal-categoria").textContent = ch.categoriaChamado;
+        document.getElementById("modal-descricao").textContent = ch.descricaoChamado;
     }
 
     carregarChamados();
