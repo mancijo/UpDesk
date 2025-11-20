@@ -26,12 +26,17 @@ public class ChamadosController : ControllerBase
 
     // GET: api/chamados
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ChamadoSummaryDto>>> GetChamados([FromQuery] string? status, [FromQuery] string? q)
+    public async Task<ActionResult<IEnumerable<ChamadoSummaryDto>>> GetChamados([FromQuery] string? status, [FromQuery] string? q, [FromQuery] int? solicitanteId)
     {
         var query = _context.Chamados
             .Include(c => c.Solicitante)
             .Include(c => c.Atendente)
             .AsQueryable();
+        
+        if (solicitanteId.HasValue)
+        {
+            query = query.Where(c => c.SolicitanteId == solicitanteId); // 👈 FILTRA AQUI
+        }
 
         if (!string.IsNullOrWhiteSpace(status))
         {
@@ -351,5 +356,65 @@ public class ChamadosController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+
+// GET: api/chamados/5/usuario
+    [HttpGet("{id}/usuario")]
+    public async Task<ActionResult<UsuarioDto>> GetUsuarioByChamado(int id)
+    {
+        var chamado = await _context.Chamados
+            .Include(c => c.Solicitante)
+            .FirstOrDefaultAsync(c => c.ChamadoId == id);
+
+        if (chamado == null || chamado.Solicitante == null)
+        {
+            return NotFound(); // Retorna 404 se não encontrar
+        }
+
+        var usuario = chamado.Solicitante;
+
+        var usuarioDto = new UsuarioDto(usuario.Id, usuario.Nome, usuario.Email, usuario.Telefone, usuario.Setor, usuario.Cargo);
+        return Ok(usuarioDto);
+    }
+
+// POST: api/chamados/5/usuario
+    [HttpPost("{id}/usuario")]
+    public async Task<ActionResult<UsuarioDto>> CreateUsuarioForChamado(int id, [FromBody] CreateUsuarioDto usuarioDto)
+    {
+        var chamado = await _context.Chamados
+            .Include(c => c.Solicitante)
+            .FirstOrDefaultAsync(c => c.ChamadoId == id);
+
+        if (chamado == null)
+        {
+            return NotFound(new { message = "Chamado não encontrado." });
+        }
+
+        if (await _context.Usuarios.AnyAsync(u => u.Email == usuarioDto.Email))
+        {
+            return BadRequest(new { mensagem = "Este email já está em uso." });
+        }
+
+        var novoUsuario = new Usuario
+        {
+            Nome = usuarioDto.Nome,
+            Email = usuarioDto.Email,
+            Telefone = usuarioDto.Telefone,
+            Setor = usuarioDto.Setor,
+            Cargo = usuarioDto.Cargo,
+            Senha = PasswordService.HashPassword(usuarioDto.Senha)
+        };
+
+        _context.Usuarios.Add(novoUsuario);
+        await _context.SaveChangesAsync();
+
+        // Associa o novo usuário como solicitante do chamado
+        chamado.SolicitanteId = novoUsuario.Id;
+        await _context.SaveChangesAsync();
+
+        var resultDto = new UsuarioDto(novoUsuario.Id, novoUsuario.Nome, novoUsuario.Email, novoUsuario.Telefone, novoUsuario.Setor, novoUsuario.Cargo);
+
+        return CreatedAtAction(nameof(GetUsuarioByChamado), new { id = chamado.ChamadoId }, resultDto);
     }
 }

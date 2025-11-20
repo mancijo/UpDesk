@@ -87,3 +87,70 @@
 .btn-success:hover {
   background-color: var(--cor-primaria-escura);
 }
+
+/* Container do chat */
+.chat-messages {
+    background: #f7f7f7;
+    border-radius: 10px;
+    padding: 15px;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+/* Estrutura da mensagem */
+.message {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    max-width: 75%;
+}
+
+/* Nome + hora */
+.message .author {
+    font-size: 0.75rem;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+/* Balão de texto */
+.message .bubble {
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    line-height: 1.3rem;
+    word-wrap: break-word;
+}
+
+/* Mensagem enviada pelo usuário atual */
+.message.sent {
+    margin-left: auto;
+    align-items: flex-end;
+}
+
+.message.sent .bubble {
+    background: #d1e7ff;
+    border: 1px solid #b6dbff;
+    color: #003c80;
+}
+
+/* Mensagem recebida */
+.message.received {
+    margin-right: auto;
+    align-items: flex-start;
+}
+
+.message.received .bubble {
+    background: #e9ecef;
+    border: 1px solid #d3d6d8;
+    color: #333;
+}
+
+/* Scroll mais bonito */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}

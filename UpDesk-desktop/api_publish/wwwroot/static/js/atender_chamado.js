@@ -255,7 +255,7 @@ async function handleTransferirChamado() {
         select.innerHTML = '<option value="" selected disabled>Carregando...</option>';
         try {
             // ATENÇÃO: Crie o endpoint GET /api/usuarios/tecnicos no backend
-            const response = await fetchWithAuth('/api/usuarios/tecnicos');
+            const response = await fetchWithAuth('/api/tecnicos');
             if (!response.ok) throw new Error('Falha ao carregar técnicos.');
             
             const tecnicos = await response.json();

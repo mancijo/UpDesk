@@ -32,7 +32,7 @@ visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
         visualizarChamadoModal.querySelector('#modal-categoria').textContent = chamado.categoriaChamado || '---';
         visualizarChamadoModal.querySelector('#modal-descricao').textContent = chamado.descricaoChamado || 'Sem descrição disponível';
 
-        // 🔥 AQUI ESTÁ A CORREÇÃO DO BOTÃO “ATENDER CHAMADO”
+        
         const linkAtender = visualizarChamadoModal.querySelector("#modal-atender-chamado-link");
         if (linkAtender) {
             linkAtender.href = `/templates/atender_chamado.html?id=${chamado.chamadoId}`;

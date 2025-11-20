@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UpDesk.api.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8870881518e64894f9e02d84a1513eb5b7fa6f57")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa198b1d48910620e7bb28ae0bc3b81a771d1982")]
 [assembly: System.Reflection.AssemblyProductAttribute("UpDesk.api.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UpDesk.api.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
