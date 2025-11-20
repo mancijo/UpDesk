@@ -1,70 +1,77 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    const searchButton = document.getElementById('search-button');
+    const statusFilter = document.getElementById('status-filter');
+    const searchInput = document.getElementById('search-input');
+    const tableBody = document.getElementById('chamados-table-body');
 
     const user = JSON.parse(localStorage.getItem("usuario"));
-    const userId = user.id;
-    
+    const userId = user?.id;
+    const userRole = user?.cargo?.trim();
+    const techRoles = ['Supervisor', 'Técnico N1', 'Técnico N2', 'Triagem'];
 
     if (!userId) {
         alert("Usuário não encontrado. Faça login novamente.");
         window.location.href = "/templates/index.html";
         return;
     }
-const visualizarChamadoModal = document.getElementById('visualizarChamadoModal');
 
-visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
-    const button = event.relatedTarget;
-    const chamadoId = button.getAttribute('data-id');
+    // EVENTOS
+    searchButton.addEventListener('click', fetchAndDisplayChamados);
+    statusFilter.addEventListener('change', fetchAndDisplayChamados);
+    searchInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') fetchAndDisplayChamados();
+    });
 
-    // Exibe "Carregando..." enquanto busca os dados
-    visualizarChamadoModal.querySelector('#modal-titulo').textContent = 'Carregando...';
-    visualizarChamadoModal.querySelector('#modal-data-abertura').textContent = '';
-    visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = '';
-    visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = '';
-    visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = '';
-    visualizarChamadoModal.querySelector('#modal-status').textContent = '';
-    visualizarChamadoModal.querySelector('#modal-categoria').textContent = '';
-    visualizarChamadoModal.querySelector('#modal-descricao').textContent = '';
+    // CHAMAR AO INICIAR A PÁGINA
+    fetchAndDisplayChamados();
 
-    try {
-        const response = await fetchWithAuth(`/api/chamados/${chamadoId}`);
-        if (!response.ok) throw new Error('Erro ao carregar detalhes do chamado');
-        const chamado = await response.json();
 
-        // Atualiza o modal com dados reais
-        visualizarChamadoModal.querySelector('#modal-titulo').textContent = chamado.tituloChamado || 'Sem título';
-        visualizarChamadoModal.querySelector('#modal-data-abertura').textContent =
-            chamado.dataAbertura ? `Aberto em: ${new Date(chamado.dataAbertura).toLocaleDateString('pt-BR')}` : '';
-        visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = chamado.solicitanteNome || 'N/A';
-        visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = chamado.solicitanteEmail || 'N/A';
-        visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = chamado.solicitanteTelefone || 'N/A';
-        visualizarChamadoModal.querySelector('#modal-status').textContent = chamado.statusChamado || '---';
-        visualizarChamadoModal.querySelector('#modal-categoria').textContent = chamado.categoriaChamado || '---';
-        visualizarChamadoModal.querySelector('#modal-descricao').textContent = chamado.descricaoChamado || 'Sem descrição disponível';
+    // =================================================================================
+    //  BUSCAR CHAMADOS FILTRADOS 
+    // =================================================================================
+    async function fetchAndDisplayChamados() {
+        tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Carregando...</td></tr>';
 
-        
-        const linkAtender = visualizarChamadoModal.querySelector("#visualizarChamadoModal");
-        if (linkAtender) {
-            linkAtender.href = `/templates/meus_chamados.html?id=${chamado.chamadoId}`;
+        const params = new URLSearchParams();
+
+        const status = statusFilter.value;
+        const query = searchInput.value;
+
+        if (status && status !== 'Todos os Status') params.append('status', status);
+        if (query) params.append('q', query);
+
+        // Se NÃO for técnico → mostrar apenas seus chamados
+        if (!techRoles.includes(userRole)) {
+            params.append('solicitanteId', userId);
         }
 
-    } catch (error) {
-        console.error(error);
-        visualizarChamadoModal.querySelector('#modal-titulo').textContent = 'Erro ao carregar chamado';
-        visualizarChamadoModal.querySelector('#modal-descricao').textContent = 'Não foi possível obter os detalhes deste chamado.';
+        try {
+            const response = await fetchWithAuth(`/api/chamados?${params.toString()}`);
+
+            if (!response.ok) throw new Error("Erro ao buscar chamados");
+
+            const chamados = await response.json();
+
+            renderTabela(chamados);
+
+        } catch (error) {
+            console.error(error);
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Erro ao carregar chamados.</td></tr>';
+        }
     }
-});
-
-    async function carregarChamados() {
-        const response = await fetch(`/api/chamados?solicitanteId=${userId}`);
-        const chamados = await response.json();
-        renderTabela(chamados);
-    }
 
 
+    // =================================================================================
+    //  RENDERIZAR TABELA 
+    // =================================================================================
     function renderTabela(lista) {
-        const corpo = document.getElementById("chamados-table-body");
-        corpo.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        if (lista.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum chamado encontrado.</td></tr>';
+            return;
+        }
 
         lista.forEach(ch => {
             const tr = document.createElement("tr");
@@ -74,48 +81,48 @@ visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
                 <td>${ch.prioridadeChamado}</td>
                 <td>${ch.statusChamado}</td>
                 <td>${new Date(ch.dataAbertura).toLocaleString()}</td>
-                <td class="ticket-actions text-end">
-                    <button class="btn btn-vizualizar-triagem btn-sm visualizar-btn"
-                        data-bs-toggle="modal" 
-                        data-bs-target="#visualizarChamadoModal"><i class="bi bi-eye"></i><br>
-                        Visualizar
+                <td class="text-end">
+                    <button class="btn btn-sm btn-ver-detalhes visualizar-btn"
+                        data-id="${ch.chamadoId}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#visualizarChamadoModal">
+                        <i class="bi bi-eye"></i> Ver detalhes
                     </button>
                 </td>
             `;
 
-            corpo.appendChild(tr);
+            tableBody.appendChild(tr);
         });
     }
 
-    // EVENTO DO BOTÃO VER DETALHES
-    document.addEventListener("click", async e => {
-        if (e.target.classList.contains("ver-detalhes")) {
-            const id = e.target.getAttribute("data-id");
 
-            const response = await fetch(`/api/chamados/`);
-            const chamado = await response.json();
+    // =================================================================================
+    //  MODAL DE DETALHES
+    // =================================================================================
+    const visualizarChamadoModal = document.getElementById('visualizarChamadoModal');
 
-            preencherModal(chamado);
+    visualizarChamadoModal.addEventListener('show.bs.modal', async event => {
+        const button = event.relatedTarget;
+        const chamadoId = button.dataset.id;
 
-            new bootstrap.Modal(
-                document.getElementById("visualizarChamadoModal")
-            ).show();
+        try {
+            const response = await fetchWithAuth(`/api/chamados/${chamadoId}`);
+            if (!response.ok) throw new Error("Falha ao carregar detalhes");
+
+            const ch = await response.json();
+
+            visualizarChamadoModal.querySelector('#modal-titulo').textContent = ch.tituloChamado;
+            visualizarChamadoModal.querySelector('#modal-data-abertura').textContent = new Date(ch.dataAbertura).toLocaleDateString("pt-BR");
+            visualizarChamadoModal.querySelector('#modal-solicitante-nome').textContent = ch.solicitanteNome || "N/A";
+            visualizarChamadoModal.querySelector('#modal-solicitante-email').textContent = ch.solicitanteEmail || "N/A";
+            visualizarChamadoModal.querySelector('#modal-solicitante-ramal').textContent = ch.solicitanteTelefone || "N/A";
+            visualizarChamadoModal.querySelector('#modal-status').textContent = ch.statusChamado;
+            visualizarChamadoModal.querySelector('#modal-categoria').textContent = ch.categoriaChamado;
+            visualizarChamadoModal.querySelector('#modal-descricao').textContent = ch.descricaoChamado;
+
+        } catch (err) {
+            console.error(err);
         }
     });
 
-    function preencherModal(ch) {
-        document.getElementById("modal-titulo").textContent = chamado.tituloChamado;
-        document.getElementById("modal-data-abertura").textContent =
-            new Date(ch.data_abertura).toLocaleString();
-
-        document.getElementById("modal-solicitante-nome").textContent = chamado.solicitanteNome;
-        document.getElementById("modal-solicitante-email").textContent = ch.solicitante?.email;
-        document.getElementById("modal-solicitante-ramal").textContent = ch.solicitante?.ramal;
-
-        document.getElementById("modal-status").textContent = ch.statusChamado;
-        document.getElementById("modal-categoria").textContent = ch.categoriaChamado;
-        document.getElementById("modal-descricao").textContent = ch.descricaoChamado;
-    }
-
-    carregarChamados();
 });

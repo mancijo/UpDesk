@@ -160,3 +160,17 @@ input[type="text"] {
     background-color: var(--cor-primaria-escura);
     color: #FFFFFF;
 }
+
+.btn-ver-detalhes {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+    border: solid 1px #000;
+    padding: 20px 20px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-ver-detalhes:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF ;
+}

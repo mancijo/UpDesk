@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const storedUser = JSON.parse(localStorage.getItem('usuario'));
 
         if (storedUser) {
-            console.log("Usuário carregado do localStorage:", storedUser);
             updateUIAfterLogin(storedUser);
         } else {
             console.warn("Nenhum usuário encontrado no localStorage. Redirecionando para login...");
@@ -60,7 +59,7 @@ function updateUIAfterLogin(userData) {
     const navbarUsername = document.getElementById('navbar-username');
     if (navbarUsername) navbarUsername.textContent = userName;
 
-    console.log(`UI UPDATE: Atualizando interface para '${userName}' (${userRole})`);
+    
 
     // =========================
     // 🔗 Referências aos botões do menu
@@ -126,7 +125,7 @@ function updateUIAfterLogin(userData) {
             break;
     }
 
-    console.log(`UI UPDATE: Interface carregada com permissões para '${userRole}' ✅`);
+    
 }
 
 /**
