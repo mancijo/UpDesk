@@ -22,7 +22,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.mancijo.updeskmobile"
     },
     "web": {
       "favicon": "./assets/logoUpd.png"
@@ -30,6 +31,12 @@
     "plugins": [
       "expo-router",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c6fd7c9b-7445-485a-a008-d07c2159c8f1"
+      }
+    }
   }
 }
