@@ -49,14 +49,14 @@ function loadNavbar() {
 
 /**
  * Atualiza a interface do usuário (nome, visibilidade de menus, etc.) com base nos dados de login.
- * Esta função deve ser chamada APÓS a navbar estar no DOM.
- */
+ * Esta função deve ser chamada APÓS a navbar estar no DOM. */
+
 function updateUIAfterLogin(userData) {
     const userRole = userData && userData.cargo ? userData.cargo.trim() : null;
     const userName = userData && userData.nome ? userData.nome : 'Usuário';
 
-    // Atualiza nome do usuário no topo
-    const navbarUsername = document.getElementById('navbar-username');
+     // Atualiza nome do usuário no topo
+    const navbarUsername = document.getElementById('navbar-username'); 
     if (navbarUsername) navbarUsername.textContent = userName;
 
     
@@ -79,7 +79,7 @@ function updateUIAfterLogin(userData) {
         navGerenciamento, navChamado, navAtender,
         navPerfil, navMeusChamados
     ];
-    allNavs.forEach(item => { if (item) item.style.display = 'none'; });
+    allNavs.forEach(item => { if (item) item.style.display = 'none'; }); 
 
     // =========================
     //  Lógica de hierarquia

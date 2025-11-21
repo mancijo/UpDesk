@@ -42,9 +42,43 @@ visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
 
 let transferModal;
 
+// Função principal que aplica busca + filtro por status
+    function aplicarFiltrosTriagem(chamados) {
+        const termoBusca = document.getElementById('search-input').value.toLowerCase();
+        const statusFiltro = document.getElementById('status-filter').value;
+
+
+    return chamados.filter(c => {
+        const tituloMatch = c.tituloChamado.toLowerCase().includes(termoBusca);
+        const statusMatch = statusFiltro ? c.statusChamado === statusFiltro : true;
+        return tituloMatch && statusMatch;
+        });
+    }
+
+
 document.addEventListener('DOMContentLoaded', () => {
     transferModal = new bootstrap.Modal(document.getElementById('transferirChamadoModal'));
 
+    
+
+    // EVENTO DO BOTÃO DE BUSCA
+    document.getElementById("search-button").addEventListener("click", () => {
+    fetchTriagemChamados();
+    });
+
+    // ENTER para buscar
+    document.getElementById("search-input").addEventListener("keyup", (e) => {
+    if (e.key === "Enter") fetchTriagemChamados();
+    });
+
+    // Filtro de status
+    document.getElementById("status-filter").addEventListener("change", () => {
+    fetchTriagemChamados();
+    });
+
+    // ===== FILTROS E BUSCA NA TRIAGEM =====
+
+    
     // Carrega a lista de chamados para triagem
     fetchTriagemChamados();
     // Carrega a lista de técnicos para o select    
@@ -77,8 +111,11 @@ async function fetchTriagemChamados() {
         const response = await fetchWithAuth(`/api/chamados/triagem`);
         if (!response.ok) throw new Error('Falha ao carregar chamados para triagem');
 
-        const chamados = await response.json();
-        console.log(chamados);
+        let chamados = await response.json();
+
+        // Aplica filtros (busca + status)
+        chamados = aplicarFiltrosTriagem(chamados);
+
 
         if (chamados.length === 0) {
             container.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum chamado para triagem.</td></tr>';
@@ -93,19 +130,22 @@ async function fetchTriagemChamados() {
             tableRow.innerHTML = `
                 <td>${chamado.chamadoId}</td>
                 <td>${chamado.tituloChamado}</td>
-                <td><span class="status status-pendente">${chamado.statusChamado}</span></td>
+                <td>${chamado.solicitanteNome}</td>
+                <td>${chamado.categoriaChamado}</td>
+                <td>${chamado.prioridadeChamado}</td>
                 <td>${dataAbertura}</td>
+                <td><span class="status status-pendente">${chamado.statusChamado}</span></td>
                 <td class="ticket-actions text-end">
                     <button class="btn btn-vizualizar-triagem btn-sm visualizar-btn"
                         data-id="${chamado.chamadoId}"
                         data-bs-toggle="modal" 
-                        data-bs-target="#visualizarChamadoModal"><i class="bi bi-eye"></i><br>
+                        data-bs-target="#visualizarChamadoModal"><i class="bi bi-eye"></i>
                         Visualizar
                     </button>
                     <button class="btn btn-transferir-triagem btn-sm transferir-btn" 
                         data-id="${chamado.chamadoId}" 
-                        data-titulo="${chamado.tituloChamado}"><i class="bi bi-headset"></i><br>
-                        Transferir
+                        data-titulo="${chamado.tituloChamado}"><i class="bi bi-headset"></i>
+                        Triar
                     </button>
                 </td>
             `;

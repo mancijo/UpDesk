@@ -17,22 +17,60 @@
         <div class="main-panel">
             <h1 class="text-center panel-title">Painel da Triagem</h1>
 
-            <!--<div class="tickets-list mt-4" id="tickets-list-container">
-                <div class="tickets-header d-none d-md-grid">
-                    <div>Id</div>
-                    <div>Título</div>
-                    <div>Status</div>
-                    <div>Data</div>
-                    <div class="actions-header">Ações</div>
-                </div> -->
+            <!--cards de status da triagem--> 
+            <div class="row g-2 mt-3 status-cards">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card text-center shadow-sm border-0 h-10 custom-card">
+                        <div class="card-body-triagem">
+                            <h2 class="card-title text-primary-triagem">Aguardando Triagem</h2>
+                            <span class="display-4 fw-bold text-primary-triagem" id="Aguardando-triagem-count">0</span>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card text-center shadow-sm border-0 h-10 custom-card">
+                        <div class="card-body-triados">
+                            <h2 class="card-title text-primary-triagem">Triados hoje</h2>
+                            <span class="display-4 fw-bold text-primary-triagem" id="chamados-triados-hoje-count">0</span>
+                        </div>
+                    </div>  
+                </div>  
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card text-center shadow-sm border-0 h-10 custom-card">
+                        <div class="card-body-pendentes">
+                            <h2 class="card-title text-primary-triagem">Pendendentes >24h</h2>
+                            <span class="display-4 fw-bold text-primary-triagem" id="chamados-pendentes-24h-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            
+            <!--Campo de busca-->
+            <div class="filtros">
+            <div class="input-group">
+                <select class="form-select" id="status-filter">
+                    <option value="">Todos os Status</option>
+                    <option value="Aberto">Aberto</option>
+                    <option value="Em Atendimento">Em Atendimento</option>
+                    <option value="Resolvido">Resolvido</option>
+                    <option value="Transferido">Transferido</option>
+                    <option value="Agendado">Agendado</option>
+                </select>
+                <input class="form-control w-50" type="search" id="search-input" placeholder="Buscar por título do chamado...">
+                <button class="btn btn-outline-secondary" id="search-button">Buscar</button>
+            </div>
+        </div>
+
             <div class="table-responsive mt-4">
                 <table class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Título</th> 
-                        <th>Status</th>
+                        <th>Título</th>
+                        <th>Solicitante</th>
+                        <th>Categoria</th>
+                        <th>Prioridade</th>
                         <th>Data de Abertura</th>
+                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
                     </thead>
@@ -78,7 +116,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
-                    <a href="#" id="modal-atender-chamado-link" class="btn btn-iniciar-modal rounded-pill">Atender Chamado</a>
+                    <a href="#" id="modal-atender-chamado-link" class="btn btn-iniciar-modal rounded-pill">Iniciar triagem</a>
                 </div>
             </div>
         </div>
@@ -117,4 +155,4 @@
     <script src="../static/js/main.js"></script>
     <script src="../static/js/triagem.js"></script>
 </body>
-</html>
+</html> 

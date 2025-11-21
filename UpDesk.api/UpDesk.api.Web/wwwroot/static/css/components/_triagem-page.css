@@ -60,36 +60,35 @@
     border-radius: var(--raio-borda-l);
     box-shadow: var(--sombra-discreta);
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin-left: auto;
 }
 
 .btn-transferir-triagem {
-    background-color: var(--cor-primaria); 
+    background-color: var(--cor-sucesso); 
     color: #FFFFFF;  
-    border: solid 1px #000;
     border-radius: 0.25rem;
-    padding: 20px 20px; 
+    padding: 10px 10px; 
     cursor: pointer;
     transition: background-color 0.4s ease;
 }
 
 .btn-transferir-triagem:hover {
-    background-color: var(--cor-primaria-escura);
+    background-color: var(--cor-sucesso-escura);
     color: #FFFFFF;  
 }
 
 .btn-vizualizar-triagem {
-    background-color: var(--cor-secundaria); 
+    background-color: var(--cor-primaria); 
     color: #FFFFFF;  
     border-radius: 0.25rem;
-    padding: 20px 20px; 
+    padding: 10px 10px; 
     cursor: pointer;
     transition: background-color 0.4s ease;
 }
 
 .btn-vizualizar-triagem:hover {
-    background-color: var(--cor-secundaria-escura);
+    background-color: var(--cor-primaria-escura);
     color: #FFFFFF;  
 }
 
@@ -119,4 +118,29 @@
     background-color: var(--cor-primaria-escura);
     color: #FFFFFF;
     
+}
+
+.text-primary-triagem {
+    color: #FFFFFF !important;
+}
+
+.card-body-triagem {
+    background-color: var(--cor-primaria);
+    border-radius: var(--raio-borda-l);
+    box-shadow: var(--sombra-intensa);
+
+}
+
+.card-body-triados {
+    background-color: var(--cor-sucesso);
+    border-radius: var(--raio-borda-l);
+    box-shadow: var(--sombra-intensa);
+
+}
+
+.card-body-pendentes {
+    background-color: var(--cor-perigo);
+    border-radius: var(--raio-borda-l);
+    box-shadow: var(--sombra-intensa);
+
 }
