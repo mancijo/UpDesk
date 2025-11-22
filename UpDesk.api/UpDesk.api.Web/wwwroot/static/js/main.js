@@ -1,172 +1,210 @@
 // /static/js/main.js
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Carrega a navbar e, QUANDO TERMINAR, atualiza a interface com o usuário logado
-    loadNavbar().then(() => {
-        const storedUser = JSON.parse(localStorage.getItem('usuario'));
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadNavbar();
 
-        if (storedUser) {
-            updateUIAfterLogin(storedUser);
-        } else {
-            console.warn("Nenhum usuário encontrado no localStorage. Redirecionando para login...");
-            window.location.href = "/templates/index.html";
-        }
-    });
-});
+    const user = JSON.parse(localStorage.getItem("usuario"));
 
-/**
- * Carrega o HTML da navbar de forma assíncrona.
- * Retorna uma Promise que resolve quando a navbar é inserida na página.
- */
-function loadNavbar() {
-    return new Promise((resolve, reject) => {
-        const navbarPlaceholder = document.getElementById('navbar-placeholder');
-        if (navbarPlaceholder) {
-            fetch('/templates/navbar.html')
-                .then(response => response.text())
-                .then(html => {
-                    navbarPlaceholder.innerHTML = html;
-                    // Carrega o script da navbar para funcionalidades como o highlight do link ativo.
-                    const existingScript = document.querySelector('script[data-script="navbar"]');
-                    if (!existingScript) {
-                        const script = document.createElement('script');
-                        script.src = '/static/js/navbar.js';
-                        script.dataset.script = 'navbar'; // Marca o script para não ser carregado novamente
-                        document.body.appendChild(script);
-                    }
-                    resolve(); // A navbar foi carregada com sucesso.
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar a navbar:', error);
-                    navbarPlaceholder.innerHTML = '<p>Erro ao carregar o menu.</p>';
-                    reject(error);
-                });
-        } else {
-            resolve(); // Se não houver placeholder, apenas resolve.
-        }
-    });
-}
-
-/**
- * Atualiza a interface do usuário (nome, visibilidade de menus, etc.) com base nos dados de login.
- * Esta função deve ser chamada APÓS a navbar estar no DOM. */
-
-function updateUIAfterLogin(userData) {
-    const userRole = userData && userData.cargo ? userData.cargo.trim() : null;
-    const userName = userData && userData.nome ? userData.nome : 'Usuário';
-
-     // Atualiza nome do usuário no topo
-    const navbarUsername = document.getElementById('navbar-username'); 
-    if (navbarUsername) navbarUsername.textContent = userName;
-
-    
-
-    // =========================
-    // 🔗 Referências aos botões do menu
-    // =========================
-    const navHome = document.getElementById('nav-home');
-    const navMonitoramento = document.getElementById('nav-monitoramento');
-    const navTriagem = document.getElementById('nav-triagem');
-    const navGerenciamento = document.getElementById('nav-gerenciamento');
-    const navChamado = document.getElementById('nav-chamado');
-    const navAtender = document.getElementById('nav-atender');
-    const navPerfil = document.getElementById('nav-perfil');
-    const navMeusChamados = document.getElementById('nav-meuschamados');
-
-    // Primeiro, oculta tudo (assim garantimos que ninguém herda o que não deve)
-    const allNavs = [
-        navHome, navMonitoramento, navTriagem,
-        navGerenciamento, navChamado, navAtender,
-        navPerfil, navMeusChamados
-    ];
-    allNavs.forEach(item => { if (item) item.style.display = 'none'; }); 
-
-    // =========================
-    //  Lógica de hierarquia
-    // =========================
-    switch (userRole) {
-        case 'Supervisor':
-            // Supervisor tem acesso total
-            allNavs.forEach(item => { if (item) item.style.display = 'block'; });
-            break;
-
-        case 'Tecnico N1':
-        case 'Tecnico N2':
-            // Técnicos podem triagem, atender, abrir e ver chamados
-            if (navHome) navHome.style.display = 'block';
-            if (navMonitoramento) navMonitoramento.style.display = 'block';
-            if (navTriagem) navTriagem.style.display = 'block';
-            if (navAtender) navAtender.style.display = 'block';
-            if (navChamado) navChamado.style.display = 'block';
-            if (navMeusChamados) navMeusChamados.style.display = 'block';
-            if (navPerfil) navPerfil.style.display = 'block';
-            break;
-
-        case 'Triagem':
-            // Triagem pode monitorar, triagem, abrir e ver chamados
-            if (navHome) navHome.style.display = 'block';
-            if (navMonitoramento) navMonitoramento.style.display = 'block';
-            if (navTriagem) navTriagem.style.display = 'block';
-            if (navChamado) navChamado.style.display = 'block';
-            if (navMeusChamados) navMeusChamados.style.display = 'block';
-            if (navPerfil) navPerfil.style.display = 'block';
-            break;
-
-        case 'Auxiliar administrativo':
-            // Aux. administrativo -> só pode abrir chamado e ver os dele
-            if (navHome) navHome.style.display = 'block';
-            if (navChamado) navChamado.style.display = 'block';
-            if (navMeusChamados) navMeusChamados.style.display = 'block';
-            if (navPerfil) navPerfil.style.display = 'block';
-            break;
-
-        default:
-            console.warn(`UI UPDATE: Cargo '${userRole}' não reconhecido — sem permissões.`);
-            break;
+    if (!user) {
+        console.warn("Nenhum usuário logado. Redirecionando para login...");
+        window.location.href = "/templates/index.html";
+        return;
     }
 
+    UI.updateInterface(user);
+    UI.safeRedirect(user);
+
     
+});
+
+/* ==========================================================
+    SISTEMA DE PAPÉIS / PERMISSÕES
+   ========================================================== */
+
+const ROLE_CONFIG = {
+    "Supervisor": {
+        home: "/templates/home_supervisor.html",
+        allowedNavs: [
+            "nav-home", ,"nav-monitoramento", "nav-triagem",
+            "nav-gerenciamento", "nav-chamado", "nav-atender",
+            , "nav-meuschamados", "nav-perfil"
+        ]
+    },
+
+    "Tecnico N1": {
+        home: "/templates/home_tecnicos.html",
+        allowedNavs: [
+            "nav-home", "nav-perfil", "nav-monitoramento",
+            "nav-chamado", "nav-meuschamados"
+            
+        ]
+    },
+
+    "Tecnico N2": {
+        home: "/templates/home_tecnicos.html",
+        allowedNavs: [
+            "nav-home", "nav-monitoramento", "nav-triagem",
+            "nav-atender", "nav-chamado", "nav-meuschamados",
+            "nav-perfil"
+        ]
+    },
+
+    "Triagem": {
+        home: "/templates/home_triagem.html",
+        allowedNavs: [
+            "nav-perfil", "nav-home", "nav-monitoramento", "nav-triagem",
+            "nav-chamado", "nav-meuschamados"
+        ]
+    },
+
+    "Auxiliar administrativo": {
+        home: "/templates/home_usuario.html",
+        allowedNavs: [
+            "nav-home", "nav-chamado",
+            "nav-meuschamados", "nav-perfil"
+        ]
+    }
+};
+
+/* ==========================================================
+    GERENCIADOR DE UI
+   ========================================================== */
+
+const UI = {
+    updateInterface(user) {
+        const role = user.cargo?.trim() || null;
+        const userName = user.nome || "Usuário";
+
+        console.log(`PERMISSÕES → Aplicando interface para cargo: ${role}`);
+
+        // Atualiza o nome no topo
+        const usernameEl = document.getElementById("navbar-username");
+        if (usernameEl) usernameEl.textContent = userName;
+
+        // Captura todos os itens do menu
+        const allNavElements = Array.from(document.querySelectorAll("[id^='nav-']"));
+
+        // Esconde tudo
+        allNavElements.forEach(nav => nav.style.display = "none");
+
+        // Valida role
+        const roleInfo = ROLE_CONFIG[role];
+        if (!roleInfo) {
+            console.warn(`Cargo '${role}' não encontrado na configuração de permissões.`);
+            return;
+        }
+
+        // Exibe apenas itens permitidos
+        roleInfo.allowedNavs.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) element.style.display = "block";
+        });
+    },
+
+safeRedirect(user) {
+    const role = user.cargo?.trim();
+    if (!role) return;
+
+    const roleInfo = ROLE_CONFIG[role];
+    if (!roleInfo) return;
+
+    const currentPage = window.location.pathname;
+
+    // Permitir navegação normal entre páginas
+    const allowedPages = [
+        "/templates/chamado.html",
+        "/templates/verChamado.html",
+        "/templates/triagem.html",
+        "/templates/ger_usuarios.html",
+        "/templates/meus_chamados.html",
+        "/templates/perfil.html",
+        roleInfo.home
+    ];
+
+    // Só redireciona se a página atual NÃO estiver na lista
+    if (!allowedPages.some(page => currentPage.endsWith(page.split("/").pop()))) {
+        window.location.href = roleInfo.home;
+    }
+},
+};
+
+/* ==========================================================
+    NAVBAR LOADER
+   ========================================================== */
+
+function enableDropdowns() {
+    if (window.bootstrap) {
+        document.querySelectorAll(".dropdown-toggle").forEach(el => {
+            new bootstrap.Dropdown(el);
+        });
+    } else {
+        setTimeout(enableDropdowns, 100);
+    }
 }
 
-/**
- * Função auxiliar para fazer chamadas à API com o token de autenticação.
- * @param {string} endpoint O endpoint da API para o qual fazer a chamada (ex: '/api/chamados').
- * @param {object} options As opções para a chamada fetch (method, body, etc.).
- * @returns {Promise<Response>} A resposta da chamada fetch.
- */
+function loadNavbar() {
+    return new Promise((resolve) => {
+        const placeholder = document.getElementById("navbar-placeholder");
+        if (!placeholder) return resolve();
+
+        fetch("/templates/navbar.html")
+            .then(r => r.text())
+            .then(html => {
+                placeholder.innerHTML = html;
+
+                /* Ativar dropdown Bootstrap depois de inserir HTML
+                document.querySelectorAll('.dropdown-toggle').forEach(el => {
+                    new bootstrap.Dropdown(el);
+                });*/
+                enableDropdowns();
+
+                // Carregar script extra da navbar só 1 vez
+                if (!document.querySelector("script[data-script='navbar']")) {
+                    const script = document.createElement("script");
+                    script.src = "/static/js/navbar.js";
+                    script.dataset.script = "navbar";
+                    document.body.appendChild(script);
+                }
+
+                resolve();
+            })
+            .catch(err => {
+                console.error("Erro ao carregar navbar:", err);
+                placeholder.innerHTML = "<p>Erro ao carregar menu</p>";
+                resolve();
+            });
+    });
+}
+
+
+
+
+/* ==========================================================
+    FETCH COM TOKEN
+   ========================================================== */
+
 async function fetchWithAuth(endpoint, options = {}) {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
 
     const headers = {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
     };
 
-    // Adiciona o token de autorização se ele existir.
     if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+        headers["Authorization"] = `Bearer ${token}`;
     }
 
-    // Usa a origem da janela atual (http://localhost:PORTA) como base.
-    // Isso torna a URL da API dinâmica e resolve o problema da porta.
-    const baseUrl = window.location.origin;
-    const url = new URL(endpoint, baseUrl).href;
+    const response = await fetch(new URL(endpoint, window.location.origin), {
+        ...options,
+        headers
+    });
 
-    // Se o body for um objeto, stringify aqui para evitar formatações incorretas
-    const finalOptions = { ...options, headers: headers };
-    if (finalOptions.body && typeof finalOptions.body === 'object') {
-        finalOptions.body = JSON.stringify(finalOptions.body);
-    }
-
-    const response = await fetch(url, finalOptions);
-
-    // Se a resposta for 401 (Não Autorizado), o token é inválido ou expirou.
     if (response.status === 401) {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('usuario');
-        window.location.href = '/templates/login.html';
-        // Lança um erro para interromper a execução do código que chamou a função.
-        throw new Error('Não autorizado');
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("usuario");
+        window.location.href = "/templates/login.html";
+        throw new Error("Não autorizado");
     }
 
     return response;
