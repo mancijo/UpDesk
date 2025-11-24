@@ -18,6 +18,9 @@ load_dotenv()
 class Config:
     """Define as configurações da aplicação em uma classe para melhor organização."""
     
+    # Modo debug padrão em desenvolvimento (pode ser desligado via variável de ambiente DEBUG=0)
+    DEBUG = os.getenv('DEBUG', '1') == '1'
+
     # Chave secreta usada pelo Flask para assinar digitalmente os dados da sessão (cookies).
     # É crucial para a segurança contra a manipulação de cookies.
     # O valor é lido do ambiente, com um fallback inseguro apenas para desenvolvimento fácil.
@@ -60,7 +63,17 @@ class Config:
 
     # Chave da API do Google Gemini, lida a partir das variáveis de ambiente.
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    # Flag para habilitar o preview Gemini 3 Pro para todos os clientes
+    ENABLE_GEMINI_3_PRO_PREVIEW = os.getenv('ENABLE_GEMINI_3_PRO_PREVIEW', '1') == '1'
+    # Permite forçar um modelo específico via env (ex: gemini-3.0-pro, gemini-1.5-flash)
+    GEMINI_MODEL_OVERRIDE = os.getenv('GEMINI_MODEL_OVERRIDE')
 
     # --- Configurações de Upload de Arquivos ---
     UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'uploads')
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'doc', 'docx'}
+
+    # --- Flags de desenvolvimento/qualidade ---
+    # Quando AUTH_BYPASS=1 (em variável de ambiente) ou via querystring ?bypass=1,
+    # o sistema permite navegar por telas protegidas sem sessão (somente para DEV/testes).
+    # Por padrão, se DEBUG estiver ligado, habilitamos o bypass para facilitar o desenvolvimento.
+    AUTH_BYPASS = os.getenv('AUTH_BYPASS', '1' if DEBUG else '0') == '1'

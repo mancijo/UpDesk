@@ -15,16 +15,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Bootstrap Icons CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v={{ config['STATIC_VERSION'] }}">
     {% block head %}
     {% endblock %}
 </head>
 
-<body class="d-flex flex-column min-vh-100"> <!-- Added Bootstrap classes for sticky footer -->
+<body class="d-flex flex-column min-vh-100 {% block body_class %}{% endblock %}"> <!-- Suporte a classe condicional de perfil (is-staff / usuario-final) -->
     {% include 'navbar.html' %}
 
     <div class="content-wrapper">
     <main class="flex-grow-1"> <!-- Added main tag and flex-grow-1 -->
+        {# Global flash messages (appear on all pages) #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
         {% block body %}
         {% endblock %}
     </main>

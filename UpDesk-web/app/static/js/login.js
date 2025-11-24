@@ -70,16 +70,33 @@ document.addEventListener('DOMContentLoaded', function () {
             // O bloco try...catch...finally garante que o botão seja reativado mesmo se ocorrer um erro.
             try {
                 // Envia a requisição para o backend usando a API Fetch
+                // Captura token CSRF gerado pelo Flask-WTF para envio manual na requisição JSON
+                const csrfInput = document.querySelector('input[name="csrf_token"]');
+                const csrfToken = csrfInput ? csrfInput.value : null;
+
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (csrfToken) {
+                    // Flask-WTF aceita cabeçalhos 'X-CSRFToken'
+                    headers['X-CSRFToken'] = csrfToken;
+                }
+
                 const resposta = await fetch(loginUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json' // Informa ao backend que estamos enviando JSON
-                    },
-                    body: JSON.stringify({ email, senha }) // Converte os dados do formulário para o formato JSON
+                    credentials: 'same-origin',
+                    headers,
+                    body: JSON.stringify({ email, senha })
                 });
 
                 // Converte a resposta do backend (que também é JSON) para um objeto JavaScript
-                const dados = await resposta.json();
+                // Tenta parsear JSON com fallback silencioso
+                let dados = {};
+                try {
+                    dados = await resposta.json();
+                } catch (e) {
+                    // Se não vier JSON, mantém objeto vazio
+                }
 
                 // Verifica se a requisição foi bem-sucedida (status HTTP 2xx)
                 if (resposta.ok) {

@@ -8,7 +8,7 @@
  *   dentro do contexto específico desta página.
  */
 
-/* Body styles for the login page */
+/* Estilos do body para a página de login */
 body.login-page-body {
     font-family: var(--fonte-principal);
     background-color: var(--cor-fundo-principal); /* #F4F6F8 */
@@ -17,24 +17,24 @@ body.login-page-body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding-top: 0; /* Override the global padding */
+    padding-top: 0; /* Sobrescreve o padding global */
 }
 
-/* The main login container card */
+/* Container principal (card) de login */
 .login-card {
     width: 450px;
     max-width: 95%;
-    padding: var(--espaco-xl); /* Generous padding */
+    padding: var(--espaco-xl); /* Padding generoso */
     background: var(--cor-fundo-claro); /* #FFFFFF */
-    box-shadow: var(--sombra-discreta); /* Subtle shadow */
-    border-radius: var(--raio-borda-l); /* Rounded corners */
+    box-shadow: var(--sombra-discreta); /* Sombra discreta */
+    border-radius: var(--raio-borda-l); /* Cantos arredondados */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--espaco-m); /* Space between logo and form */
+    gap: var(--espaco-m); /* Espaço entre logo e formulário */
 }
 
-/* Text-based brand/logo */
+/* Marca/logo em texto */
 .login-card__brand {
     font-size: 2.5rem; /* Larger font size */
     font-weight: var(--fonte-peso-bold);
@@ -42,22 +42,22 @@ body.login-page-body {
     margin-bottom: var(--espaco-s);
 }
 
-/* Form adjustments */
+/* Ajustes do formulário */
 .login-card form {
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: var(--espaco-s); /* Space between form elements */
+    gap: var(--espaco-s); /* Espaço entre elementos do formulário */
 }
 
-/* Input group styling for icons */
+/* Estilo do grupo de input para ícones */
 .login-card .input-group-text {
     background-color: transparent;
     border-right: none;
-    border-color: #ced4da; /* Softer, default Bootstrap color */
+    border-color: #ced4da; /* Cor padrão mais suave do Bootstrap */
 }
 
-/* Ensure icon color is applied */
+/* Garante que a cor do ícone seja aplicada */
 .login-card .input-group-text i {
     color: var(--cor-primaria);
 }
@@ -74,13 +74,13 @@ body.login-page-body {
     border-color: var(--cor-primaria);
 }
 
-/* Placeholder styling */
+/* Estilo do placeholder */
 .login-card .form-control::placeholder {
     color: var(--cor-texto-secundario);
     opacity: 0.8;
 }
 
-/* Checkbox styling */
+/* Estilo do checkbox */
 .login-card .form-check-label {
     font-size: var(--fonte-tamanho-s);
     color: var(--cor-texto-principal);
@@ -91,7 +91,7 @@ body.login-page-body {
     border-color: var(--cor-primaria);
 }
 
-/* Login button (CTA) styling */
+/* Estilo do botão de login (CTA) */
 .login-card .btn-login {
     background-color: var(--cor-primaria); /* #2B4C70 */
     border-color: var(--cor-primaria);
@@ -106,7 +106,7 @@ body.login-page-body {
     border-color: var(--cor-primaria-escura);
 }
 
-/* "Forgot password" link styling */
+/* Estilo do link "Esqueci a senha" */
 .login-card a {
     color: var(--cor-primaria);
     text-decoration: none;
@@ -118,7 +118,7 @@ body.login-page-body {
     text-decoration: underline;
 }
 
-/* Message area for errors */
+/* Área de mensagens para erros */
 .login-card .message {
     font-size: var(--fonte-tamanho-s);
 }

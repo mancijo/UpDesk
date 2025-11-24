@@ -45,6 +45,33 @@
 - 🎯 Direcionamento automatizado de chamados
 
 ---
+ 
+## Fluxo do Chamado com IA
+
+1. Abertura do chamado
+  - Usuário preenche título e descrição no formulário.
+  - O sistema consulta a IA, que sugere uma solução e uma prioridade.
+
+2. Decisão do usuário
+  - Se a solução sugerida resolve: registra-se o chamado como “Resolvido por IA”.
+  - Se não resolve: o usuário confirma a abertura; o chamado é salvo como “Aberto” com a prioridade sugerida.
+
+3. Triagem
+  - Equipe (Supervisor/N1/N2) valida informações e pode ajustar prioridade.
+  - Opcional: cálculo de complexidade (baixa/média/alta) para direcionamento rápido.
+
+4. Atendimento
+  - N1 atende baixa complexidade; N2 atende média e alta.
+  - Chat integrado para interação entre solicitante e equipe.
+
+5. Encerramento
+  - Após a solução, o chamado é marcado como “Resolvido”.
+
+Notas técnicas
+- Para performance, a listagem usa carregamento adiantado (joinedload) de solicitante/atendente.
+- Status “Aberto” não aparece na página de monitoramento; chamados abertos são gerenciados na Triagem.
+- Constantes centrais definem cargos de staff e status válidos.
+
   
 ## Prototipagem - [Figma](https://github.com/mancijo/UpDesk/blob/main/Figma/README.md)
  

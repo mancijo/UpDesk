@@ -9,11 +9,15 @@ Responsabilidade:
 from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for
 from werkzeug.security import generate_password_hash
 from ..models import db, Usuario
+from ..utils.constants import validar_setor_cargo, SETORES, CARGOS
+from ..utils.auth import requires_roles
 from ..forms import CriarUsuarioForm, EditarUsuarioForm
+from flask import current_app
 
 bp = Blueprint('usuarios', __name__, url_prefix='/usuarios')
 
 @bp.route('/ger_usuarios')
+@requires_roles('supervisor', allow_bypass=False)
 def ger_usuarios():
     """
     Renderiza a página principal de gerenciamento de usuários.
@@ -25,8 +29,8 @@ def ger_usuarios():
         return redirect(url_for('main.index'))
 
     search_query = request.args.get('q', '')
-    # Inicia a query buscando apenas usuários ativos
-    query = Usuario.query.filter_by(ativo=True)
+    # Inicia a query buscando todos os usuários (ativos e inativos) para permitir reativação
+    query = Usuario.query
     if search_query:
         search_term = f"%{search_query}%"
         # Filtra por nome ou email que contenham o termo de busca (case-insensitive)
@@ -37,7 +41,21 @@ def ger_usuarios():
     user = {'name': session.get('usuario_nome', 'Usuário')}
     return render_template('ger_usuarios.html', usuarios=lista_usuarios, user=user, form_criar=form_criar, search_query=search_query)
 
+
+@bp.route('/ativar/<int:usuario_id>', methods=['POST'])
+@requires_roles('supervisor', allow_bypass=False)
+def ativar_usuario(usuario_id):
+    """
+    Reactiva um usuário marcado como inativo (soft-undelete).
+    Retorna JSON 200 em caso de sucesso.
+    """
+    usuario = Usuario.query.get_or_404(usuario_id)
+    usuario.ativo = True
+    db.session.commit()
+    return jsonify({'mensagem': 'Usuário reativado com sucesso!'}), 200
+
 @bp.route('/criar', methods=['POST'])
+@requires_roles('supervisor', allow_bypass=False)
 def criar_usuario():
     """
     Endpoint para criar um novo usuário. Responde em JSON.
@@ -47,12 +65,20 @@ def criar_usuario():
     """
     form = CriarUsuarioForm()
     if form.validate_on_submit():
+        # Validação server-side: coerência entre setor e cargo
+        setor = form.setor.data
+        cargo = form.cargo.data
+        ok, msg = validar_setor_cargo(setor, cargo)
+        if not ok:
+            erros = {'cargo': msg}
+            return jsonify({"mensagem": "Dados inválidos", "erros": erros}), 400
+
         novo_usuario = Usuario(
             nome=form.nome.data,
             email=form.email.data,
             telefone=form.telefone.data,
-            setor=form.setor.data,
-            cargo=form.cargo.data,
+            setor=setor,
+            cargo=cargo,
             # É crucial armazenar apenas o hash da senha, nunca a senha em texto plano
             senha=generate_password_hash(form.senha.data)
         )
@@ -65,6 +91,7 @@ def criar_usuario():
     return jsonify({"mensagem": "Dados inválidos", "erros": erros}), 400 # 400 Bad Request
 
 @bp.route('/editar/<int:usuario_id>', methods=['POST'])
+@requires_roles('supervisor', allow_bypass=False)
 def editar_usuario(usuario_id):
     """
     Endpoint para editar um usuário existente. Responde em JSON.
@@ -78,11 +105,19 @@ def editar_usuario(usuario_id):
         form.senha.validators = []
 
     if form.validate_on_submit():
+        # Validação server-side: coerência entre setor e cargo
+        setor = form.setor.data
+        cargo = form.cargo.data
+        ok, msg = validar_setor_cargo(setor, cargo)
+        if not ok:
+            erros = {'cargo': msg}
+            return jsonify({"mensagem": "Dados inválidos", "erros": erros}), 400
+
         usuario.nome = form.nome.data
         usuario.email = form.email.data
         usuario.telefone = form.telefone.data
-        usuario.setor = form.setor.data
-        usuario.cargo = form.cargo.data
+        usuario.setor = setor
+        usuario.cargo = cargo
         if form.senha.data:
             usuario.senha = generate_password_hash(form.senha.data)
         db.session.commit()
@@ -92,6 +127,7 @@ def editar_usuario(usuario_id):
     return jsonify({"mensagem": "Dados inválidos", "erros": erros}), 400
 
 @bp.route('/excluir/<int:usuario_id>', methods=['POST'])
+@requires_roles('supervisor', allow_bypass=False)
 def excluir_usuario(usuario_id):
     """
     Endpoint para excluir (desativar) um usuário.

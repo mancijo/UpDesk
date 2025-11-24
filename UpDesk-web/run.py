@@ -9,15 +9,18 @@ Responsabilidade:
 """
 from app import create_app
 
-# Chama a função de fábrica para criar e configurar a instância da aplicação Flask.
+# Cria e configura a instância da aplicação Flask via função de fábrica
 app = create_app()
 
-# A condição `if __name__ == '__main__':` garante que o código dentro deste bloco
-# só será executado quando o script `run.py` for chamado diretamente pelo interpretador Python.
-# Isso previne que o servidor inicie caso este arquivo seja importado por outro script.
+# Executa o servidor de desenvolvimento quando chamado diretamente
 if __name__ == '__main__':
-    # Inicia o servidor de desenvolvimento web do Flask.
-    # `debug=True` ativa o modo de depuração, que oferece recarregamento automático
-    # a cada alteração no código e um depurador interativo no navegador em caso de erro.
-    # O valor é pego do arquivo de configuração para facilitar a mudança entre ambientes.
-    app.run(debug=app.config.get('DEBUG', False), host='0.0.0.0')
+    app.run(
+        debug=app.config.get('DEBUG', False),
+        host='0.0.0.0',
+        port=5000,
+    )   
+   
+   
+
+
+   

@@ -8,26 +8,25 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="card-container">
-        <div class="card-header">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h1 class="card-title">Chamado Resolvido com IA UPDESK</h1>
+<div class="chamado-resolvido-wrapper container">
+    <div class="card-container chamado-resolvido-card">
+        <div class="card-header mb-3">
+            <i class="fas fa-check-circle success-icon" aria-hidden="true"></i>
+            <h1 class="card-title h4 mb-2">Chamado Resolvido com IA UPDESK</h1>
         </div>
-        <div class="card-body">
-            <p class="chamado-info">Seu chamado <span class="chamado-titulo">[{{ chamado.titulo_Chamado }}]</span></p>
-            <p class="agradecimento">
-                foi solucionado com sucesso pela inteligência artificial UPDESK! 🛠️ <br>
-                A solução foi aplicada e validada, garantindo o funcionamento esperado. <br>
-                Caso tenha dúvidas ou precise de suporte adicional, estamos à disposição para ajudar.
+        <div class="card-body py-2">
+            <p class="chamado-info mb-2">Seu chamado <span class="chamado-titulo">[{{ chamado.titulo_Chamado }}]</span></p>
+            <p class="agradecimento small mb-0">
+                Foi solucionado pela inteligência artificial UPDESK. A solução foi aplicada e validada. <br class="d-none d-sm-inline">
+                Se ainda houver dúvidas ou precisar de suporte adicional, estamos à disposição.
             </p>
         </div>
-        <div class="card-footer">
-            <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-redirect">
-                <i class="fas fa-home"></i> Ir para a Página Inicial
+        <div class="card-footer pt-3">
+            <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-redirect btn-sm">
+                <i class="fas fa-home" aria-hidden="true"></i> Página Inicial
             </a>
-            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-secondary btn-redirect">
-                <i class="fas fa-list"></i> Ver meu Chamados
+            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-outline-secondary btn-redirect btn-sm">
+                <i class="fas fa-list" aria-hidden="true"></i> Meus Chamados
             </a>
         </div>
     </div>

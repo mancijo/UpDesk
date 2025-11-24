@@ -8,27 +8,74 @@ Responsabilidade:
 """
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, ValidationError, Regexp
 from flask_wtf.file import FileField, FileAllowed
 
 class CriarUsuarioForm(FlaskForm):
-    nome = StringField('Nome de Usuário', validators=[DataRequired(), Length(min=3, max=25)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    telefone = StringField('Telefone', validators=[DataRequired(), Length(min=10, max=15)])
-    setor = StringField('Setor', validators=[DataRequired(), Length(min=2, max=50)])
-    cargo = StringField('cargo', validators=[DataRequired(), Length(min=2, max=50)])
-    senha = PasswordField('Senha', validators=[DataRequired(), Length(min=6)])
-    confirma_senha = PasswordField('Confirme a Senha', validators=[DataRequired(), EqualTo('senha')])
+    """Formulário para criação de usuário corporativo.
+    Regras adicionais:
+    - Email deve pertencer ao domínio @updesk.com.br
+    - Setor deve ser uma das opções predefinidas
+    - Senha deve conter pelo menos uma letra e um número
+    """
+    nome = StringField('Nome de Usuário', validators=[DataRequired(message='Este campo é obrigatório.'), Length(min=3, max=25)])
+    email = StringField('Email', validators=[DataRequired(message='Este campo é obrigatório.'), Email(message='Formato de e-mail inválido.')])
+    telefone = StringField('Telefone', validators=[DataRequired(message='Este campo é obrigatório.'), Length(min=10, max=15)])
+    setor = SelectField('Setor', choices=[
+        ('Administrativos e Estratégicos', 'Administrativos e Estratégicos'),
+        ('Operacionais', 'Operacionais'),
+        ('Comerciais e de Relacionamento', 'Comerciais e de Relacionamento'),
+        ('Tecnologia e Inovação', 'Tecnologia e Inovação'),
+        ('Serviços Internos', 'Serviços Internos')
+    ], validators=[DataRequired(message='Este campo é obrigatório.')])
+    cargo = SelectField('Cargo', choices=[
+        ('Usuário', 'Usuário'),
+        ('Supervisor', 'Supervisor'),
+        ('N1', 'N1'),
+        ('N2', 'N2')
+    ], validators=[DataRequired(message='Este campo é obrigatório.')])
+    senha = PasswordField('Senha', validators=[DataRequired(message='Este campo é obrigatório.'), Length(min=6, message='Mínimo 6 caracteres.'), Regexp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$', message='A senha deve ter letras e números.')])
+    confirma_senha = PasswordField('Confirme a Senha', validators=[DataRequired(message='Este campo é obrigatório.'), EqualTo('senha', message='As senhas não coincidem.')])
     submit = SubmitField('Cadastrar')
 
+    def validate_email(self, field):
+        dominio = '@updesk.com.br'
+        if not field.data.lower().endswith(dominio):
+            raise ValidationError(f'O e-mail deve terminar com {dominio}')
+
 class EditarUsuarioForm(FlaskForm):
-    nome = StringField('nome', validators=[DataRequired(), Length(min=3, max=25)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    nome = StringField('Nome', validators=[DataRequired(message='Este campo é obrigatório.'), Length(min=3, max=25)])
+    email = StringField('Email', validators=[DataRequired(message='Este campo é obrigatório.'), Email(message='Formato de e-mail inválido.')])
     telefone = StringField('Telefone', validators=[Length(min=2, max=15)])
-    setor = StringField('Setor', validators=[DataRequired(), Length(min=2, max=50)])
-    cargo = StringField('cargo', validators=[DataRequired(), Length(min=2, max=50)])
-    senha = PasswordField('Nova Senha (deixe em branco para não alterar)', validators=[Length(min=6)])
+    setor = SelectField('Setor', choices=[
+        ('Administrativos e Estratégicos', 'Administrativos e Estratégicos'),
+        ('Operacionais', 'Operacionais'),
+        ('Comerciais e de Relacionamento', 'Comerciais e de Relacionamento'),
+        ('Tecnologia e Inovação', 'Tecnologia e Inovação'),
+        ('Serviços Internos', 'Serviços Internos')
+    ], validators=[DataRequired(message='Este campo é obrigatório.')])
+    cargo = SelectField('Cargo', choices=[
+        ('Usuário', 'Usuário'),
+        ('Supervisor', 'Supervisor'),
+        ('N1', 'N1'),
+        ('N2', 'N2')
+    ], validators=[DataRequired(message='Este campo é obrigatório.')])
+    senha = PasswordField('Nova Senha (deixe em branco para não alterar)', validators=[Length(min=6), Regexp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$', message='A senha deve ter letras e números.')])
     submit = SubmitField('Editar')
+
+    def validate_email(self, field):
+        dominio = '@updesk.com.br'
+        if not field.data.lower().endswith(dominio):
+            raise ValidationError(f'O e-mail deve terminar com {dominio}')
+
+    def validate_senha(self, field):
+        # Permite vazio (sem alteração)
+        if not field.data:
+            return
+        # RegExp já cobre, mas caso mude a RegExp acima, mantemos esta verificação de defesa
+        import re
+        if not re.search(r'[A-Za-z]', field.data) or not re.search(r'\d', field.data):
+            raise ValidationError('A senha deve conter pelo menos uma letra e um número.')
 
 class chamadoForm(FlaskForm):
     solicitante = StringField('Solicitante', render_kw={'readonly': True})
@@ -47,15 +94,15 @@ class LoginForm(FlaskForm):
     """
     # Campo de Email: Requer que seja preenchido e que tenha um formato de email válido.
     # O nome da variável "Email" com "E" maiúsculo é como foi definido e deve ser usado no template.
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(message='Este campo é obrigatório.'), Email()])
     
     # Campo de Senha: Requer que seja preenchido.
-    senha = PasswordField('Senha', validators=[DataRequired()])
+    senha = PasswordField('Senha', validators=[DataRequired(message='Este campo é obrigatório.')])
     
     # Botão de Submit: Texto que aparecerá no botão.
     Submit =  SubmitField('Login')
 
 class FormularioEsqueciSenha(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(message='Este campo é obrigatório.'), Email()])
     submit = SubmitField('Recuperar Senha')
     

@@ -11,7 +11,8 @@
   background-color: var(--cor-fundo-claro, #FFF);
   box-shadow: var(--sombra-discreta, 0 2px 8px rgba(0,0,0,0.05));
   border-radius: var(--raio-borda, 4px);
-  overflow: hidden; /* Garante que o raio da borda se aplique ao conteúdo */
+  /* Permitir overflow visível para evitar corte de conteúdo dentro das células (ex.: botões) */
+  overflow: visible;
 }
 
 .table th,
@@ -20,6 +21,8 @@
   text-align: left;
   border-bottom: 1px solid var(--cor-borda, #EEE);
 }
+
+.table td { overflow: visible; } /* garantir que conteúdo interno (botões) não seja cortado por overflow */
 
 .table th {
   background-color: var(--cor-fundo-cinza, #F9F9F9);
@@ -40,5 +43,95 @@
 .table__actions {
   display: flex;
   gap: var(--espaco-xs, 8px);
-  justify-content: flex-start;
+  justify-content: flex-end; /* alinhar ações à direita */
+  align-items: center;
+  white-space: nowrap; /* evitar quebra dos botões dentro da célula */
+  /* reduzir min-width para permitir que colgroup % funcione melhor em telas médias
+     e deixar o comportamento responsivo para o container rolável */
+  min-width: 120px;
+  padding-right: 8px; /* pequeno padding interno para evitar corte */
+  box-sizing: border-box;
+}
+
+/* Padroniza botões dentro da célula de ações */
+.table__actions .btn {
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Responsividade: em telas pequenas reduz o padding dos botões para caber */
+@media (max-width: 576px) {
+  .table__actions {
+    min-width: 100px;
+    gap: 6px;
+  }
+  .table__actions .btn {
+    padding: 0 8px;
+    font-size: 12px;
+  }
+}
+
+/* Larguras fixas padronizadas para colunas */
+.col-status { width: 120px; }
+.col-data   { width: 130px; }
+/* Largura maior para comportar 2 botões (Visualizar + Atender) sem overflow */
+.col-acoes  { width: 220px; }
+
+/* Grupo de ações com layout consistente */
+.actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.actions-group .btn {
+  height: 32px; /* padroniza altura dos botões de ação */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Responsividade: em telas médias, apertar um pouco as ações */
+@media (max-width: 992px) {
+  .col-acoes { width: 200px; }
+}
+@media (max-width: 768px) {
+  .col-status { width: 110px; }
+  .col-data   { width: 120px; }
+  .col-acoes  { width: 160px; }
+}
+@media (max-width: 576px) {
+  .btn-label { display: none; } /* mostrar ícone apenas em telas pequenas */
+  .col-acoes { width: 96px; }
+  .table th, .table td { padding: 10px 8px; }
+  .table__actions { gap: 6px; }
+  .table__actions .btn { height: 30px; padding: 0 8px; gap: 4px; }
+}
+
+/* Em telas muito pequenas, priorizar Título e Ações: ocultar colunas secundárias */
+/* Modo cards para tabelas em telas pequenas */
+@media (max-width: 576px) {
+  .responsive-table thead { display: none; }
+  .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td { display: block; width: 100%; }
+  .responsive-table tr { margin-bottom: 12px; border: 1px solid var(--cor-borda, #EEE); border-radius: 8px; background: var(--bs-card-bg, #FFF); overflow: hidden; }
+  .responsive-table td { 
+    display: grid; 
+    grid-template-columns: 110px 1fr; 
+    align-items: center; 
+    padding: 10px 12px; 
+    border: 0; 
+    border-bottom: 1px solid var(--cor-borda, #EEE);
+  }
+  .responsive-table td:last-child { border-bottom: 0; }
+  .responsive-table td::before { 
+    content: attr(data-label); 
+    font-weight: 600; 
+    color: var(--cor-texto-secundario, #888);
+    padding-right: 8px; 
+  }
+  .responsive-table td.table__actions { grid-template-columns: 1fr; text-align: right; }
+  .responsive-table td.table__actions .actions-group { justify-content: flex-end; }
 }

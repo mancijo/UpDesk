@@ -6,7 +6,7 @@ Responsabilidade:
 - Gerenciar as rotas relacionadas à autenticação de usuários, como login e logout.
 - Funciona como uma API interna para o frontend, recebendo dados em JSON e respondendo em JSON.
 """
-from flask import Blueprint, request, jsonify, session, redirect, url_for, render_template
+from flask import Blueprint, request, jsonify, session, redirect, url_for, render_template, current_app
 from werkzeug.security import check_password_hash
 from ..models import Usuario, db # Import db aqui se for fazer commits
 from ..forms import FormularioEsqueciSenha
@@ -41,6 +41,13 @@ def login():
         # Se a autenticação for válida, armazena os dados do usuário na sessão do Flask
         session['usuario_nome'] = usuario.nome
         session['usuario_id'] = usuario.id
+        # Armazena o cargo na sessão para uso em templates (frontend) e verificações simples
+        session['usuario_cargo'] = usuario.cargo
+        # Armazena o salt atual da aplicação na sessão para validar reinícios
+        try:
+            session['session_salt'] = current_app.config.get('SESSION_SALT')
+        except Exception:
+            pass
         
         # Retorna uma resposta de sucesso com os dados do usuário
         return jsonify({

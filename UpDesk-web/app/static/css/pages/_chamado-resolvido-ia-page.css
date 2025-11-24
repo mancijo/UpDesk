@@ -1,103 +1,40 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    padding: 20px;
+/* Layout específico da tela de chamado resolvido por IA - otimizado para menor altura */
+.chamado-resolvido-wrapper {
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 18px 40px;
+  min-height:60vh; /* reduzido de 80vh para evitar excesso de espaço e scroll */
 }
 
-.card-container {
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    text-align: center;
-    max-width: 800px;
-    width: 100%;
+.chamado-resolvido-card {
+  background:#ffffff;
+  border-radius:14px;
+  box-shadow:0 4px 12px -2px rgba(0,0,0,.1),0 2px 6px -1px rgba(0,0,0,.06);
+  padding:28px 28px 26px;
+  text-align:center;
+  max-width:680px;
+  width:100%;
 }
 
-.card-header {
-    margin-bottom: 30px;
-}
+.success-icon { color:#198754; font-size:40px; margin-bottom:12px; }
+.card-title { font-weight:600; color:#1f2933; }
 
-.success-icon {
-    color: #28a745;
-    font-size: 50px;
-    margin-bottom: 20px;
-}
+.chamado-info { font-size:1rem; color:#374151; margin:0 0 .5rem; }
+.chamado-titulo { font-weight:600; background:#f8f9fa; padding:4px 12px; border-radius:6px; border:1px solid #e0e0e0; display:inline-block; }
+.agradecimento { font-size:.875rem; line-height:1.45; color:#555; }
 
-.card-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #333;
-}
+.card-footer { display:flex; justify-content:center; gap:12px; }
+.btn-redirect { font-weight:600; gap:6px; }
+.btn-redirect .fas { font-size:16px; }
+.btn-primary.btn-redirect { background:#0b5ed7; border:none; }
+.btn-primary.btn-redirect:hover { background:#0a53c1; }
+.btn-outline-secondary.btn-redirect { background:#ffffff; }
 
-.card-body {
-    margin-bottom: 40px;
-}
-
-.chamado-info {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 20px;
-}
-
-.chamado-titulo {
-    font-weight: 600;
-    background-color: #f8f9fa;
-    padding: 5px 15px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    display: inline-block;
-}
-
-.agradecimento {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #666;
-}
-
-.card-footer {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.btn-redirect {
-    padding: 15px 30px;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.btn-redirect .fas {
-    font-size: 20px;
-}
-
-.btn-primary.btn-redirect {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-}
-
-.btn-primary.btn-redirect:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-.btn-secondary.btn-redirect {
-    background-color: #e9ecef;
-    color: #333;
-    border: 1px solid #ced4da;
-}
-
-.btn-secondary.btn-redirect:hover {
-    background-color: #d6d8db;
-    transform: translateY(-2px);
+@media (max-width:576px){
+  .chamado-resolvido-card { padding:24px 20px 22px; }
+  .success-icon { font-size:36px; margin-bottom:10px; }
+  .agradecimento { font-size:.82rem; }
+  .card-footer { flex-direction:column; }
+  .btn-redirect { width:100%; justify-content:center; }
 }

@@ -1,4 +1,4 @@
-x{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}Chamado Enviado com Sucesso{% endblock %}
 
@@ -9,34 +9,45 @@ x{% extends "base.html" %}
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="card-container">
-        <div class="card-header-success">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h1 class="card-title-success">Chamado enviado com sucesso!</h1>
-        </div>
-        <div class="card-body">
-            <div class="info-item">
-                <span class="info-label">Título do Chamado:</span>
-                <span class="info-value">{{ (chamado.titulo_Chamado if chamado else chamado_data.titulo) if chamado or chamado_data else '' }}</span>
+<main class="container chamado-enviado-wrapper" role="main">
+    <article class="card-container mx-auto" aria-labelledby="chamado-sucesso-title">
+        <header class="card-header-success text-center py-4">
+            <i class="fas fa-check-circle success-icon" aria-hidden="true"></i>
+            <h1 id="chamado-sucesso-title" class="card-title-success">Chamado enviado com sucesso!</h1>
+            <p class="lead visually-hidden" aria-live="polite">Sucesso: Este chamado foi aberto e encaminhado ao setor de triagem para avaliação.</p>
+        </header>
+
+        <section class="card-body p-4" aria-describedby="chamado-detalhes">
+
+            <dl id="chamado-detalhes" class="row">
+                <dt class="col-12 col-md-3">Número do Chamado</dt>
+                <dd class="col-12 col-md-9 d-flex align-items-center gap-2">
+                    <span id="chamado-id">{{ ('#' ~ chamado.chamado_ID) if chamado else (('#' ~ chamado_data.get('id')) if chamado_data and chamado_data.get('id') else '') }}</span>
+                </dd>
+                <dt class="col-12 col-md-3">Título do Chamado</dt>
+                <dd class="col-12 col-md-9">{{ (chamado.titulo_Chamado if chamado else chamado_data.titulo) if chamado or chamado_data else '' }}</dd>
+
+                <dt class="col-12 col-md-3">Solicitante</dt>
+                <dd class="col-12 col-md-9">{{ user.name if user else '' }}</dd>
+
+                <dt class="col-12 col-md-3">Prioridade</dt>
+                <dd class="col-12 col-md-9">{{ (chamado.prioridade_Chamado if chamado else chamado_data.prioridade) if chamado or chamado_data else '' }}</dd>
+
+                <dt class="col-12 col-md-3">Encaminhamento</dt>
+                <dd class="col-12 col-md-9">Encaminhado ao setor de triagem para avaliação.</dd>
+            </dl>
+        </section>
+
+        <footer class="card-footer d-flex flex-column flex-md-row justify-content-center gap-3 py-4 align-items-center">
+            <div class="d-flex gap-2">
+                <a id="btn-ver-chamados" href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary" aria-label="Ver meus chamados">Ver Meus Chamados</a>
+                <a href="{{ url_for('main.home') }}" class="btn btn-outline-secondary" aria-label="Ir para página inicial">Ir para Página Inicial</a>
             </div>
-            <div class="info-item">
-                <span class="info-label">Solicitante:</span>
-                <span class="info-value">{{ user.name if user else '' }}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Urgência:</span>
-                <span class="info-value">{{ (chamado.prioridade_Chamado if chamado else chamado_data.prioridade) if chamado or chamado_data else '' }}</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-redirect">
-                Ir para Página Inicial
-            </a>
-            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-secondary btn-redirect">
-                Ver Meus Chamados
-            </a>
-        </div>
-    </div>
-</div>
+        </footer>
+    </article>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chamado_enviado.js') }}"></script>
 {% endblock %}

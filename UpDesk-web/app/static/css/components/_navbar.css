@@ -1,8 +1,5 @@
 /* c:\UpDesk\UpDesk-web\app\static\css\components\_navbar.css */
-/* 
-Este arquivo contém os estilos para a barra de navegação responsiva da aplicação UpDesk,
-implementada usando CSS puro para estrutura semântica e manutenibilidade.
-*/
+/* Navbar unificada com cor primária para todos os perfis */
 
 :root {
     --color-primary: #2B4C7E;
@@ -13,13 +10,12 @@ implementada usando CSS puro para estrutura semântica e manutenibilidade.
     --color-border-light: #eee;
 }
 
-/* Estilos gerais para o container da barra de navegação */
 header.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.625rem 1.25rem;
-    background-color: var(--color-background);
+    background: var(--color-background); /* volta ao branco original */
     border-bottom: 1px solid var(--color-border);
     position: fixed;
     top: 0;
@@ -27,58 +23,56 @@ header.navbar {
     width: 100%;
     z-index: 10;
     min-height: 3.75rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* 2 Logo centralizada */
 .navbar-brand {
-    flex: 0; /* não cresce nem encolhe */
+    flex: 0;
     order: 2;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 1.5rem;
     color: var(--color-primary);
     text-decoration: none;
     text-align: center;
-    position: absolute; /* centraliza perfeitamente */
+    position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    letter-spacing: .5px;
 }
 
-/* 1 Menu à esquerda */
 .navbar-menu {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     order: 1;
-    flex: 1; /* ocupa espaço proporcional à esquerda */
+    flex: 1;
 }
 
 .navbar-nav {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex; /* Links em linha no desktop */
-    flex-direction: row; /* Links um ao lado do outro em desktop */
+    display: flex;
+    flex-direction: row;
 }
 
-.navbar-menu li {
-    margin-left: 1rem;
-}
+.navbar-menu li { margin-left: 1rem; }
 
 .navbar-menu a {
     text-decoration: none;
     color: var(--color-text);
     padding: 0.5rem 1rem;
     display: block;
+    transition: color .15s ease, border-color .15s ease;
+    border-bottom: 2px solid transparent;
 }
-
 .navbar-menu a:hover,
 .navbar-menu a.active {
-    color: var(--color-primary); /* Cor de destaque ao passar o mouse ou ativo */
-    border-bottom: 2px solid var(--color-primary); /* Adiciona uma linha abaixo do link ativo */
-    padding-bottom: 0.3rem; /* Ajusta o padding para compensar a borda */
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 0.3rem;
 }
 
-/*  Dropdown à direita */
 .navbar-user-dropdown {
     order: 3;
     flex: 1;
@@ -87,74 +81,60 @@ header.navbar {
 }
 
 .navbar-user-dropdown button {
-    background-color: var(--color-primary); /* Cor de fundo do botão */
-    color: white;
+    background: var(--color-primary);
+    color: #fff;
     padding: 0.625rem 1.25rem;
     border: none;
     cursor: pointer;
-    font-size: 1rem;
-    border-radius: 5px;
-    display: flex; /* Para alinhar texto e ícone */
+    font-size: 0.95rem;
+    border-radius: 6px;
+    display: flex;
     align-items: center;
+    transition: background .15s ease;
+}
+.navbar-user-dropdown button:hover {
+    background: #203a5d; /* tom mais escuro no hover */
 }
 
 .navbar-user-dropdown .dropdown-arrow {
     margin-left: 8px;
     transition: transform 0.3s ease;
 }
-
-.navbar-user-dropdown button[aria-expanded="true"] .dropdown-arrow {
-    transform: rotate(180deg);
-}
+.navbar-user-dropdown button[aria-expanded="true"] .dropdown-arrow { transform: rotate(180deg); }
 
 .navbar-user-dropdown-content {
     display: none;
     position: absolute;
-    background-color: var(--color-background);
+    background: #fff;
     min-width: 10rem;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
     z-index: 1;
-    right: 0; /* Alinha o dropdown à direita */
-    list-style: none; /* Remove os marcadores de lista */
+    right: 0;
+    list-style: none;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .navbar-user-dropdown-content a {
     color: var(--color-text);
-    padding: 0.75rem 1rem;
+    padding: 0.7rem 1rem;
     text-decoration: none;
     display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
+.navbar-user-dropdown-content a:hover { background: var(--color-hover-background); }
+.navbar-user-dropdown-content.show { display: block; }
 
-.navbar-user-dropdown-content a:hover {
-    background-color: var(--color-hover-background);
-}
-
-.navbar-user-dropdown-content.show {
-    display: block; /* Mostra o dropdown quando a classe 'show' é adicionada */
-}
-
-
-/* Media Queries para Responsividade */
 @media (max-width: 768px) {
-    .navbar-menu {
-        display: none; /* Esconde o menu em mobile por padrão */
-    }
-
+    .navbar-menu { display: none; }
     .navbar-brand {
         position: static;
         transform: none;
-        text-align: center; /* Centraliza a logo em mobile */
+        text-align: center;
         flex-grow: 1;
-        order: 0; /* Ordem padrão */
+        order: 0;
     }
-
-    .navbar-user-dropdown {
-        margin-left: 0; /* Remove a margem automática */
-        order: 1; /* Coloca o dropdown à direita em mobile */
-    }
-
-    .navbar-user-dropdown-content {
-        left: auto;
-        right: 0; /* Alinha o dropdown à direita em mobile */
-    }
+    .navbar-user-dropdown { margin-left: 0; order: 1; }
+    .navbar-user-dropdown-content { left: auto; right: 0; }
 }

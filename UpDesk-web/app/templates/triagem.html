@@ -99,11 +99,7 @@
                         Solicitante {% if order_by == 'solicitanteID' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
                     </a>
                 </div>
-                <div>
-                    <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='categoria_Chamado', direction='asc' if order_by == 'categoria_Chamado' and direction == 'desc' else 'desc') }}">
-                        Categoria {% if order_by == 'categoria_Chamado' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
-                    </a>
-                </div>
+                {# Categoria column removed as requested #}
                 <div>
                     <a href="{{ url_for('chamados.triagem', page=chamados_paginados.page, q=search_query, prioridade=prioridade_filtro, status=status_filtro, data=data_filtro, order_by='prioridade_Chamado', direction='asc' if order_by == 'prioridade_Chamado' and direction == 'desc' else 'desc') }}">
                         Prioridade {% if order_by == 'prioridade_Chamado' %}{% if direction == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
@@ -128,7 +124,7 @@
                 <div>{{ chamado.chamado_ID }}</div>
                 <div>{{ chamado.titulo_Chamado }}</div>
                 <div>{{ chamado.solicitante.nome if chamado.solicitante else 'N/A' }}</div>
-                <div>{{ chamado.categoria_Chamado }}</div>
+                {# Categoria removida da listagem conforme requisito anterior #}
                 <div>
                     <span class="badge 
                         {% if chamado.prioridade_Chamado == 'Crítica' %}bg-danger
@@ -150,22 +146,24 @@
                         {{ chamado.status_Chamado }}
                     </span>
                 </div>
-                <div class="ticket-actions text-end">
-                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#visualizarChamadoModal"
+                <div class="ticket-actions text-end d-flex justify-content-end gap-2">
+                    <button class="btn btn-sm btn-secondary btn-action btn-square" data-bs-toggle="modal" data-bs-target="#visualizarChamadoModal"
                         data-id="{{ chamado.chamado_ID }}"
                         data-titulo="{{ chamado.titulo_Chamado }}"
                         data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
-                        data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
-                        data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
-                        data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
+                        data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante and chamado.solicitante.nome else 'Não informado' }}"
+                        data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante and chamado.solicitante.email else 'Não informado' }}"
+                        data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante and chamado.solicitante.telefone else 'Não informado' }}"
                         data-status="{{ chamado.status_Chamado }}"
-                        data-categoria="{{ chamado.categoria_Chamado }}"
+                        data-prioridade="{{ chamado.prioridade_Chamado }}"
                         data-descricao="{{ chamado.descricao_Chamado }}">
                         Visualizar
                     </button>
-                    <a class="btn btn-sm btn-success" href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}">
+                    {% if is_staff %}
+                    <a class="btn btn-sm btn-action btn-square btn-system" href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}" title="Triar Chamado" aria-label="Triar chamado {{ chamado.chamado_ID }}">
                         Triar
                     </a>
+                    {% endif %}
                 </div>
             </div>
             {% else %}
@@ -209,33 +207,68 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <h1 class="modal-title fs-5" id="visualizarChamadoModalLabel">Dados do Chamado</h1>
-                    <h2 class="modal-subtitle" id="modal-data-abertura">Aberto em: ...</h2>
+                    <h1 class="modal-title fs-5" id="visualizarChamadoModalLabel"><span id="modal-titulo">...</span></h1>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon"><i class="bi bi-person"></i></span>
-                    <strong>Solicitante:</strong><br>
-                    <span id="modal-solicitante-nome">...</span><br>
-                    <span id="modal-solicitante-email">...</span><br>
-                    Ramal: <span id="modal-solicitante-ramal">...</span>
+                <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <section class="info-box p-3 border rounded h-100" aria-labelledby="solicitante-info-heading">
+                            <h3 id="solicitante-info-heading" class="visually-hidden">Informações do Solicitante</h3>
+                            <span class="info-box-icon me-2"><i class="bi bi-person"></i></span>
+                            <div class="info-content">
+                                <div><strong>Solicitante:</strong></div>
+                                <div id="modal-solicitante-nome">...</div>
+                                <div id="modal-solicitante-email">...</div>
+                                <div>Ramal: <span id="modal-solicitante-ramal">...</span></div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <section class="info-box p-3 border rounded h-100" aria-labelledby="chamado-info-heading">
+                            <h3 id="chamado-info-heading" class="visually-hidden">Informações do Chamado</h3>
+                            <span class="info-box-icon me-2"><i class="bi bi-journal-text"></i></span>
+                            <div class="info-content">
+                                <div class="d-flex justify-content-between text-muted mb-2 flex-wrap gap-3 align-items-start">
+                                    <div><strong>Status:</strong> <span id="modal-status">...</span></div>
+                                    <div><strong>Prioridade:</strong> <span id="modal-prioridade">...</span></div>
+                                    {% if is_staff %}
+                                    <form id="modal-alterar-prioridade-form" class="d-flex align-items-center gap-2" method="POST">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <label for="modal-prioridade-select" class="form-label mb-0 small">Alterar:</label>
+                                        <select id="modal-prioridade-select" name="prioridade" class="form-select form-select-sm">
+                                            <option value="Não Classificada">Não Classificada</option>
+                                            <option value="Baixa">Baixa</option>
+                                            <option value="Média">Média</option>
+                                            <option value="Alta">Alta</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">Salvar</button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                                <div class="mt-2 text-muted small w-100" id="modal-data-abertura">Aberto em: ...</div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
-                <div class="text-center my-4">
-                    <span class="title-badge-modal" id="modal-titulo">...</span>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p class="mb-2"><strong>Descrição:</strong></p>
+                        <div class="description-box p-3 border rounded" id="modal-descricao">...
+                        </div>
+                        <div id="modal-anexo-container" class="mt-3" style="display: none;">
+                            <p class="mb-2"><strong>Anexo:</strong></p>
+                            <a id="modal-anexo-link" href="#" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-paperclip"></i> Visualizar Anexo</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-between text-muted mb-2">
-                    <span><strong>Status:</strong> <span id="modal-status">...</span></span>
-                    <span><strong>Categoria:</strong> <span id="modal-categoria">...</span></span>
-                </div>
-                <p class="mt-3"><strong>Descrição:</strong></p>
-                <div class="description-box" id="modal-descricao">...</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
-                <a href="#" id="devolverTriagemBtn" class="btn btn-warning rounded-pill">Devolver para Triagem</a>
-                <a href="#" id="triarChamadoBtn" class="btn btn-iniciar-modal rounded-pill">Triar Chamado</a>
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Voltar</button>
+                {% if is_staff %}
+                <a href="#" id="triarChamadoBtn" class="btn btn-iniciar-modal btn-square">Triar Chamado</a>
+                {% endif %}
             </div>
         </div>
     </div>
