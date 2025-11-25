@@ -1,15 +1,19 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, BackHandler, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useChamado } from '../../../context/ChamadoContext';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../../context/AuthContext';
 import Button from '../../../components/Button';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 export default function SolucaoIAScreen() {
-  const { newChamado } = useChamado();
-  const { user } = useAuth();
-  const router = useRouter();
+  const { newChamado } = useChamado(); // Pega os dados do chamado do contexto
+  const { user } = useAuth(); // Pega os dados do usuário autenticado
+  const router = useRouter(); // Navegação entre telas
+  const navigation: any = useNavigation(); // Navegação para manipular opções do cabeçalho
+
+  //Definindo ações dos botões
 
   const handleOpenTicket = () => {
     // Navega para a próxima tela no fluxo
@@ -17,10 +21,35 @@ export default function SolucaoIAScreen() {
   };
 
   const handleFinish = () => {
-    // Lógica para finalizar o chamado (pode ser implementado depois)
-    // Por agora, pode voltar para a tela de menu, por exemplo.
+    // Lógica para finalizar o chamado 
     router.replace('/menu');
   };
+
+  // Bloqueia o botão físico de voltar no Android enquanto esta tela estiver em foco.
+  useFocusEffect(
+    useCallback(() => {
+      if (Platform.OS === 'android') {
+        const onBackPress = () => {
+          // retornar true significa: consumi o evento e NÃO volte
+          return true;
+        };
+
+        const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => subscription.remove();
+      }
+
+      return undefined;
+    }, [])
+  );
+
+  // Remove botão de voltar do cabeçalho e desabilita gesto de swipe (iOS/Android)
+  useEffect(() => {
+    try {
+      navigation.setOptions({ headerLeft: () => null, gestureEnabled: false });
+    } catch (e) {
+      // Se navigation não estiver disponível por algum motivo, ignore silenciosamente
+    }
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.safeArea}>

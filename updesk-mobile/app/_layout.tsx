@@ -17,6 +17,7 @@ export default function RootLayout() {
         >
           <Stack.Screen name="login" />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="forgetPassword" options={{ title: 'forgetPassword', headerShown: false }} />
         </Stack>
       </AuthProvider>
     </SafeAreaProvider>
