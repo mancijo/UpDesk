@@ -20,13 +20,7 @@
         >
             {{ form.hidden_tag() }}
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-            {% endwith %}
+            {# Flash messages are handled globally in base.html #}
 
             {%- if form.errors -%}
             <div class="alert alert-danger" role="alert">

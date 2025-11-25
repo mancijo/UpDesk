@@ -16,9 +16,16 @@
             <div class="solucao-ia-page__solution-content">{{ solucao_html|safe }}</div>
         </div>
 
+        {% if prioridade_sugerida %}
+        <div class="solucao-ia-page__priority-box mt-4 p-3 border rounded" role="note" aria-label="Prioridade sugerida pela IA">
+            <strong>Prioridade Sugerida:</strong> <span class="badge bg-secondary">{{ prioridade_sugerida }}</span>
+            <p class="small text-muted mb-0 mt-2">Esta prioridade foi estimada automaticamente pela IA com base no título e descrição. Você poderá ajustá-la posteriormente na triagem se necessário.</p>
+        </div>
+        {% endif %}
+
         <hr>
 
-        <p class="solucao-ia-page__question">A solução acima resolveu o seu problema?</p>
+    <p class="solucao-ia-page__question">A solução acima resolveu o seu problema?</p>
             {% if 'Não foi possível obter uma sugestão da IA' in solucao or 'Não foi possível obter uma sugestão' in solucao %}
             <div class="solucao-ia-page__fallback-card" role="complementary" aria-labelledby="iaIndisponivelTitle">
                 <h4 id="iaIndisponivelTitle" class="solucao-ia-page__fallback-card-title">A IA está indisponível — algumas ações manuais</h4>
@@ -35,11 +42,13 @@
         <div class="solucao-ia-page__actions">
             <!-- Formulário para finalizar (solução funcionou) -->
             <form action="{{ url_for('chamados.resolvido_pela_ia') }}" method="post" class="d-inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="btn btn-primary custom-btn shadow-sm"><i class="bi bi-check-circle me-2"></i>Sim, problema resolvido!</button>
             </form>
 
             <!-- Formulário para abrir o chamado (solução não funcionou) -->
             <form action="{{ url_for('chamados.confirmar_abertura_chamado') }}" method="post" class="d-inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="btn btn-primary custom-btn shadow-sm"><i class="bi bi-plus-circle me-2"></i>Não, quero abrir um chamado</button>
             </form>
         </div>

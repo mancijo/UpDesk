@@ -12,47 +12,62 @@
         <input class="form-control user-page__search-input" type="search" name="q" placeholder="Pesquisar usuário" aria-label="Pesquisar">
       </form>
 
-      <button class="btn btn-success m-2" onclick="openCreateUserModal(event)">Criar usuário</button>
+      <button class="btn btn-success m-2" type="button" onclick="openCreateUserModal(event)">Criar usuário</button>
     </div>
 
     <div class="modal fade" id="modalCriarUsuario" tabindex="-1" aria-labelledby="modalCriarUsuarioLabel"
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <form id="formCriarUsuario" method="post" action="{{ url_for('criar_usuario') }}" novalidate>
+          <form id="formCriarUsuario" method="post" action="{{ url_for('usuarios.criar_usuario') }}" novalidate autocomplete="off">
+            <!-- Dummy anti-autofill campos escondidos para reduzir preenchimento automático do navegador -->
+            <input type="text" name="_fake_user" autocomplete="off" style="display:none" tabindex="-1" aria-hidden="true">
+            <!-- Dummy hidden password to discourage password managers from suggesting saved passwords for the visible fields -->
+            <input type="password" name="_fake_pass" autocomplete="new-password" style="display:none" tabindex="-1" aria-hidden="true">
             {{ form_criar.csrf_token }}
             <div class="modal-header">
               <h5 class="modal-title" id="modalCriarUsuarioLabel">Criar novo usuário</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
+              <div id="createFormErrors" class="alert alert-danger d-none" role="alert" aria-live="polite"></div>
               <div class="mb-3">
                 {{ form_criar.nome.label(class="form-label") }}
-                {{ form_criar.nome(class="form-control", id="nome") }}
+                {{ form_criar.nome(class="form-control", id="nome", autocomplete="off", value="") }}
+                <div class="invalid-feedback" id="error-nome"></div>
               </div>
               <div class="mb-3">
                 {{ form_criar.email.label(class="form-label") }}
-                {{ form_criar.email(class="form-control", id="email") }}
+                <div class="email-suggest-wrapper" style="position:relative">
+                  {{ form_criar.email(class="form-control", id="email", autocomplete="off", autocapitalize="none", value="", pattern="^[A-Za-z0-9._%+-]+@updesk\.com\.br$", title="Use um e-mail corporativo @updesk.com.br") }}
+                  <div id="emailSuggestion" role="button" tabindex="0" aria-hidden="true" class="email-suggestion">@updesk.com.br</div>
+                </div>
+                <div class="invalid-feedback" id="error-email"></div>
               </div>
               <div class="mb-3">
                 {{ form_criar.telefone.label(class="form-label") }}
-                {{ form_criar.telefone(class="form-control", id="telefone") }}
+                {{ form_criar.telefone(class="form-control", id="telefone", autocomplete="off", value="", inputmode="tel", placeholder="(99) 99999-9999") }}
+                <div class="invalid-feedback" id="error-telefone"></div>
               </div>
               <div class="mb-3">
                 {{ form_criar.setor.label(class="form-label") }}
-                {{ form_criar.setor(class="form-control", id="setor") }}
+                {{ form_criar.setor(class="form-select", id="setor") }}
+                <div class="invalid-feedback" id="error-setor"></div>
               </div>
               <div class="mb-3">
                 {{ form_criar.cargo.label(class="form-label") }}
-                {{ form_criar.cargo(class="form-control", id="cargo") }}
+                {{ form_criar.cargo(class="form-select", id="cargo") }}
+                <div class="invalid-feedback" id="error-cargo"></div>
               </div>
               <div class="mb-3">
                 {{ form_criar.senha.label(class="form-label") }}
-                {{ form_criar.senha(class="form-control", id="senha") }}
+                {{ form_criar.senha(class="form-control", id="senha", autocomplete="new-password", readonly="readonly", value="", pattern="(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}", title="Mínimo 6 caracteres com letras e números") }}
+                <div class="invalid-feedback" id="error-senha"></div>
               </div>
               <div class="mb-3">
                 {{ form_criar.confirma_senha.label(class="form-label") }}
-                {{ form_criar.confirma_senha(class="form-control", id="confirma_senha") }}
+                {{ form_criar.confirma_senha(class="form-control", id="confirma_senha", autocomplete="new-password", readonly="readonly", value="") }}
+                <div class="invalid-feedback" id="error-confirma_senha"></div>
               </div>
             </div>
             <div class="modal-footer">
@@ -85,19 +100,31 @@
               </div>
               <div class="mb-3">
                 <label for="edit-telefone" class="form-label">Telefone</label>
-                <input type="text" class="form-control" id="edit-telefone" name="telefone" required>
+                <input type="text" class="form-control" id="edit-telefone" name="telefone" required inputmode="tel" placeholder="(99) 99999-9999">
               </div>
               <div class="mb-3">
                 <label for="edit-setor" class="form-label">Setor</label>
-                <input type="text" class="form-control" id="edit-setor" name="setor" required>
+                <select id="edit-setor" name="setor" class="form-select" required>
+                  <option value="">Selecione...</option>
+                  <option value="Administrativos e Estratégicos">Administrativos e Estratégicos</option>
+                  <option value="Operacionais">Operacionais</option>
+                  <option value="Comerciais e de Relacionamento">Comerciais e de Relacionamento</option>
+                  <option value="Tecnologia e Inovação">Tecnologia e Inovação</option>
+                  <option value="Serviços Internos">Serviços Internos</option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="edit-cargo" class="form-label">Cargo</label>
-                <input type="text" class="form-control" id="edit-cargo" name="cargo" required>
+                <select id="edit-cargo" name="cargo" class="form-select" required>
+                  <option value="Usuário">Usuário</option>
+                  <option value="Supervisor">Supervisor</option>
+                  <option value="N1">N1</option>
+                  <option value="N2">N2</option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="senha" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="edit-senha" name="senha" placeholder="Deixe em branco para não alterar">
+                <input type="password" class="form-control" id="edit-senha" name="senha" placeholder="Deixe em branco para não alterar" readonly="readonly">
               </div>
             </div>
             <div class="modal-footer">
@@ -111,14 +138,15 @@
     <!-- Modal Edit Usr -->
 
     <table class="table table-bordered table-striped">
+      <caption>Lista de usuários do sistema</caption>
       <thead>
         <tr>
-          <th class="col-id">ID</th>
-          <th>Nome</th>
-          <th class="col-email">Email</th>
-          <th class="col-cargo">Cargo/Função</th>
-          <th class="col-status">Status</th>
-          <th>Ações</th>
+          <th class="col-id" scope="col">ID</th>
+          <th scope="col">Nome</th>
+          <th class="col-email" scope="col">Email</th>
+          <th class="col-cargo" scope="col">Cargo/Função</th>
+            <th class="col-status" scope="col">Status</th>
+          <th scope="col">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -128,8 +156,15 @@
           <td>{{ usuario.nome }}</td>
           <td class="col-email">{{ usuario.email }}</td>
           <td class="col-cargo">{{ usuario.cargo }}</td>
-          <td class="col-status"></td>
+          <td class="col-status">
+            {% if usuario.ativo %}
+              <span class="badge bg-success">Ativo</span>
+            {% else %}
+              <span class="badge bg-secondary">Inativo</span>
+            {% endif %}
+          </td>
           <td class="user-page__col-acoes">
+            {% if usuario.ativo %}
             <button type="button" class="btn btn-outline-danger"
               onclick="abrirModalExcluir('{{ usuario.id }}', '{{ usuario.nome }}', '{{ usuario.email }}')">
               Excluir
@@ -137,13 +172,17 @@
             <button 
               type="button" 
               class="btn btn-primary user-page__editar-usuario-btn"
+              onclick="openEditUserModal(this)"
               data-id="{{ usuario.id }}"
               data-nome="{{ usuario.nome }}"
               data-email="{{ usuario.email }}"
               data-telefone="{{ usuario.telefone }}"
               data-setor="{{ usuario.setor }}"
               data-cargo="{{ usuario.cargo }}"
->Editar</button>
+            >Editar</button>
+            {% else %}
+            <button type="button" class="btn btn-outline-success" onclick="reativarUsuario('{{ usuario.id }}')">Reativar</button>
+            {% endif %}
           </td>
 
         </tr>
@@ -188,7 +227,8 @@
   <div class="modal fade" id="modalSucesso" tabindex="-1" aria-labelledby="modalSucessoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header bg-success text-white">
+        <!-- Cabeçalho com visual mais "clean": fundo branco, borda sutil e título em tom primário -->
+        <div class="modal-header modal-header-clean">
           <h5 class="modal-title" id="modalSucessoLabel">Sucesso</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
@@ -196,7 +236,7 @@
           Usuário criado com sucesso!
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+          <button type="button" class="btn btn-outline-primary-clean" data-bs-dismiss="modal">OK</button>
         </div>
       </div>
     </div>

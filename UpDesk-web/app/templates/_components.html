@@ -1,0 +1,123 @@
+{# Componentes reutilizáveis para templates - badges e tags #}
+{% macro priority_badge(prioridade) -%}
+    {%- set cls = 'nao-classificada' -%}
+    {%- if prioridade == 'Crítica' -%}{%- set cls = 'critica' -%}
+    {%- elif prioridade == 'Alta' -%}{%- set cls = 'alta' -%}
+    {%- elif prioridade == 'Média' -%}{%- set cls = 'media' -%}
+    {%- elif prioridade == 'Baixa' -%}{%- set cls = 'baixa' -%}
+    {%- endif -%}
+    <span class="badge-pri {{ cls }}" role="status" aria-label="Prioridade {{ prioridade }}">{{ prioridade }}</span>
+{%- endmacro %}
+
+{% macro status_tag(status) -%}
+    {%- set key = (status | default('') | lower).replace(' ', '-') -%}
+    <span class="status-tag status-{{ key }}" role="status" aria-label="Status {{ status }}">{{ status }}</span>
+{%- endmacro %}
+
+{# Grupo padronizado de ações por chamado #}
+{% macro actions_buttons(chamado, is_staff=False, current_user_id=None) -%}
+    {# Usuário final: status 'Aberto' vira badge de triagem na coluna ações, sem duplicar coluna STATUS #}
+    {% if not is_staff and chamado.status_Chamado == 'Aberto' %}
+    <nav class="actions-group calls-table__actions-group justify-content-start" aria-label="Status do Chamado">
+        <span class="badge chamado-pending" role="status" aria-label="Chamado aguardando triagem" title="Chamado aguardando triagem">
+            <i class="bi bi-hourglass-split" aria-hidden="true"></i> Em Triagem
+        </span>
+    </nav>
+    {% else %}
+    {# Inline actions - visíveis em larguras >= lg (>=992px) #}
+    <div class="d-none d-lg-flex w-100">
+        <nav class="actions-group calls-table__actions-group" aria-label="Ações do Chamado">
+            <button type="button" class="btn btn-outline-secondary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#visualizarChamadoModal"
+                data-chamado-id="{{ chamado.chamado_ID }}"
+                data-titulo="{{ chamado.titulo_Chamado }}"
+                data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
+                data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
+                data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
+                data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
+                data-status="{{ chamado.status_Chamado }}"
+                data-prioridade="{{ chamado.prioridade_Chamado }}"
+                data-descricao="{{ chamado.descricao_Chamado }}"
+                data-anexo-id="{{ chamado.chamado_ID }}"
+                data-anexo-nome="{{ chamado.nome_anexo if chamado.nome_anexo else '' }}"
+                data-has-anexo="{{ '1' if chamado.anexo_Chamado else '0' }}"
+                aria-label="Visualizar chamado">
+                <i class="bi bi-eye" aria-hidden="true"></i><span class="btn-label"> Visualizar</span>
+            </button>
+
+            {% if is_staff %}
+                {% if chamado.status_Chamado in ['Aberto','Em Atendimento'] %}
+                <a role="button" class="btn btn-primary btn-sm"
+                     href="{{ url_for('chamados.atender_chamado', chamado_id=chamado.chamado_ID) }}"
+                     title="Atender Chamado" aria-label="Atender chamado">
+                        <i class="bi bi-headset" aria-hidden="true"></i><span class="btn-label"> Atender</span>
+                </a>
+                {% endif %}
+                {% if chamado.status_Chamado == 'Resolvido' or chamado.status_Chamado == 'Resolvido por IA' %}
+        <form action="{{ url_for('chamados.reabrir_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-warning btn-sm"
+                    onclick="return confirm('Tem certeza que deseja reabrir este chamado?')"
+                    title="Reabrir Chamado">
+                <i class="bi bi-arrow-clockwise" aria-hidden="true"></i><span class="btn-label"> Reabrir</span>
+            </button>
+        </form>
+                {% endif %}
+            {% endif %}
+
+            {% if not is_staff and current_user_id and chamado.status_Chamado == 'Em Atendimento' and chamado.solicitanteID == current_user_id %}
+            <a role="button" class="btn btn-outline-primary btn-sm"
+                 href="{{ url_for('chamados.atender_chamado', chamado_id=chamado.chamado_ID) }}"
+                 title="Ver Atendimento" aria-label="Ver atendimento do chamado">
+                <i class="bi bi-chat-dots" aria-hidden="true"></i><span class="btn-label"> Ver Atendimento</span>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+
+    {# Dropdown compact - visível em larguras < lg (mobile/tablet) #}
+    <div class="d-flex d-lg-none w-100 justify-content-end">
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ chamado.chamado_ID }}" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações">
+                <i class="bi bi-three-dots"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown{{ chamado.chamado_ID }}">
+                <li>
+                    <button class="dropdown-item" type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#visualizarChamadoModal"
+                        data-chamado-id="{{ chamado.chamado_ID }}"
+                        data-titulo="{{ chamado.titulo_Chamado }}"
+                        data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
+                        data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
+                        data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
+                        data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
+                        data-status="{{ chamado.status_Chamado }}"
+                        data-prioridade="{{ chamado.prioridade_Chamado }}"
+                        data-descricao="{{ chamado.descricao_Chamado }}"
+                        data-anexo-id="{{ chamado.chamado_ID }}"
+                        data-anexo-nome="{{ chamado.nome_anexo if chamado.nome_anexo else '' }}"
+                        data-has-anexo="{{ '1' if chamado.anexo_Chamado else '0' }}">
+                        <i class="bi bi-eye me-2"></i> Visualizar
+                    </button>
+                </li>
+                {% if is_staff %}
+                    {% if chamado.status_Chamado in ['Aberto','Em Atendimento'] %}
+                    <li><a class="dropdown-item" href="{{ url_for('chamados.atender_chamado', chamado_id=chamado.chamado_ID) }}"><i class="bi bi-headset me-2"></i>Atender</a></li>
+                    {% endif %}
+                    {% if chamado.status_Chamado == 'Resolvido' or chamado.status_Chamado == 'Resolvido por IA' %}
+                    <li>
+                        <form action="{{ url_for('chamados.reabrir_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja reabrir este chamado?')">
+                            <button type="submit" class="dropdown-item"><i class="bi bi-arrow-clockwise me-2"></i>Reabrir</button>
+                        </form>
+                    </li>
+                    {% endif %}
+                {% endif %}
+                {% if not is_staff and current_user_id and chamado.status_Chamado == 'Em Atendimento' and chamado.solicitanteID == current_user_id %}
+                    <li><a class="dropdown-item" href="{{ url_for('chamados.atender_chamado', chamado_id=chamado.chamado_ID) }}"><i class="bi bi-chat-dots me-2"></i>Ver Atendimento</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+{%- endmacro %}

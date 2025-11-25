@@ -3,93 +3,76 @@
 {% block title %}Transferir Chamado #{{ chamado.chamado_ID }} - UpDesk{% endblock %}
 
 {% block body %}
-    <div class="container mt-4 mb-4">
-        <div class="row">
-            <div class="col-lg-7 mb-4">
-                <div class="main-card">
-                    <div class="row h-100">
-                        <!-- Dados do Chamado (Dinâmico) -->
-                        <div class="col-md-5 ticket-data">
-                            <h5 class="card-title-custom">Dados Abertura Chamado</h5>
-                            <p><strong>Aberto em:</strong> {{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}</p>
-                            {% if chamado.solicitante %}
-                            <p><strong>Solicitante:</strong><br>
-                                {{ chamado.solicitante.nome }}<br>
-                                {{ chamado.solicitante.email }}<br>
-                                Ramal: {{ chamado.solicitante.telefone }}
-                            </p>
-                            {% endif %}
-                            <p><strong>Status:</strong> {{ chamado.status_Chamado }}</p>
-                            <p><strong>Categoria:</strong> {{ chamado.categoria_Chamado }}</p>
-                        </div>
-                        <!-- Título e Descrição (Dinâmico) -->
-                        <div class="col-md-7">
-                            <div class="ticket-message-box">
-                                <span class="ticket-title-badge">{{ chamado.titulo_Chamado }}</span>
-                                <blockquote>
-                                    "{{ chamado.descricao_Chamado }}"
-                                </blockquote>
-                            </div>
-                        </div>
+    <div class="container mt-4 mb-4 triagem-detalhe-container">
+    <form method="POST" action="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}" class="row g-4 align-items-start" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <!-- Card: Dados do Chamado (similar ao atender) -->
+            <div class="col-12 col-lg-7 d-flex">
+                <div class="atendimento-card detalhes flex-grow-1">
+                    <h5 class="card-title-custom mb-3">Dados do Chamado #{{ chamado.chamado_ID }}</h5>
+                    <p class="small text-muted mb-2"><strong>Aberto em:</strong> {{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}</p>
+                    {% if chamado.solicitante %}
+                    <div class="solicitante-box mb-3">
+                        <span class="solicitante-label">Solicitante:</span><br>
+                        <span class="solicitante-nome">{{ chamado.solicitante.nome }}</span><br>
+                        <span class="solicitante-email">{{ chamado.solicitante.email }}</span><br>
+                        <span class="solicitante-ramal">Ramal {{ chamado.solicitante.telefone }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="titulo-wrapper mb-3">
+                        <div class="titulo-chip" title="{{ chamado.titulo_Chamado }}">{{ chamado.titulo_Chamado }}</div>
+                    </div>
+                    <div class="row gx-3 mb-3 status-row">
+                        <div class="col-auto"><strong>Status atual:</strong> <span class="status-pill">{{ chamado.status_Chamado }}</span></div>
+                        <div class="col-auto"><strong>Prioridade atual:</strong> <span class="status-pill">{{ chamado.prioridade_Chamado }}</span></div>
+                    </div>
+                    <div class="descricao-wrapper mb-3">
+                        <label class="descricao-label"><strong>Descrição:</strong></label>
+                        <div class="descricao-box">"{{ chamado.descricao_Chamado }}"</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comentario" class="form-label"><strong>Adicionar comentário de triagem</strong> (opcional)</label>
+                        <textarea name="comentario" id="comentario" rows="4" class="form-control" placeholder="Resumo das verificações, instruções iniciais, contexto adicional...">{{ comentario_tmp if comentario_tmp is defined else '' }}</textarea>
                     </div>
                 </div>
             </div>
-
-            <div class="col-lg-5 mb-4">
-                <!-- Formulário de Transferência -->
-                <div class="main-card">
-                    <h5 class="card-title-custom">Prioridade do chamado</h5>
-                    <form method="POST" action="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}">
-                    <ul class="priority-options">
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="prioridade" id="prio-baixa" value="Baixa" {% if chamado.prioridade_Chamado == 'Baixa' %}checked{% endif %}>
-                                <label class="form-check-label" for="prio-baixa">Baixa</label>
+            <!-- Card: Ações de Triagem -->
+            <div class="col-12 col-lg-5 d-flex">
+                <div class="atendimento-card triagem-acoes flex-grow-1">
+                    <h5 class="card-title-custom mb-3">Validar Prioridade</h5>
+                    {% set prioridade_form = prioridade_tmp if prioridade_tmp is defined and prioridade_tmp else chamado.prioridade_Chamado %}
+                    <div class="row g-2 mb-3 prioridade-radio-group">
+                        {% for p in ['Não Classificada','Baixa','Média','Alta'] %}
+                        <div class="col-6 col-sm-4">
+                            <div class="form-check small">
+                                <input class="form-check-input" type="radio" name="prioridade" id="prio-{{ p|lower|replace(' ','-') }}" value="{{ p }}" {% if prioridade_form == p %}checked{% endif %}>
+                                <label class="form-check-label" for="prio-{{ p|lower|replace(' ','-') }}">{{ p }}</label>
                             </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="prioridade" id="prio-media" value="Média" {% if chamado.prioridade_Chamado == 'Média' %}checked{% endif %}>
-                                <label class="form-check-label" for="prio-media">Média</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="prioridade" id="prio-alta" value="Alta" {% if chamado.prioridade_Chamado == 'Alta' %}checked{% endif %}>
-                                <label class="form-check-label" for="prio-alta">Alta</label>
-                            </div>
-                        </li>
-                    </ul>
-                    <h5 class="card-title-custom">Transferir para</h5>
-
-                    <ul class="transferir-opcoes">
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n1" value="setor-ti-n1">
-                                <label class="form-check-label" for="setor-ti-n1">Transferir para setor TI N1</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transferir" id="setor-ti-n2" value="setor-ti-n2" {% if True %}checked{% endif %}>
-                                <label class="form-check-label" for="setor-ti-n2">Transferir para setor TI N2</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transferir" id="setor-triagem" value="setor-triagem">
-                                <label class="form-check-label" for="setor-triagem">Transferir para setor Triagem</label>
-                            </div>
-                        </li>
-                    </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <h5 class="card-title-custom mb-2">Transferir / Encaminhar</h5>
+                    <div class="transfer-options mb-3">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="transferir" id="dest-n1" value="setor-ti-n1" required>
+                            <label class="form-check-label" for="dest-n1">Encaminhar para TI N1</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="transferir" id="dest-n2" value="setor-ti-n2" required>
+                            <label class="form-check-label" for="dest-n2">Encaminhar para TI N2</label>
+                        </div>
+                        <div class="invalid-feedback d-block small text-danger">Selecione o setor para encaminhar o chamado.</div>
+                    </div>
+                    <div class="alert alert-info small mb-3" role="note">Ao salvar: prioridade alterada, comentário anexado ao histórico e ação de encaminhamento aplicada.</div>
                 </div>
             </div>
-        </div>
-        
-                <div class="footer-actions">
-            <a href="{{ url_for('chamados.triagem') }}" class="btn btn-voltar rounded-pill">Voltar</a>
-            <button type="submit" class="btn btn-finalizar rounded-pill">Finalizar</button>
-        </div>
+            <!-- Footer ações -->
+            <div class="col-12">
+                <div class="footer-actions d-flex justify-content-between mt-2">
+                    <a href="{{ url_for('chamados.triagem') }}" class="btn btn-secondary rounded-pill"><i class="bi bi-arrow-left"></i> Voltar</a>
+                    <button type="submit" class="btn btn-primary rounded-pill"><i class="bi bi-save"></i> Salvar Triagem</button>
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}

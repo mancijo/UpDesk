@@ -31,7 +31,7 @@
 
 .tickets-header, .ticket-row {
     display: grid;
-    grid-template-columns: 50px 2fr 1fr 1fr 1fr 1fr 1fr 1fr; /* 8 colunas */
+    grid-template-columns: 50px 2fr 1fr 1fr 1fr 1fr 1fr; /* 7 colunas (categoria removida) */
     gap: 15px;
     align-items: center;
     padding: 10px 15px;
@@ -61,7 +61,9 @@
     color: #0056b3;
 }
 
-.ticket-row > div {
+.ticket-row > div:not(.ticket-actions) {
+    /* Aplica truncamento por ellipsis apenas às colunas que contém texto/valores.
+       A coluna de ações (.ticket-actions) fica fora desta regra para evitar cortar botões. */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -73,20 +75,66 @@
 
 .ticket-actions {
     display: flex;
-    gap: 5px;
+    gap: 8px;
     justify-content: flex-end;
+    flex-wrap: nowrap; /* manter lado-a-lado em telas maiores */
+}
+
+/* Padronização dos botões de ação dentro da coluna de ações na tela de triagem */
+.ticket-actions .btn-action {
+    min-width: 120px; /* largura uniforme */
+    padding: 0.35rem 0.9rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* classe auxiliar para botões quadrados */
+.btn-square {
+    border-radius: 4px !important; /* cantos levemente quadrados */
+}
+
+/* Botão azul padrão do sistema (primary personalizado usado na UI) */
+:root { --system-blue: #2b6cb0; --system-blue-dark: #23527c; }
+.ticket-actions .btn-system {
+    background-color: var(--system-blue);
+    color: #ffffff;
+    border: none;
+}
+.ticket-actions .btn-system:hover,
+.ticket-actions .btn-system:focus {
+    background-color: var(--system-blue-dark);
+    color: #fff;
+}
+
+/* Botão cinza (secondary) com aparência consistente */
+.ticket-actions .btn-secondary {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: none;
+}
+.ticket-actions .btn-secondary:hover,
+.ticket-actions .btn-secondary:focus {
+    background-color: #5c6468;
+    color: #fff;
+}
+
+/* Mobile: permitir quebra e ocupar linha se necessário */
+@media (max-width: 768px) {
+    .ticket-actions { flex-wrap: wrap; }
+    .ticket-actions .btn-action { min-width: 100px; }
 }
 
 /* Estilos para os Status */
 .status {
     padding: 4px 8px;
     border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
     display: inline-block;
+    line-height: 1.2;
 }
-
 .status-resolvido {
     background-color: #d4edda; /* Verde claro */
     color: #155724; /* Verde escuro */
@@ -108,13 +156,11 @@
         grid-template-columns: 50px 2fr 1fr 1fr 1fr; /* Reduz colunas */
     }
     .ticket-row > div:nth-child(3), /* Oculta Solicitante */
-    .ticket-row > div:nth-child(4), /* Oculta Categoria */
-    .ticket-row > div:nth-child(6) { /* Oculta Data */
+    .ticket-row > div:nth-child(5) { /* Oculta Data (novo índice após remoção de Categoria) */
         display: none;
     }
     .tickets-header > div:nth-child(3),
-    .tickets-header > div:nth-child(4),
-    .tickets-header > div:nth-child(6) {
+    .tickets-header > div:nth-child(5) {
         display: none;
     }
 }
@@ -147,4 +193,276 @@
         right: 15px;
         flex-direction: row;
     }
+}
+
+/* Estilos quadriculados para inputs e selects (mais "retos" / quadrados) */
+.form-control,
+.form-select,
+textarea.form-control {
+    border-radius: 0 !important; /* cantos retos */
+    border: 1px solid #c7ccd0 !important; /* borda mais definida */
+    box-shadow: none !important; /* remove sombras internas */
+    background-color: #ffffff; /* branco puro para contraste */
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea.form-control:focus {
+    outline: none !important;
+    border-color: #2b6cb0 !important; /* tom de azul para foco */
+    box-shadow: 0 0 0 0.15rem rgba(43,108,176,0.12) !important; /* leve halo azul */
+}
+
+/* Ajustes visuais para placeholders e labels */
+.form-control::placeholder {
+    color: #6c757d; /* cinza clássico */
+    opacity: 1;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #343a40;
+}
+
+/* Botões de ação de formulário com cantos levemente quadrados */
+.btn {
+    border-radius: 4px !important;
+}
+
+/* Paleta mais sóbria para os cartões de indicadores na triagem
+   - Mantém semântica (primário/verde/vermelho) mas com tons menos saturados
+   - Aplica apenas dentro do .main-panel para evitar afetar outros usos do Bootstrap */
+.main-panel .card.bg-primary {
+    background-color: #2b6cb0 !important; /* azul mais equilibrado */
+    color: #ffffff !important;
+    box-shadow: 0 3px 8px rgba(43,108,176,0.12);
+}
+.main-panel .card.bg-success {
+    background-color: #2f855a !important; /* verde mais escuro e menos saturado */
+    color: #ffffff !important;
+    box-shadow: 0 3px 8px rgba(47,133,90,0.12);
+}
+.main-panel .card.bg-danger {
+    background-color: #c53030 !important; /* vermelho mais sóbrio */
+    color: #ffffff !important;
+    box-shadow: 0 3px 8px rgba(197,48,48,0.12);
+}
+
+/* Ajuste dos textos grandes dentro dos cards para melhor contraste/legibilidade */
+.main-panel .card .card-text.fs-3 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Sugestão de domínio para campo de e-mail */
+.email-suggestion {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #495057;
+    display: none;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.email-suggestion[aria-hidden="false"] {
+    display: block;
+}
+
+/* Dashboard / Home adjustments */
+.home-main-section {
+    padding-bottom: 1.5rem; /* reduz espaço inferior */
+}
+
+.dashboard-row {
+    gap: 1rem !important; /* reduz espaço horizontal entre colunas */
+}
+
+.dashboard-card {
+    height: 180px; /* garante mesmo tamanho */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.dashboard-card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-metric {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.card-action-wrapper {
+    margin-top: 24px; /* distância exata pedida */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.card-action-button {
+    width: 260px; /* largura uniforme */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-action-button .bi {
+    margin-right: 8px; /* ícone alinhado à esquerda do texto */
+}
+
+/* Action cards (visão usuário) */
+.action-card {
+    min-height: 250px;
+    border-radius: 22px; /* similar ao mock */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #ffffff;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+.action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+}
+/* Ícone composto dos action cards */
+.action-icon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bs-primary-bg-subtle, #e7f1ff);
+    color: var(--bs-primary, #0d6efd);
+    border-radius: 16px;
+    font-size: 2rem;
+    position: relative;
+}
+.action-icon.no-bg {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+.action-icon .main-icon {
+    font-size: 42px;
+    color: #1f2d50;
+    line-height: 1;
+}
+.action-icon .badge-icon {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    font-size: 0.95rem;
+    background: var(--bs-primary);
+    color: #fff;
+    padding: 3px;
+    line-height: 1;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #e7f1ff;
+}
+.action-btn {
+    border-radius: 999px !important;
+    font-weight: 600;
+    padding: 0.55rem 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.action-desc {
+    line-height: 1.2;
+}
+@media (max-width: 576px) {
+    .action-card { min-height: 220px; }
+    .action-icon i { font-size: 36px; }
+}
+
+/* mobile: empilhar cards e tornar botões fluidos */
+@media (max-width: 576px) {
+    .dashboard-row {
+        gap: 0.75rem !important;
+    }
+    .dashboard-card {
+        height: auto;
+        padding: 1rem 0.75rem;
+    }
+    .card-action-button {
+        width: 90%;
+    }
+}
+
+/* Modal header clean style: fundo claro, borda sutil e texto em tom primário */
+.modal-header-clean {
+    background-color: #ffffff; /* branco limpo */
+    color: #23527c; /* tom de azul mais suave que o primary padrão */
+    border-bottom: 1px solid #e9ecef; /* borda sutil */
+}
+.info-box {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.info-box .info-box-icon {
+    font-size: 1.4rem;
+    color: var(--system-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.title-badge-modal {
+    display: inline-block;
+    padding: 6px 10px;
+    background: #eef1f4;
+    border-radius: 8px;
+    color: #1f2d50;
+}
+.description-box {
+    background: #fbfdff;
+    border: 1px solid #e3e7ec;
+    border-radius: 8px;
+    padding: 14px;
+    color: #39434d;
+    min-height: 80px;
+    white-space: pre-wrap;
+}
+/* Estilos para o conteúdo interno das info-boxes (blocos empilhados para evitar inline overflow) */
+.info-box .info-content {
+    display: block;
+}
+.info-box .info-content > div {
+    margin-bottom: 6px;
+}
+.info-box .info-content #modal-solicitante-email {
+    color: #495057;
+    font-size: 0.95rem;
+}
+
+/* Data de abertura dentro do info-box (ficar abaixo da linha de status) */
+.info-box .info-content #modal-data-abertura {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 6px;
+    width: 100%;
+}
+.modal-header-clean .modal-title {
+    color: #23527c;
+    font-weight: 600;
+}
+.btn-outline-primary-clean {
+    color: #23527c;
+    border-color: #cfe2ff;
+    background-color: transparent;
+}
+.btn-outline-primary-clean:hover {
+    background-color: #e7f1ff;
+    border-color: #b6d4ff;
 }

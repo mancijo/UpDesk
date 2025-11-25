@@ -10,6 +10,7 @@ Responsabilidade:
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
+from flask_wtf import CSRFProtect
 
 # Instancia o SQLAlchemy, que é o ORM (Object-Relational Mapper) para interagir com o banco de dados.
 db = SQLAlchemy()
@@ -20,3 +21,6 @@ migrate = Migrate()
 # Instancia o Flask-CORS, que lida com as políticas de Cross-Origin Resource Sharing,
 # permitindo que o frontend (em um domínio diferente) faça requisições para esta API.
 cors = CORS()
+
+# Proteção contra CSRF para formulários (Flask-WTF)
+csrf = CSRFProtect()

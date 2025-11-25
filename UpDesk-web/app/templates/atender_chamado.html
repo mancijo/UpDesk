@@ -2,69 +2,86 @@
 
 {% block title %}Atender Chamado #{{ chamado.chamado_ID }} - UpDesk{% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/_atender-chamado-page.css') }}?v={{ config.STATIC_VERSION }}">
+{% endblock %}
+
 {% block body %}
-    <div class="container mt-4 mb-4">
-        <div class="row">
-            <!-- Coluna de Detalhes do Chamado -->
-            <div class="col-12 mb-4">
-                <div class="main-card ticket-data">
-                    <h5 class="card-title-custom">Detalhes do Chamado #{{ chamado.chamado_ID }}</h5>
-                    <p><strong>Título:</strong> {{ chamado.titulo_Chamado }}</p>
-                    <p><strong>Aberto em:</strong> {{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}</p>
+    <div class="container atender-container mt-4 mb-4" data-can-send="{{ '1' if can_send else '0' }}" data-can-manage="{{ '1' if can_manage else '0' }}">
+        <div class="row g-4 atendimento-grid align-items-stretch">
+            <!-- Card: Dados do Chamado -->
+            <div class="col-12 col-lg-6 d-flex">
+                <div class="atendimento-card detalhes flex-grow-1">
+                    <h5 class="card-title-custom mb-3">Dados Abertura Chamado</h5>
+                    <p class="small text-muted mb-2"><strong>Aberto em:</strong> {{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}</p>
                     {% if chamado.solicitante %}
-                    <dl>
-                        <dt>Solicitante:</dt>
-                        <dd>{{ chamado.solicitante.nome }}</dd>
-                        <dt>Email:</dt>
-                        <dd>{{ chamado.solicitante.email }}</dd>
-                        <dt>Ramal:</dt>
-                        <dd>{{ chamado.solicitante.telefone }}</dd>
-                    </dl>
+                    <div class="solicitante-box mb-3">
+                        <span class="solicitante-label">Resp Chamado:</span><br>
+                        <span class="solicitante-nome">{{ chamado.solicitante.nome }}</span><br>
+                        <span class="solicitante-email">{{ chamado.solicitante.email }}</span><br>
+                        <span class="solicitante-ramal">Ramal {{ chamado.solicitante.telefone }}</span>
+                    </div>
                     {% endif %}
-                    <p><strong>Status:</strong> <span class="badge bg-primary" role="status" aria-live="polite">{{ chamado.status_Chamado }}</span></p>
-                    <p><strong>Prioridade:</strong> {{ chamado.prioridade_Chamado }}</p>
-                    <p><strong>Categoria:</strong> {{ chamado.categoria_Chamado }}</p>
-                    <hr>
-                    <p><strong>Descrição:</strong><br> "{{ chamado.descricao_Chamado }}"</p>
+                    <div class="titulo-wrapper mb-3">
+                        <div class="titulo-chip" title="{{ chamado.titulo_Chamado }}">{{ chamado.titulo_Chamado }}</div>
+                    </div>
+                    <div class="row gx-3 mb-3 status-row">
+                        <div class="col-auto"><strong>Status:</strong> <span class="status-pill">{{ chamado.status_Chamado }}</span></div>
+                        <div class="col-auto"><strong>Categoria:</strong> <span class="categoria-pill">{{ chamado.categoria_Chamado }}</span></div>
+                    </div>
+                    <div class="descricao-wrapper">
+                        <label class="descricao-label"><strong>Descrição:</strong></label>
+                        <div class="descricao-box">"{{ chamado.descricao_Chamado }}"</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Coluna do Chat -->
-            <div class="col-12 mb-4">
-                <div class="main-card">
-                    <h5 class="card-title-custom">Chat de Atendimento</h5>
-                    <div class="chat-container" data-chamado-id="{{ chamado.chamado_ID }}" data-user-id="{{ session['usuario_id'] }}">
-                        <div class="chat-messages" id="chat-messages" style="max-height: 400px; overflow-y: auto;">
+            <!-- Card: Chat do Chamado -->
+            <div class="col-12 col-lg-6 d-flex">
+                <div class="atendimento-card chat flex-grow-1">
+                    <h5 class="card-title-custom mb-3">Chat de Atendimento</h5>
+                    <div class="chat-container" data-chamado-id="{{ chamado.chamado_ID }}" data-user-id="{{ session['usuario_id'] }}" data-can-send="{{ '1' if can_send else '0' }}">
+                        <div class="chat-messages" id="chat-messages">
                             <!-- Mensagens serão carregadas aqui via JS -->
                         </div>
-                        <form class="chat-input" id="form-enviar-mensagem">
-                            <div class="input-group">
-                                <input type="text" id="input-mensagem" class="form-control" placeholder="Digite sua mensagem..." required>
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="bi bi-send-fill"></i> Enviar
+                        <input type="hidden" id="csrf_token_chat" value="{{ csrf_token() }}">
+                        {% if can_send %}
+                        <form class="chat-input" id="form-enviar-mensagem" autocomplete="off">
+                            <div class="input-wrapper">
+                                <input type="text" id="input-mensagem" class="form-control chat-field" placeholder="Digite sua mensagem..." required>
+                                <button class="btn btn-send" type="submit" aria-label="Enviar mensagem">
+                                    <i class="bi bi-send-fill"></i>
                                 </button>
                             </div>
                         </form>
+                        {% else %}
+                        <div class="read-only-banner" role="status" aria-live="polite">Visualização somente leitura. Mensagens desabilitadas.</div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Ações no Rodapé -->
-        <div class="footer-actions">
+        <div class="footer-actions mt-4 d-flex justify-content-between align-items-center">
             <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-secondary btn-action rounded-pill">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
-            <div>
+            {% if can_manage %}
+            <div class="actions-right">
                 <a href="{{ url_for('chamados.transferir_chamado', chamado_id=chamado.chamado_ID) }}" class="btn btn-info text-white btn-action rounded-pill">
                     <i class="bi bi-arrow-right-square"></i> Transferir Chamado
                 </a>
                 <form action="{{ url_for('chamados.encerrar_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-success btn-action rounded-pill" onclick="return confirm('Tem certeza que deseja encerrar este chamado?')">
                         <i class="bi bi-check-circle"></i> Encerrar Chamado
                     </button>
                 </form>
             </div>
+            {% else %}
+            <div class="text-muted small">Sem permissões de gerenciamento</div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

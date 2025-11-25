@@ -3,7 +3,35 @@
 {% block title %}Dashboard - UpDesk{% endblock %}
 
 {% block body %}
-<section class="container mt-4"> <!-- Adicionado container e margem superior -->
+<section class="container mt-4 home-main-section"> <!-- Adicionado container e margem superior -->
+  {% set _cargo = session.get('usuario_cargo', '') | lower %}
+  {% if _cargo in ['usuario', 'usuário'] %}
+  <div class="row justify-content-center dashboard-row">
+    <!-- Card Abrir Chamado -->
+    <div class="col-12 col-md-6 col-lg-4 d-flex flex-column align-items-center mb-4 mb-lg-0">
+      <div class="card text-center shadow-sm border-0 w-100 action-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="action-icon no-bg mb-3" aria-hidden="true"><i class="bi bi-journal-plus main-icon"></i></div>
+          <a href="{{ url_for('chamados.abrir_chamado') }}" class="btn btn-primary btn-md shadow-sm action-btn"><i class="bi bi-plus-circle me-2"></i>Abrir Chamado</a>
+          <p class="mt-3 small text-muted action-desc">Relate seu problema<br>ou solicitação</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card Ver Chamados -->
+    <div class="col-12 col-md-6 col-lg-4 d-flex flex-column align-items-center">
+      <div class="card text-center shadow-sm border-0 w-100 action-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="action-icon no-bg mb-3" aria-hidden="true">
+            <i class="bi bi-journal-text main-icon"></i>
+            <i class="bi bi-search badge-icon" title="Pesquisar"></i>
+          </div>
+          <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary btn-md shadow-sm action-btn"><i class="bi bi-eye me-2"></i>Ver Chamados</a>
+          <p class="mt-3 small text-muted action-desc">Visualize o andamento e<br>histórico dos seus chamados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
   <div class="row g-4 justify-content-center">
     <div class="col-12 col-md-6 col-lg-3">
       <div class="card text-center shadow-lg border-0 h-100 custom-card">
@@ -49,8 +77,10 @@
       </div>
     </div>
   </div>
+  {% endif %}
 
   <!-- Seção de Ações -->
+  {% if _cargo not in ['usuario', 'usuário'] %}
   <nav>
     <ul class="row g-4 justify-content-center mt-5 list-unstyled">
       <li class="col-12 col-md-6 col-lg-3 text-center">
@@ -59,14 +89,19 @@
       <li class="col-12 col-md-6 col-lg-3 text-center">
         <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-eye me-2"></i>Monitoramento de Chamados</a>
       </li>
+      {% if _cargo in ['supervisor','triagem','n1','n2','suporte','ti','atendente'] %}
       <li class="col-12 col-md-6 col-lg-3 text-center">
         <a href="{{ url_for('chamados.triagem') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-gear me-2"></i>Painel da Triagem</a>
       </li>
+      {% endif %}
+      {% if is_supervisor %}
       <li class="col-12 col-md-6 col-lg-3 text-center">
         <a href="{{ url_for('usuarios.ger_usuarios') }}" class="btn btn-primary btn-lg custom-btn shadow-sm"><i class="bi bi-person-gear me-2"></i>Gerenciar Usuário</a>
       </li>
+      {% endif %}
     </ul>
   </nav>
+  {% endif %}
 </div> <!-- Fechamento do container -->
 </section>
 {% endblock %}

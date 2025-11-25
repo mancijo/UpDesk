@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const solicitanteNome = button.dataset.solicitanteNome;
         const solicitanteEmail = button.dataset.solicitanteEmail;
         const solicitanteRamal = button.dataset.solicitanteRamal;
-        const status = button.dataset.status;
-        const categoria = button.dataset.categoria;
+    const status = button.dataset.status;
+    const prioridade = button.dataset.prioridade;
         const descricao = button.dataset.descricao;
 
         // Atualiza o conteúdo do modal
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalSolicitanteEmail = visualizarChamadoModal.querySelector('#modal-solicitante-email');
         const modalSolicitanteRamal = visualizarChamadoModal.querySelector('#modal-solicitante-ramal');
         const modalStatus = visualizarChamadoModal.querySelector('#modal-status');
-        const modalCategoria = visualizarChamadoModal.querySelector('#modal-categoria');
-        const modalDescricao = visualizarChamadoModal.querySelector('#modal-descricao');
+    const modalDescricao = visualizarChamadoModal.querySelector('#modal-descricao');
+    const modalPrioridade = visualizarChamadoModal.querySelector('#modal-prioridade');
         const modalAtenderBtn = visualizarChamadoModal.querySelector('#modal-atender-chamado-btn'); // Botão Atender Chamado no modal
 
         modalTitle.textContent = titulo;
@@ -33,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         modalSolicitanteEmail.textContent = solicitanteEmail;
         modalSolicitanteRamal.textContent = solicitanteRamal;
         modalStatus.textContent = status;
-        modalCategoria.textContent = categoria;
+        if (modalPrioridade) {
+            modalPrioridade.textContent = prioridade || 'Não Classificada';
+        }
         modalDescricao.textContent = descricao;
 
         // Lógica para exibir/ocultar e configurar o botão "Atender Chamado" no modal

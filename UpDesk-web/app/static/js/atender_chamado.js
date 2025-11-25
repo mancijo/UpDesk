@@ -13,35 +13,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para renderizar uma mensagem na tela
     function renderizarMensagem(msg) {
-        const messageDiv = document.createElement('div');
-        const authorSpan = document.createElement('span');
-        const bubbleDiv = document.createElement('div');
+        const wrapper = document.createElement('div');
+        const bubble = document.createElement('div');
+        const meta = document.createElement('span');
 
-        // Define o autor e a data
-        authorSpan.className = 'author';
-        authorSpan.textContent = `${msg.usuario_nome} - ${msg.data_criacao}`;
+        const isMine = msg.usuario_id === parseInt(currentUserId);
+        wrapper.className = 'message ' + (isMine ? 'me' : 'other');
+        bubble.className = 'bubble-content';
+        bubble.textContent = msg.mensagem;
+        meta.className = 'meta';
+        meta.textContent = `${msg.usuario_nome} • ${msg.data_criacao}`;
 
-        // Define o balão da mensagem
-        bubbleDiv.className = 'bubble';
-        bubbleDiv.textContent = msg.mensagem;
-
-        // Define a classe principal da mensagem (enviada ou recebida)
-        messageDiv.className = 'message';
-        if (msg.usuario_id === parseInt(currentUserId)) {
-            messageDiv.classList.add('sent');
-        } else {
-            messageDiv.classList.add('received');
-        }
-
-        messageDiv.appendChild(authorSpan);
-        messageDiv.appendChild(bubbleDiv);
-        chatMessages.appendChild(messageDiv);
+        wrapper.appendChild(bubble);
+        wrapper.appendChild(meta);
+        chatMessages.appendChild(wrapper);
     }
 
     // Função para carregar as mensagens do chamado
     async function carregarMensagens() {
         try {
-            const response = await fetch(`/chamados/api/${chamadoId}/mensagens`);
+            const response = await fetch(`/chamados/api/${chamadoId}/mensagens`, { credentials: 'same-origin' });
             if (!response.ok) {
                 throw new Error('Falha ao carregar mensagens.');
             }
@@ -69,10 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (mensagemTexto) {
             try {
-                const response = await fetch(`/api/${chamadoId}/mensagens`, {
+                const csrfToken = document.getElementById('csrf_token_chat')?.value;
+                const response = await fetch(`/chamados/api/${chamadoId}/mensagens`, {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
+                        ...(csrfToken ? { 'X-CSRFToken': csrfToken } : {})
                     },
                     body: JSON.stringify({ mensagem: mensagemTexto }),
                 });
