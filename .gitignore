@@ -3,7 +3,7 @@ __pycache__/
 .vscode/
 .venv/
 *.code-workspace
-/node_modulesnode_modules/
+**/node_modules
 bin/
 obj/
 **/bin/
