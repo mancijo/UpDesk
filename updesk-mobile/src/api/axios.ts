@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000',
+  baseURL: 'http://192.168.15.8:5291',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

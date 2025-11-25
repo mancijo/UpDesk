@@ -20,7 +20,7 @@ namespace UpDesk.Api.Controllers
             _jwtService = jwtService;
         }
 
-        [HttpPost("/api/auth/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
         {
             // 1. Busca o usuário pelo email no banco de dados

@@ -1,0 +1,64 @@
+### Passo a Passo da Configuração
+
+#### Passo 1: Obter o Código-Fonte
+
+1.  Abra um terminal (PowerShell ou Git Bash).
+2.  Navegue até a pasta onde deseja salvar o projeto (ex: `C:\Projetos`).
+3.  Clone o repositório com o seguinte comando:
+    ```bash
+    git clone <URL_DO_SEU_REPOSITORIO_GIT> UpDesk
+    ```
+4.  Entre na pasta do projeto:
+    ```bash
+    cd UpDesk
+    ```
+
+#### Passo 2: Configurar o Banco de Dados
+
+1.  Abra o **SQL Server Management Studio (SSMS)**.
+2.  Na tela de login, o nome do servidor (`Server name`) geralmente é `NOME_DO_COMPUTADOR\SQLEXPRESS` ou simplesmente `.\SQLEXPRESS`. Mantenha a autenticação como "Windows Authentication" e clique em **Connect**.
+3.  Na árvore de objetos à esquerda, clique com o botão direito na pasta **"Databases"** e selecione **"New Database..."**.
+4.  No campo `Database name`, digite **`UpDesk`** e clique em **OK**. Não é preciso criar nenhuma tabela, o código fará isso.
+
+#### Passo 3: Atualizar a Conexão no Projeto
+
+1.  Abra a pasta do projeto `UpDesk` no **Visual Studio Code**.
+2.  Navegue e abra o arquivo: `UpDesk.api\UpDesk.api.Web\appsettings.Development.json`.
+3.  Localize a seção `ConnectionStrings`.
+4.  Altere o valor do `Server` para `.\\SQLEXPRESS`. A linha deve ficar assim:
+    ```json
+    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=UpDesk;Trusted_Connection=True;TrustServerCertificate=True;"
+    ```
+5.  Salve o arquivo.
+
+#### Passo 4: Criar as Tabelas (Executar Migrations)
+
+1.  No VS Code, abra um novo terminal (`Terminal` > `New Terminal`).
+2.  Navegue até a pasta do projeto web:
+    ```powershell
+    cd UpDesk.api\UpDesk.api.Web
+    ```
+3.  Execute o comando para criar a estrutura do banco de dados:
+    ```powershell
+    dotnet ef database update
+    ```
+    Aguarde a execução terminar (deve aparecer "Done.").
+
+#### Passo 5: Executar a API
+
+1.  No mesmo terminal, navegue até a pasta do projeto que inicia a aplicação:
+    ```powershell
+    cd ..\UpDesk.api.AppHost
+    ```
+2.  Execute a API com o comando:
+    ```powershell
+    dotnet run
+    ```
+
+#### Passo 6: Verificar se Tudo Funcionou
+
+1.  Abra um navegador de internet.
+2.  Acesse a URL da documentação da API: `http://localhost:5291/swagger`.
+3.  Acesse a URL de verificação de saúde do banco de dados: `http://localhost:5291/health`. A página deve exibir a palavra **`Healthy`**.
+
+---

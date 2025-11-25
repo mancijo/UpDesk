@@ -56,6 +56,10 @@ else
     builder.Services.AddScoped<IaiService, MockIaService>();
 }
 
+// Adiciona o serviço de Health Checks
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>(); // Adiciona uma verificação específica para o banco de dados
+
 var app = builder.Build();
 app.UseDefaultFiles(); // Esta linha faz o servidor encontrar o index.html por defeito
 app.UseStaticFiles();  // Esta linha permite que o servidor sirva o index.html e outros ficheiros (CSS, JS)
@@ -70,6 +74,10 @@ app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins); // Habilita a politica de CORS
 
 app.UseAuthorization();
+
+// Adiciona o endpoint de Health Checks
+app.MapHealthChecks("/health");
+
 app.MapControllers();
 
 // Executa o seed data
