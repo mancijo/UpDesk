@@ -3,3 +3,15 @@ __pycache__/
 .vscode/
 .venv/
 *.code-workspace
+/node_modulesnode_modules/
+bin/
+obj/
+**/bin/
+**/obj/
+publish/
+**/publish/
+*.dll
+*.exe
+*.pdb
+*.deps.json
+*.runtimeconfig.json

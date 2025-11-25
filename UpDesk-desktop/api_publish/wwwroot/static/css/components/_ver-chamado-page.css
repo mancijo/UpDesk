@@ -1,0 +1,162 @@
+/* static/css/components/_ver-chamado-page.css */
+
+.ver-chamado-container {
+    max-width: 1000px;
+    margin: var(--espaco-xl) auto;
+    background: var(--cor-fundo-claro);
+    padding: var(--espaco-l);
+    border-radius: var(--raio-borda-grande);
+    box-shadow: var(--sombra-padrao);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h2 {
+    font-weight: var(--fonte-peso-semi-bold);
+}
+
+.filtros {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--espaco-m);
+}
+
+select,
+input[type="text"] {
+    padding: var(--espaco-xs) var(--espaco-s);
+    border-radius: var(--raio-borda-pílula);
+    border: 1px solid var(--cor-borda);
+}
+
+.bottom-bar {
+    margin-top: var(--espaco-l);
+    display: flex;
+    justify-content: space-between;
+}
+
+.user {
+    font-weight: var(--fonte-peso-semi-bold);
+    font-style: bold;
+}
+
+.main-panel {
+    background-color: var(--cor-fundo-claro); /* Fundo branco */
+    padding: var(--espaco-l); /* Espaçamento interno generoso */
+    border-radius: var(--raio-borda-l); /* Bordas arredondadas */
+    box-shadow: var(--sombra-discreta); /* Sombra suave para dar profundidade */
+    width: 100%;
+    max-width: 1200px; /* Largura máxima para telas grandes */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-voltar-modal {
+    background-color: var(--cor-secundaria); 
+    color: #FFFFFF;  
+    border: none; 
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-voltar-modal:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+}
+.btn-atender {
+    background-color: var(--cor-primaria); 
+    color: #FFFFFF;  
+    border: solid 1px #000;
+    padding: 20px 20px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-atender:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-vizualizar {
+    background-color: var(--cor-secundaria); 
+    color: #FFFFFF;  
+    border: solid 1px #000;
+    padding: 20px 20px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-vizualizar:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-iniciar-modal {
+    background-color: var(--cor-primaria); 
+    color: #FFFFFF;  
+    border: none; 
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-iniciar-modal:hover {
+    background-color: var(--cor-primaria-escura); 
+    color: #FFFFFF;  
+}
+
+.btn-home{
+    background-color: var(--cor-secundaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-home:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-gestao {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-gestao:hover {
+    background-color: var(--cor-primaria-escura);   
+    color: #FFFFFF;
+}
+
+.btn-export {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-export:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}
+
+.btn-outline-secondary {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+}

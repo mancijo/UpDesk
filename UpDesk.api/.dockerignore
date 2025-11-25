@@ -1,0 +1,11 @@
+bin
+obj
+.git
+.github
+**/bin
+**/obj
+*.zip
+*.tar
+.vs
+*.user
+*.suo

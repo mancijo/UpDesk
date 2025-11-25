@@ -1,0 +1,68 @@
+/* static/css/components/_perfil-page.css */
+
+.perfil-page__container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e3eafc 0%, #f8f9fa 100%);
+  padding: var(--espaco-l);
+}
+
+.perfil-page__card {
+  background: var(--cor-fundo-claro);
+  border-radius: var(--raio-borda-xl);
+  box-shadow: var(--sombra-intensa);
+  padding: var(--espaco-xl) var(--espaco-l);
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+.perfil-page__avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: var(--cor-fundo-cinza);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--espaco-m) auto;
+  font-size: 2.5rem;
+  color: var(--cor-texto-secundario);
+}
+
+.perfil-page__name {
+  font-family: 'Abel', Arial, sans-serif;
+  font-size: var(--fonte-tamanho-h2);
+  margin-bottom: var(--espaco-s);
+  color: var(--cor-texto-escuro);
+}
+
+.perfil-page__info {
+  margin-bottom: var(--espaco-l);
+  text-align: left;
+}
+
+.perfil-page__info-item {
+  margin-bottom: var(--espaco-s);
+  font-size: 1.1rem;
+  color: var(--cor-texto-principal);
+}
+
+.perfil-page__info-item strong {
+  color: var(--cor-texto-escuro);
+  min-width: 80px;
+  display: inline-block;
+}
+
+.perfil-page__actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--espaco-s);
+}
+
+.perfil-page__actions .btn {
+    min-width: 120px;
+    font-weight: 500;
+}

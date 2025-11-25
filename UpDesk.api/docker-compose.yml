@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: UpDesk.api.AppHost/Dockerfile
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=UpDesk;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+      - Jwt__Key=UpDesk_Secret_Key_Minimum_32_Characters_Long_For_Security
+    ports:
+      - "5000:80"
+    restart: unless-stopped

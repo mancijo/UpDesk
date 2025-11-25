@@ -1,0 +1,146 @@
+/* static/css/components/_triagem-page.css */
+
+.triagem-page__container {
+  width: 90%;
+  max-width: 1400px;
+  margin: var(--espaco-l) auto;
+}
+
+.triagem-page__title {
+  text-align: center;
+  margin-bottom: var(--espaco-l);
+  color: var(--cor-primaria);
+  margin-top: var(--espaco-m);
+}
+
+.triagem-page__tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--espaco-s);
+  flex-wrap: wrap;
+  gap: var(--espaco-s);
+}
+
+.triagem-page__search-form {
+  display: flex;
+  gap: var(--espaco-s);
+}
+
+.triagem-page__search-input {
+    background-color: var(--cor-fundo-principal);
+    width: 320px;
+}
+
+/* Responsividade para ocultar colunas em telas menores que 992px */
+@media (max-width: 992px) {
+    th.col-id,
+    td.col-id,
+    th.col-prioridade,
+    td.col-prioridade {
+        display: none !important;
+    }
+}
+@media (max-width: 600px) {
+    th.col-data,
+    td.col-data {
+        display: none !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .triagem-page__tools {
+        flex-direction: column;
+    }
+}
+
+.main-panel {
+    background-color: var(--cor-fundo-claro);
+    padding: var(--espaco-l);
+    border-radius: var(--raio-borda-l);
+    box-shadow: var(--sombra-discreta);
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+}
+
+.btn-transferir-triagem {
+    background-color: var(--cor-sucesso); 
+    color: #FFFFFF;  
+    border-radius: 0.25rem;
+    padding: 10px 10px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-transferir-triagem:hover {
+    background-color: var(--cor-sucesso-escura);
+    color: #FFFFFF;  
+}
+
+.btn-vizualizar-triagem {
+    background-color: var(--cor-primaria); 
+    color: #FFFFFF;  
+    border-radius: 0.25rem;
+    padding: 10px 10px; 
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.btn-vizualizar-triagem:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;  
+}
+
+.btn-voltar {
+    background-color: var(--cor-secundaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+}
+
+.btn-voltar:hover {
+    background-color: var(--cor-secundaria-escura);
+    color: #FFFFFF;
+    
+}
+
+.btn-confirm {
+    background-color: var(--cor-primaria);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--raio-borda-pílula) !important;
+    cursor: pointer;
+}
+
+.btn-confirm:hover {
+    background-color: var(--cor-primaria-escura);
+    color: #FFFFFF;
+    
+}
+
+.text-primary-triagem {
+    color: #FFFFFF !important;
+}
+
+.card-body-triagem {
+    background-color: var(--cor-primaria);
+    border-radius: var(--raio-borda-l);
+    box-shadow: var(--sombra-intensa);
+
+}
+
+.card-body-triados {
+    background-color: var(--cor-sucesso);
+    border-radius: var(--raio-borda-l);
+    box-shadow: var(--sombra-intensa);
+
+}
+
+.card-body-pendentes {
+    background-color: var(--cor-perigo);
+    border-radius: var(--raio-borda-l);
+    box-shadow: var(--sombra-intensa);
+
+}
