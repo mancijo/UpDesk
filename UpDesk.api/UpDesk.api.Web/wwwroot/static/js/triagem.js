@@ -1,5 +1,7 @@
 // /static/js/triagem.js
 
+
+
 const visualizarChamadoModal = document.getElementById('visualizarChamadoModal');
 
 visualizarChamadoModal.addEventListener('show.bs.modal', async (event) => {
@@ -57,7 +59,9 @@ let transferModal;
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    fetchDashboardStats();
     transferModal = new bootstrap.Modal(document.getElementById('transferirChamadoModal'));
+    
 
     
 
@@ -157,6 +161,36 @@ async function fetchTriagemChamados() {
         container.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${error.message}</td></tr>`;
     }
 }
+
+async function fetchDashboardStats() {
+    try {
+        // ATENÇÃO: Este endpoint '/api/dashboard/stats' precisa ser criado no seu backend C#.
+        const response = await fetchWithAuth('/api/dashboard/stats');
+
+        if (!response.ok) {
+            // Se a resposta não for OK, exibe um erro no console.
+            console.error('Erro ao buscar estatísticas do dashboard:', response.status, response.statusText);
+            // Você pode querer exibir uma mensagem de erro para o usuário na página aqui.
+            return;
+        }
+
+        const stats = await response.json();
+
+        // Atualiza a interface com os dados recebidos da API.
+        document.getElementById('Aguardando-triagem-count').textContent = stats.chamadosEmTriagem || 0;
+        document.getElementById('chamados-triados-hoje-count').textContent = stats.chamadosFinalizados || 0;
+        document.getElementById('chamados-pendentes-24h-count').textContent = stats.chamadosAbertos || 0;
+        
+        
+        
+        
+
+    } catch (error) {
+        // Captura erros de rede ou da função fetchWithAuth (ex: token inválido).
+        console.error('Falha ao carregar estatísticas do dashboard:', error);
+    }
+}
+
 
 /**
  * Prepara e abre o modal de transferência.

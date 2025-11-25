@@ -14,12 +14,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (forceCreateBtn) {
         forceCreateBtn.addEventListener('click', () => {
-            document.getElementById('submit-chamado').click();
+            // mais robusto: usa requestSubmit() ou procura o botão de submit no form
+            const form = document.getElementById('chamado-form');
+            if (form) {
+                if (typeof form.requestSubmit === 'function') form.requestSubmit();
+                else {
+                    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                    if (submitBtn) submitBtn.click();
+                }
+            } else {
+                const submit = document.getElementById('submit-chamado');
+                if (submit) submit.click();
+            }
         });
     }
     if (solutionWorkedBtn) {
         solutionWorkedBtn.addEventListener('click', handleSolutionWorked);
     }
+
+    // Delegation fallback: captura cliques mesmo que os botões sejam adicionados dinamicamente
+    document.addEventListener('click', (e) => {
+        const el = e.target.closest && e.target.closest('[data-action], #solution-worked-btn, #force-create-ticket-btn, #suggest-solution-btn');
+        if (!el) return;
+
+        // "Sim, problema resolvido"
+        if (el.id === 'solution-worked-btn' || el.dataset.action === 'solution-worked') {
+            e.preventDefault();
+            handleSolutionWorked();
+            return;
+        }
+
+        // "Não, quero abrir um chamado"
+        if (el.id === 'force-create-ticket-btn' || el.dataset.action === 'force-create-ticket') {
+            e.preventDefault();
+            const form = document.getElementById('chamado-form');
+            if (form) {
+                if (typeof form.requestSubmit === 'function') form.requestSubmit();
+                else {
+                    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                    if (submitBtn) submitBtn.click();
+                }
+            } else {
+                const submit = document.getElementById('submit-chamado');
+                if (submit) submit.click();
+            }
+            return;
+        }
+
+        // botão de sugestão IA (fallback)
+        if (el.id === 'suggest-solution-btn' || el.dataset.action === 'suggest-solution') {
+            e.preventDefault();
+            getAISuggestion();
+            return;
+        }
+    });
 });
 
 /* UI feedback helpers: global loading overlay with spinner + message */
@@ -79,80 +127,140 @@ function hideLoading() {
  * cria um chamado com status "Resolvido por IA"
  */
 async function handleSolutionWorked() {
-    const titulo = document.getElementById('titulo').value.trim();
-    const descricao = document.getElementById('descricao').value.trim();
-    const categoria = document.getElementById('categoria').value;
-    const prioridade = document.getElementById('prioridade').value;
-    const solutionText = document.getElementById('solution-text').textContent.trim();
+	// --- NOVO: utilitários para localizar campos de forma resiliente ---
+	const form = document.getElementById('chamado-form');
 
-    const userInfo = JSON.parse(localStorage.getItem('usuario'));
-    const userId = userInfo ? (userInfo.id || userInfo.Id) : null;
+	function findField(id, nameFallback) {
+		// tenta por id global
+		let el = document.getElementById(id);
+		if (el) return el;
 
-    if (!userId) {
-        alert('Não foi possível identificar o usuário. Faça login novamente.');
-        return;
-    }
+		// tenta dentro do form por id ou name
+		if (form) {
+			el = form.querySelector(`#${id}`);
+			if (el) return el;
+			el = form.querySelector(`[name="${nameFallback || id}"]`);
+			if (el) return el;
+		}
 
-    const payload = {
-        Titulo: titulo,
-        Descricao: descricao,
-        Categoria: categoria,
-        Prioridade: prioridade,
-        SolicitanteId: parseInt(userId),
-        Status: "Resolvido por IA",
-        Solucao: solutionText
-    };
+		// tenta global por name
+		el = document.querySelector(`[name="${nameFallback || id}"]`);
+		if (el) return el;
 
-    try {
-        const token = localStorage.getItem('authToken');
-        const headers = { 'Content-Type': 'application/json' };
-        if (token) headers['Authorization'] = `Bearer ${token}`;
+		// tenta por data-attribute comum
+		el = document.querySelector(`[data-field="${id}"], [data-field="${nameFallback || id}"]`);
+		return el;
+	}
 
-        // Mostrar feedback ao usuário enquanto processamos
-        showLoading('Finalizando seu chamado...');
+	function getValueFromField(fieldEl) {
+		if (!fieldEl) return '';
+		if ('value' in fieldEl) return fieldEl.value;
+		return fieldEl.textContent || '';
+	}
 
-        // Cria o chamado primeiro (API sempre cria como 'Aberto')
-        const response = await fetch('/api/chamados', {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(payload)
-        });
+	// procura os elementos com fallback flexível
+	const tituloEl = findField('titulo', 'Titulo') || findField('title', 'title');
+	const descricaoEl = findField('descricao', 'Descricao') || findField('description', 'description');
+	const categoriaEl = findField('categoria', 'Categoria') || findField('category', 'category');
+	const prioridadeEl = findField('prioridade', 'Prioridade') || findField('priority', 'priority');
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Erro ao salvar: ${errorText}`);
-        }
+	// solução pode estar em #solution-text, .solution-text ou [data-solution]
+	let solutionTextEl = document.getElementById('solution-text')
+		|| document.querySelector('.solution-text')
+		|| document.querySelector('[data-solution]')
+		|| (form && form.querySelector('.solution-text'));
 
-        const created = await response.json();
-        // procurar o id retornado (variações de casing)
-        const chamadoId = created?.ChamadoId ?? created?.chamadoId ?? created?.Id ?? created?.id;
-        if (!chamadoId) {
-            hideLoading();
-            alert('Chamado criado, mas não foi possível identificar o ID para marcar como resolvido.');
-            window.location.href = '/templates/verChamado.html';
-            return;
-        }
+	// Se não encontrou, tenta elementos que contenham a palavra "sol" no id (heurística)
+	if (!solutionTextEl) {
+		solutionTextEl = Array.from(document.querySelectorAll('[id]')).find(e => /sol/i.test(e.id));
+	}
 
-        // Agora chama o endpoint para resolver com IA
-        const resolverResp = await fetch(`/api/chamados/${chamadoId}/resolver-com-ia`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({ Solucao: solutionText })
-        });
+	// validações específicas para ajudar o diagnóstico
+	const missing = [];
+	if (!tituloEl) missing.push('título');
+	if (!descricaoEl) missing.push('descrição');
+	if (!prioridadeEl) missing.push('prioridade');
+	if (!solutionTextEl) missing.push('texto da solução (IA)');
 
-        if (!resolverResp.ok) {
-            const err = await resolverResp.text();
-            throw new Error(`Chamado criado (id=${chamadoId}) mas falha ao marcar como resolvido: ${err}`);
-        }
+	if (missing.length) {
+		alert(`Campo(s) não encontrados: ${missing.join(', ')}. Recarregue a página e verifique o HTML (ids/names).`);
+		return;
+	}
 
-        hideLoading();
-        alert('Chamado registrado e marcado como resolvido pela IA!');
-        window.location.href = '/templates/verChamado.html';
+	const titulo = getValueFromField(tituloEl).trim();
+	const descricao = getValueFromField(descricaoEl).trim();
+	const categoria = getValueFromField(categoriaEl).trim();
+	const prioridade = getValueFromField(prioridadeEl).trim();
+	const solutionText = (solutionTextEl.textContent || solutionTextEl.value || '').trim();
 
-    } catch (error) {
-        console.error('Erro ao resolver com IA:', error);
-        alert('Erro ao registrar chamado resolvido: ' + error.message);
-    }
+	const userInfo = JSON.parse(localStorage.getItem('usuario'));
+	const userId = userInfo ? (userInfo.id || userInfo.Id) : null;
+
+	if (!userId) {
+		alert('Não foi possível identificar o usuário. Faça login novamente.');
+		return;
+	}
+
+	const payload = {
+		Titulo: titulo,
+		Descricao: descricao,
+		Categoria: categoria,
+		Prioridade: prioridade,
+		SolicitanteId: parseInt(userId),
+		Status: "Resolvido por IA",
+		Solucao: solutionText
+	};
+
+	try {
+		const token = localStorage.getItem('authToken');
+		const headers = { 'Content-Type': 'application/json' };
+		if (token) headers['Authorization'] = `Bearer ${token}`;
+
+		// Mostrar feedback ao usuário enquanto processamos
+		showLoading('Finalizando seu chamado...');
+
+		// Cria o chamado primeiro (API sempre cria como 'Aberto')
+		const response = await fetch('/api/chamados', {
+			method: 'POST',
+			headers,
+			body: JSON.stringify(payload)
+		});
+
+		if (!response.ok) {
+			const errorText = await response.text();
+			throw new Error(`Erro ao salvar: ${errorText}`);
+		}
+
+		const created = await response.json();
+		// procurar o id retornado (variações de casing)
+		const chamadoId = created?.ChamadoId ?? created?.chamadoId ?? created?.Id ?? created?.id;
+		if (!chamadoId) {
+			hideLoading();
+			alert('Chamado criado, mas não foi possível identificar o ID para marcar como resolvido.');
+			window.location.href = '/templates/verChamado.html';
+			return;
+		}
+
+		// Agora chama o endpoint para resolver com IA
+		const resolverResp = await fetch(`/api/chamados/${chamadoId}/resolver-com-ia`, {
+			method: 'POST',
+			headers,
+			body: JSON.stringify({ Solucao: solutionText })
+		});
+
+		if (!resolverResp.ok) {
+			const err = await resolverResp.text();
+			throw new Error(`Chamado criado (id=${chamadoId}) mas falha ao marcar como resolvido: ${err}`);
+		}
+
+		hideLoading();
+		alert('Chamado registrado e marcado como resolvido pela IA!');
+		window.location.href = '/templates/verChamado.html';
+
+	} catch (error) {
+		console.error('Erro ao resolver com IA:', error);
+		alert('Erro ao registrar chamado resolvido: ' + error.message);
+	}
 }
 
 /**
@@ -164,8 +272,46 @@ async function handleFormSubmit(event) {
     const submitButton = form.querySelector('button[type="submit"]');
     const errorMessageDiv = document.getElementById('error-message');
 
-    const titulo = document.getElementById('titulo').value;
-    const descricao = document.getElementById('descricao').value;
+    // Resilient field finding
+    function findField(id, nameFallback) {
+        let el = document.getElementById(id);
+        if (el) return el;
+        if (form) {
+            el = form.querySelector(`#${id}`);
+            if (el) return el;
+            el = form.querySelector(`[name="${nameFallback || id}"]`);
+            if (el) return el;
+        }
+        el = document.querySelector(`[name="${nameFallback || id}"]`);
+        if (el) return el;
+        el = document.querySelector(`[data-field="${id}"], [data-field="${nameFallback || id}"]`);
+        return el;
+    }
+
+    function getValueFromField(fieldEl) {
+        if (!fieldEl) return '';
+        if ('value' in fieldEl) return fieldEl.value;
+        return fieldEl.textContent || '';
+    }
+
+    const tituloEl = findField('titulo', 'Titulo') || findField('title', 'title');
+    const descricaoEl = findField('descricao', 'Descricao') || findField('description', 'description');
+    const categoriaEl = findField('categoria', 'Categoria') || findField('category', 'category');
+    const prioridadeEl = findField('prioridade', 'Prioridade') || findField('priority', 'priority');
+
+    // Validate all fields exist
+    const missing = [];
+    if (!tituloEl) missing.push('título');
+    if (!descricaoEl) missing.push('descrição');
+    if (!prioridadeEl) missing.push('prioridade');
+
+    if (missing.length) {
+        showError(`Campo(s) não encontrados: ${missing.join(', ')}. Verifique o HTML (ids/names).`);
+        return;
+    }
+
+    const titulo = getValueFromField(tituloEl).trim();
+    const descricao = getValueFromField(descricaoEl).trim();
 
     if (titulo.length < 10) {
         showError('O título deve ter no mínimo 10 caracteres.');
@@ -184,8 +330,8 @@ async function handleFormSubmit(event) {
     const payload = {
         Titulo: titulo,
         Descricao: descricao,
-        Categoria: document.getElementById('categoria').value,
-        Prioridade: document.getElementById('prioridade').value,
+        Categoria: getValueFromField(categoriaEl),
+        Prioridade: getValueFromField(prioridadeEl),
         SolicitanteId: null,
     };
 
@@ -235,17 +381,48 @@ async function handleFormSubmit(event) {
     }
 
     function showError(msg) {
-        errorMessageDiv.textContent = msg;
-        errorMessageDiv.classList.remove('d-none');
+        if (errorMessageDiv) {
+            errorMessageDiv.textContent = msg;
+            errorMessageDiv.classList.remove('d-none');
+        } else {
+            alert(msg);
+        }
     }
+}
+
+// Shared utility functions for resilient field finding
+function findField(id, nameFallback) {
+    const form = document.getElementById('chamado-form');
+    let el = document.getElementById(id);
+    if (el) return el;
+    if (form) {
+        el = form.querySelector(`#${id}`);
+        if (el) return el;
+        el = form.querySelector(`[name="${nameFallback || id}"]`);
+        if (el) return el;
+    }
+    el = document.querySelector(`[name="${nameFallback || id}"]`);
+    if (el) return el;
+    el = document.querySelector(`[data-field="${id}"], [data-field="${nameFallback || id}"]`);
+    return el;
+}
+
+function getValueFromField(fieldEl) {
+    if (!fieldEl) return '';
+    if ('value' in fieldEl) return fieldEl.value;
+    return fieldEl.textContent || '';
 }
 
 /**
  * Busca uma sugestão da IA (Gemini API)
  */
 async function getAISuggestion() {
-    const titulo = document.getElementById('titulo').value.trim();
-    const descricao = document.getElementById('descricao').value.trim();
+    const tituloEl = findField('titulo', 'Titulo') || findField('title', 'title');
+    const descricaoEl = findField('descricao', 'Descricao') || findField('description', 'description');
+    
+    const titulo = getValueFromField(tituloEl).trim();
+    const descricao = getValueFromField(descricaoEl).trim();
+    
     const suggestBtn = document.getElementById('suggest-solution-btn');
     const solutionDisplay = document.getElementById('solution-display');
     const solutionText = document.getElementById('solution-text');
@@ -255,25 +432,36 @@ async function getAISuggestion() {
         return;
     }
 
-    suggestBtn.disabled = true;
-    suggestBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
-    solutionDisplay.classList.add('d-none');
+    if (suggestBtn) {
+        suggestBtn.disabled = true;
+        suggestBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+    }
+    if (solutionDisplay) solutionDisplay.classList.add('d-none');
 
     try {
-        // Envia com as chaves capitalizadas para casar com o DTO do servidor
         showLoading('Buscando solução com IA...');
-        // Envia a requisição para a IA
-        const response = await fetchWithAuth('/api/ia/sugerir-solucao', {
+
+        // Construir headers e body JSON corretamente
+        const token = localStorage.getItem('authToken');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const response = await fetch('/api/ia/sugerir-solucao', {
             method: 'POST',
-            body: { Titulo: titulo, Descricao: descricao }
+            headers,
+            body: JSON.stringify({ Titulo: titulo, Descricao: descricao })
         });
 
         if (!response.ok) {
-            throw new Error('Falha ao obter sugestão da IA.');
+            // tenta extrair mensagem do corpo para diagnóstico
+            let errText = '';
+            try { errText = await response.text(); } catch {}
+            throw new Error(errText || 'Falha ao obter sugestão da IA.');
         }
 
         const data = await response.json();
         const raw = data.solucao || 'Nenhuma sugestão disponível no momento.';
+
         // Renderiza um subconjunto de Markdown com segurança (escape + conversões simples)
         function escapeHtml(unsafe) {
             return unsafe
@@ -293,20 +481,15 @@ async function getAISuggestion() {
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) {
-                    // blank line -> close lists
                     if (inOrdered) { html += '</ol>'; inOrdered = false; }
                     html += '<p></p>';
                     continue;
                 }
 
-                // headings: ## , ###
                 if (line.startsWith('### ')) { html += '<h3>' + line.substring(4) + '</h3>'; continue; }
                 if (line.startsWith('## ')) { html += '<h2>' + line.substring(3) + '</h2>'; continue; }
-
-                // blockquote starting with >
                 if (line.startsWith('> ')) { html += '<blockquote>' + line.substring(2) + '</blockquote>'; continue; }
 
-                // ordered list item like '1. ' or '2. '
                 const olMatch = line.match(/^\d+\.\s+(.*)$/);
                 if (olMatch) {
                     if (!inOrdered) { html += '<ol>'; inOrdered = true; }
@@ -314,11 +497,8 @@ async function getAISuggestion() {
                     continue;
                 }
 
-                // bold **text**
                 const bold = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                // simple inline code `code`
                 const code = bold.replace(/`([^`]+)`/g, '<code>$1</code>');
-
                 html += '<p>' + code + '</p>';
             }
 
@@ -326,24 +506,24 @@ async function getAISuggestion() {
             return html;
         }
 
-        // Use marked + DOMPurify for robust markdown -> safe HTML
         try {
             const html = marked.parse(raw);
             const clean = DOMPurify.sanitize(html);
-            solutionText.innerHTML = clean;
+            if (solutionText) solutionText.innerHTML = clean;
         } catch (e) {
-            // Fallback to previous renderer
-            solutionText.innerHTML = renderMarkdown(raw);
+            if (solutionText) solutionText.innerHTML = renderMarkdown(raw);
         }
-        solutionDisplay.classList.remove('d-none');
+        if (solutionDisplay) solutionDisplay.classList.remove('d-none');
 
     } catch (error) {
         console.error('Erro IA:', error);
-        alert('Erro ao obter sugestão: ' + error.message);
+        alert('Erro ao obter sugestão: ' + (error.message || error));
     } finally {
         hideLoading();
-        suggestBtn.disabled = false;
-        suggestBtn.innerHTML = 'Buscar Solução com IA';
+        if (suggestBtn) {
+            suggestBtn.disabled = false;
+            suggestBtn.innerHTML = 'Buscar Solução com IA';
+        }
     }
 }
 

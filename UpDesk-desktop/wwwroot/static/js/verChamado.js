@@ -108,7 +108,7 @@ async function fetchAndDisplayChamados() {
             row.innerHTML = `
                 <td>${chamado.tituloChamado || 'N/A'}</td>
                 <td>${chamado.prioridadeChamado || 'N/A'}</td>
-                <td>${chamado.statusChamado || 'N/A'}</td>
+                <td class="status_chamado">${chamado.statusChamado || 'N/A'}</td>
                 <td>${dataAbertura}</td>
                 <td>
                     <button class="btn btn-vizualizar visualizar-btn"
@@ -121,6 +121,7 @@ async function fetchAndDisplayChamados() {
                 </td>
             `;
             tableBody.appendChild(row);
+
         });
 
     } catch (error) {
@@ -128,6 +129,7 @@ async function fetchAndDisplayChamados() {
         tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Falha ao carregar chamados.</td></tr>';
     }
 }
+
 
 // ---------------- PDF EXPORT -----------------
 document.getElementById("export-pdf-button").addEventListener("click", async () => {

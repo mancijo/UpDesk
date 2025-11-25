@@ -71,7 +71,7 @@ public class ChamadosController : ControllerBase
         // Retorna chamados "Aberto" e sem atendente para a tela de triagem
         return await _context.Chamados
             .Include(c => c.Solicitante)
-            .Where(c => c.StatusChamado == "Aberto" && c.AtendenteId == null)
+            .Where(c => c.StatusChamado == "Em triagem" && c.AtendenteId == null)
             .OrderBy(c => c.DataAbertura) // CORREÇÃO: Mover o OrderBy para antes do Select
             .Select(c => new ChamadoSummaryDto( // Correção: Mapeamento explícito
                 c.ChamadoId, // ChamadoId
@@ -149,7 +149,7 @@ public class ChamadosController : ControllerBase
             DescricaoChamado = chamadoDto.Descricao,
             CategoriaChamado = chamadoDto.Categoria ?? "Outros", // valor padrão caso front-end não envie; a IA pode sobrescrever
             PrioridadeChamado = chamadoDto.Prioridade,
-            StatusChamado = "Aberto",
+            StatusChamado = "Em triagem",
             DataAbertura = DateTime.UtcNow,
             DataUltimaModificacao = DateTime.UtcNow
         };

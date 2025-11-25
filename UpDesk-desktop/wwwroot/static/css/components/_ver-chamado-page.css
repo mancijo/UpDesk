@@ -174,3 +174,16 @@ input[type="text"] {
     background-color: var(--cor-primaria-escura);
     color: #FFFFFF ;
 }
+
+/* ESTILOS PARA BADGE DE STATUS */
+.status-badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    margin-left: 50px;
+    height: 24px;
+    margin-top: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
