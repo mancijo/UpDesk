@@ -34,28 +34,57 @@ class Config:
     DB_UID = os.getenv('DB_UID')
     DB_PWD = os.getenv('DB_PWD')
 
-    # Monta a string de conexão (ConnectionString) para o SQLAlchemy.
-    # `urllib.parse.quote_plus` é usado para codificar caracteres especiais na string de conexão,
-    # prevenindo erros e possíveis ataques de injeção.
-    if DB_UID:
-        # Conexão com Autenticação do SQL Server
-        _params = urllib.parse.quote_plus(
-            f"Driver={{{DB_DRIVER}}};"
-            f"Server={DB_SERVER};"
-            f"Database={DB_DATABASE};"
-            f"UID={DB_UID};"
-            f"PWD={{{DB_PWD}}};"
-        )
-    else:
-        # Conexão com Autenticação do Windows
-        _params = urllib.parse.quote_plus(
-            f"Driver={{{DB_DRIVER}}};"
-            f"Server={DB_SERVER};"
-            f"Database={DB_DATABASE};"
-            f"Trusted_Connection=yes;"
-        )
+    # Permite fornecer a connection string completa via variável de ambiente
+    # Aceitamos variações comuns: DEFAULT_CONNECTION, ConnectionStrings__DefaultConnection
+    # Exemplo que pode vir do usuário / JSON samples:
+    # "Server=updesk-db.c9amamg4cvnf.sa-east-1.rds.amazonaws.com,1433;Database=updesk-db;User Id=admin;Password=...;Encrypt=True;TrustServerCertificate=True;"
+    DEFAULT_CONNECTION = (
+        os.getenv('DEFAULT_CONNECTION')
+        or os.getenv('ConnectionStrings__DefaultConnection')
+        or os.getenv('ConnectionStrings:DefaultConnection')
+    )
 
-    SQLALCHEMY_DATABASE_URI = f"mssql+pyodbc:///?odbc_connect={_params}"
+    # Monta a string de conexão (ConnectionString) para o SQLAlchemy.
+    # `urllib.parse.quote_plus` é usado para codificar caracteres especiais na string de conexão.
+    if DEFAULT_CONNECTION:
+        # Normaliza a string fornecida pelo usuário:
+        _raw = DEFAULT_CONNECTION.strip().strip('"')
+
+        # Se o usuário passou a string sem especificar o Driver ODBC, insere um driver padrão
+        # para evitar erros do pyodbc. O valor default aqui usa ODBC Driver 18 quando possível.
+        if 'driver=' not in _raw.lower():
+            # DB_DRIVER pode vir com ou sem chaves; garantir o nome limpo
+            drv = os.getenv('DB_DRIVER', 'ODBC Driver 18 for SQL Server').strip('"{}')
+            _raw = f"Driver={{{drv}}};" + _raw
+
+        # Normaliza valores booleanos comuns para a forma esperada pelo driver (yes/no)
+        _raw = _raw.replace('Encrypt=True', 'Encrypt=yes').replace('Encrypt=True;', 'Encrypt=yes;')
+        _raw = _raw.replace('Encrypt=False', 'Encrypt=no').replace('Encrypt=False;', 'Encrypt=no;')
+        _raw = _raw.replace('TrustServerCertificate=True', 'TrustServerCertificate=yes').replace('TrustServerCertificate=True;', 'TrustServerCertificate=yes;')
+        _raw = _raw.replace('TrustServerCertificate=False', 'TrustServerCertificate=no').replace('TrustServerCertificate=False;', 'TrustServerCertificate=no;')
+
+        _params = urllib.parse.quote_plus(_raw)
+        SQLALCHEMY_DATABASE_URI = f"mssql+pyodbc:///?odbc_connect={_params}"
+    else:
+        if DB_UID:
+            # Conexão com Autenticação do SQL Server
+            _params = urllib.parse.quote_plus(
+                f"Driver={{{DB_DRIVER}}};"
+                f"Server={DB_SERVER};"
+                f"Database={DB_DATABASE};"
+                f"UID={DB_UID};"
+                f"PWD={{{DB_PWD}}};"
+            )
+        else:
+            # Conexão com Autenticação do Windows
+            _params = urllib.parse.quote_plus(
+                f"Driver={{{DB_DRIVER}}};"
+                f"Server={DB_SERVER};"
+                f"Database={DB_DATABASE};"
+                f"Trusted_Connection=yes;"
+            )
+
+        SQLALCHEMY_DATABASE_URI = f"mssql+pyodbc:///?odbc_connect={_params}"
     
     # Desativa um recurso do SQLAlchemy que emite sinais a cada modificação no banco.
     # Desativar melhora a performance e é a configuração recomendada.

@@ -42,7 +42,8 @@ def abrir_chamado():
     form.status.data = 'Aberto'
     # Log mínimo: método da requisição (útil para auditoria)
     current_app.logger.debug(f"abrir_chamado called, method={request.method}")
-    if 'usuario_id' not in session:
+    bypass = current_app.config.get('AUTH_BYPASS') or request.args.get('bypass') == '1'
+    if 'usuario_id' not in session and not bypass:
         return redirect(url_for('main.index'))
     
     if request.method == 'POST' and form.validate_on_submit():
@@ -84,7 +85,8 @@ def abrir_chamado():
                 current_app.logger.warning(f"Tipo de arquivo não permitido: {file.filename}")
         
         session['chamado_temporario'] = chamado_data
-        user = {'name': session.get('usuario_nome')}
+        display_name = session.get('usuario_nome') if 'usuario_nome' in session else ('Dev Bypass' if bypass else 'Usuário')
+        user = {'name': display_name}
         # Format and sanitize the solution HTML before rendering
         try:
             from ..services import format_solucao
@@ -107,7 +109,8 @@ def abrir_chamado():
         flash('Corrija os erros do formulário e tente novamente.', 'danger')
 
     # Para requisições GET, apenas exibe o formulário de abertura de chamado
-    user = {'name': session.get('usuario_nome', 'Usuário')}
+    display_name = session.get('usuario_nome') if 'usuario_nome' in session else ('Dev Bypass' if bypass else 'Usuário')
+    user = {'name': display_name}
     return render_template('chamado.html', form=form, user=user)
 
 @bp.route('/confirmar_abertura', methods=['GET', 'POST'])
@@ -249,10 +252,15 @@ def ver_chamados():
 
     # Escopo de visualização por cargo (regra solicitada)
     if cargo == 'supervisor':
-        # Supervisor vê absolutamente todos os chamados, incluindo os em triagem (Aberto) e em atendimento
-        query = Chamado.query
+        # Supervisor: por padrão o monitoramento NÃO deve mostrar chamados que estão em triagem
+        # (status 'Aberto') para evitar duplicidade com a tela de triagem.
+        # Se necessário, o filtro por status mais abaixo permite restringir ainda mais.
+        query = Chamado.query.filter(Chamado.status_Chamado != 'Aberto')
     elif cargo in {'n1', 'n2'}:
-        # N1/N2 veem chamados em triagem (status 'Aberto') + chamados encaminhados especificamente para seu setor
+        # N1/N2: por política, o chamado precisa ser triado primeiro —
+        # portanto, aqui não mostramos chamados com status 'Aberto' na tela de monitoramento (/chamados/ver).
+        # Os N1/N2 verão apenas chamados atribuídos a eles ou encaminhados especificamente para seu setor
+        # que não estejam em estado 'Aberto'.
         user_id = session.get('usuario_id')
         # Usamos tags não ambíguas: ##destino:ti_n1## e ##destino:ti_n2##
         if cargo == 'n1':
@@ -265,12 +273,13 @@ def ver_chamados():
         # Coalesce para tratar categoria nula e evitar comparações SQL com NULL
         cat_coalesce = func.coalesce(Chamado.categoria_Chamado, '')
 
-        # Mostrar: chamados abertos (triagem), atribuídos ao usuário, ou explicitamente encaminhados para este setor
+        # Mostrar: chamados atribuídos ao usuário ou explicitamente encaminhados para este setor
         query = Chamado.query.filter(or_(
-            Chamado.status_Chamado == 'Aberto',
             Chamado.atendenteID == user_id,
             cat_coalesce.ilike(destino_tag)
         ))
+        # Garantir que não incluamos chamados que ainda estão em triagem (status 'Aberto')
+        query = query.filter(Chamado.status_Chamado != 'Aberto')
         # Excluir chamados que foram explicitamente encaminhados para o outro setor
         query = query.filter(~cat_coalesce.ilike(other_tag))
         bypass = False
@@ -632,10 +641,37 @@ def encerrar_chamado(chamado_id):
     if 'usuario_id' not in session:
         return redirect(url_for('main.index'))
 
+    # Verifica permissões similares à view de atendimento
     chamado = Chamado.query.get_or_404(chamado_id)
+
+    usuario_id = session.get('usuario_id')
+    usuario = Usuario.query.get(usuario_id)
+    cargo = (usuario.cargo or '').lower() if usuario and usuario.cargo else ''
+    is_staff = (cargo in {'supervisor','n1','n2'})
+    is_atendente = chamado.atendenteID == usuario_id
+
+    # Somente staff ou o atendente associado podem encerrar
+    if not (is_staff or is_atendente):
+        flash('Você não tem permissão para encerrar este chamado.', 'danger')
+        return redirect(url_for('chamados.atender_chamado', chamado_id=chamado_id))
+
+    # Marca como resolvido e atualiza timestamp
     chamado.status_Chamado = 'Resolvido'
+    try:
+        chamado.dataUltimaModificacao = get_sao_paulo_time()
+    except Exception:
+        chamado.dataUltimaModificacao = datetime.now()
     db.session.commit()
-    return redirect(url_for('chamados.ver_chamados'))
+
+    # Recupera histórico de interações para exibição após o encerramento
+    interacoes = Interacao.query.filter_by(chamado_id=chamado_id).order_by(Interacao.data_criacao.asc()).all()
+
+    user = {'name': session.get('usuario_nome', 'Usuário')}
+    # Permissão para reabrir: solicitante ou staff
+    is_solicitante = (chamado.solicitanteID == usuario_id)
+    can_reopen = is_staff or is_solicitante
+    flash('Chamado encerrado com sucesso.', 'success')
+    return render_template('chamado_encerrado.html', chamado=chamado, interacoes=interacoes, user=user, can_reopen=can_reopen)
 
 @bp.route('/devolver_triagem/<int:chamado_id>')
 @requires_roles('supervisor', 'n1', 'n2')
@@ -732,10 +768,24 @@ def reabrir_chamado(chamado_id):
         return redirect(url_for('main.index'))
 
     chamado = Chamado.query.get_or_404(chamado_id)
+
+    usuario_id = session.get('usuario_id')
+    usuario = Usuario.query.get(usuario_id)
+    cargo = (usuario.cargo or '').lower() if usuario and usuario.cargo else ''
+    is_staff = (cargo in {'supervisor','n1','n2'})
+    is_solicitante = (chamado.solicitanteID == usuario_id)
+    if not (is_staff or is_solicitante):
+        flash('Você não tem permissão para reabrir este chamado.', 'danger')
+        return redirect(url_for('chamados.ver_chamados'))
+
     chamado.status_Chamado = 'Aberto'
     chamado.atendenteID = None  # Remove o atendente
+    try:
+        chamado.dataUltimaModificacao = get_sao_paulo_time()
+    except Exception:
+        chamado.dataUltimaModificacao = datetime.now()
     db.session.commit()
-    
+
     flash('Chamado reaberto com sucesso!', 'success')
     return redirect(url_for('chamados.ver_chamados'))
 

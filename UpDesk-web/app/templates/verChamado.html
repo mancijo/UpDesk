@@ -70,13 +70,14 @@
                         {% for chamado in chamados %}
                         <tr class="align-middle call-row">
                             <td class="text-center text-muted small" data-label="ID">
-                                <a href="#" class="id-link" data-bs-toggle="modal" data-bs-target="#visualizarChamadoModal"
+                                          <a href="#" class="id-link" data-bs-toggle="modal" data-bs-target="#visualizarChamadoModal"
                                    data-chamado-id="{{ chamado.chamado_ID }}"
                                    data-titulo="{{ chamado.titulo_Chamado }}"
                                    data-data-abertura="{{ chamado.dataAbertura.strftime('%d/%m/%Y %H:%M') }}"
                                    data-solicitante-nome="{{ chamado.solicitante.nome if chamado.solicitante else 'Não informado' }}"
                                    data-solicitante-email="{{ chamado.solicitante.email if chamado.solicitante else 'Não informado' }}"
                                    data-solicitante-ramal="{{ chamado.solicitante.telefone if chamado.solicitante else 'Não informado' }}"
+                                              data-solicitante-id="{{ chamado.solicitante.id if chamado.solicitante else '' }}"
                                    data-status="{{ chamado.status_Chamado }}"
                                    data-prioridade="{{ chamado.prioridade_Chamado }}"
                                    data-descricao="{{ chamado.descricao_Chamado }}"
@@ -165,7 +166,7 @@
     </div>
 
     <!-- Modal de Visualização de Chamado (unificado com estrutura da Triagem) -->
-    <div class="modal fade" id="visualizarChamadoModal" tabindex="-1" aria-labelledby="visualizarChamadoModalLabel" aria-hidden="true">
+    <div class="modal fade" id="visualizarChamadoModal" tabindex="-1" aria-labelledby="visualizarChamadoModalLabel" aria-hidden="true" data-current-user-id="{{ user_id or '' }}">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -210,12 +211,21 @@
                                 <p class="mb-2"><strong>Anexo:</strong></p>
                                 <a id="modal-anexo-link" href="#" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-paperclip"></i> Visualizar Anexo</a>
                             </div>
+                            <div id="modal-historico-container" class="mt-4" style="display:none;">
+                                <h5 class="mb-2">Histórico de Interações</h5>
+                                <div id="modal-historico-list" class="list-group small"></div>
+                                <div id="modal-historico-empty" class="text-muted small" style="display:none;">Nenhuma interação registrada.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Voltar</button>
                     <a href="#" id="modal-atender-chamado-btn" class="btn btn-primary btn-sm d-none">Atender Chamado</a>
+                    <form id="form-reabrir-chamado" action="#" method="POST" class="d-none">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-warning btn-sm">Reabrir Chamado</button>
+                    </form>
                 </div>
             </div>
         </div>

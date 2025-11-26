@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Chamado Encerrado #{{ chamado.chamado_ID }}{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/_chamado-enviado-page.css') }}">
+{% endblock %}
+
+{% block body %}
+<main class="container chamado-enviado-wrapper" role="main">
+    <article class="card-container mx-auto" aria-labelledby="chamado-encerrado-title">
+        <header class="card-header-success text-center py-4">
+            <i class="fas fa-check-circle success-icon" aria-hidden="true"></i>
+            <h1 id="chamado-encerrado-title" class="card-title-success">Chamado encerrado</h1>
+            <p class="lead">O chamado foi encerrado com sucesso. Abaixo segue o histórico de interações.</p>
+        </header>
+
+        <section class="card-body p-4">
+            <dl class="row mb-3">
+                <dt class="col-12 col-md-3">Número do Chamado</dt>
+                <dd class="col-12 col-md-9">{{ '#' ~ chamado.chamado_ID }}</dd>
+
+                <dt class="col-12 col-md-3">Título</dt>
+                <dd class="col-12 col-md-9">{{ chamado.titulo_Chamado }}</dd>
+
+                <dt class="col-12 col-md-3">Solicitante</dt>
+                <dd class="col-12 col-md-9">{{ chamado.solicitante.nome if chamado.solicitante else '' }}</dd>
+
+                <dt class="col-12 col-md-3">Encerrado em</dt>
+                <dd class="col-12 col-md-9">{{ chamado.dataUltimaModificacao.strftime('%d/%m/%Y %H:%M') if chamado.dataUltimaModificacao else '' }}</dd>
+            </dl>
+
+            <h5 class="mt-3">Histórico de Interações</h5>
+            {% if interacoes and interacoes|length > 0 %}
+                <ul class="list-group mt-2">
+                    {% for i in interacoes %}
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div><strong>{{ i.usuario.nome if i.usuario else ('Usuário ' ~ i.usuario_id) }}</strong></div>
+                                <div class="text-muted small">{{ i.data_criacao.strftime('%d/%m/%Y %H:%M') if i.data_criacao else '' }}</div>
+                            </div>
+                            <div class="mt-2">{{ i.mensagem }}</div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Nenhuma interação registrada para este chamado.</p>
+            {% endif %}
+        </section>
+
+        <footer class="card-footer d-flex justify-content-center gap-3 py-4">
+            <a href="{{ url_for('chamados.ver_chamados') }}" class="btn btn-primary">Ver Meus Chamados</a>
+            <a href="{{ url_for('main.home') }}" class="btn btn-outline-secondary">Ir para Página Inicial</a>
+            {% if can_reopen %}
+            <form action="{{ url_for('chamados.reabrir_chamado', chamado_id=chamado.chamado_ID) }}" method="POST" class="d-inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-warning">Reabrir Chamado</button>
+            </form>
+            {% endif %}
+        </footer>
+    </article>
+</main>
+{% endblock %}
