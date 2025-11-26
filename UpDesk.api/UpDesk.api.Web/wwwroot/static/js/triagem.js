@@ -139,19 +139,19 @@ async function fetchTriagemChamados() {
                 <td>${chamado.prioridadeChamado}</td>
                 <td>${dataAbertura}</td>
                 <td><span class="status status-pendente">${chamado.statusChamado}</span></td>
-                <td class="ticket-actions text-end">
-                    <button class="btn btn-vizualizar-triagem btn-sm visualizar-btn"
-                        data-id="${chamado.chamadoId}"
-                        data-bs-toggle="modal" 
-                        data-bs-target="#visualizarChamadoModal"><i class="bi bi-eye"></i>
-                        Visualizar
-                    </button>
-                    <button class="btn btn-transferir-triagem btn-sm transferir-btn" 
-                        data-id="${chamado.chamadoId}" 
-                        data-titulo="${chamado.tituloChamado}"><i class="bi bi-headset"></i>
-                        Triar
-                    </button>
-                </td>
+                    <td class="ticket-actions text-end">
+                        <div class="d-flex gap-2 justify-content-end align-items-center">
+                            <button class="btn btn-vizualizar-triagem btn-sm visualizar-btn"
+                                data-id="${chamado.chamadoId}"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#visualizarChamadoModal"><i class="bi bi-eye"></i>
+                                Visualizar
+                            </button>
+                            <a href="atendimento_triagem.html?id=${chamado.chamadoId}" class="btn btn-transferir-triagem btn-sm">
+                                <i class="bi bi-headset"></i> Triar
+                            </a>
+                        </div>
+                    </td>
             `;
 
             container.appendChild(tableRow);

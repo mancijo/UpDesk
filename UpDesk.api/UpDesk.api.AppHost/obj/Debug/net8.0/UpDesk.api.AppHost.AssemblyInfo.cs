@@ -24,7 +24,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UpDesk.api.AppHost")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f99b9288270d72cb917ef53db4a9adba76321c9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f2b6b443392b89ff0672ed8f4546590d34fa819")]
 [assembly: System.Reflection.AssemblyProductAttribute("UpDesk.api.AppHost")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UpDesk.api.AppHost")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

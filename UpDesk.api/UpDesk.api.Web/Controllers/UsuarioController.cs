@@ -4,6 +4,8 @@ using UpDesk.Api.Data;
 using UpDesk.Api.Dtos;
 using UpDesk.Api.Models;
 using UpDesk.Api.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace UpDesk.Api.Controllers;
 
@@ -122,5 +124,25 @@ public class UsuariosController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    // POST: api/usuarios/verify-password
+    [HttpPost("verify-password")]
+    [Authorize]
+    public async Task<IActionResult> VerifyPassword([FromBody] UpDesk.Api.Dtos.VerifyPasswordDto dto)
+    {
+        // Obtém o id do usuário logado a partir das claims
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(idClaim)) return Unauthorized();
+
+        if (!int.TryParse(idClaim, out var userId)) return Unauthorized();
+
+        var usuario = await _context.Usuarios.FindAsync(userId);
+        if (usuario == null) return Unauthorized();
+
+        var ok = PasswordService.VerifyPassword(dto.Password, usuario.Senha);
+        if (!ok) return Unauthorized();
+
+        return Ok(new { verified = true });
     }
 }

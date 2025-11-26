@@ -26,3 +26,8 @@ public record UpdateUsuarioDto(
     string? Setor,
     [Required] string Cargo
 );
+
+// DTO para verificar senha do usuário logado
+public record VerifyPasswordDto(
+    [Required] string Password
+);

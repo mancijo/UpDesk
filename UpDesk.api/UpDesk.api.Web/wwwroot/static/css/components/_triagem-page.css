@@ -56,7 +56,7 @@
 
 .main-panel {
     background-color: var(--cor-fundo-claro);
-    padding: var(--espaco-l);
+    padding: var(--espaco-xl);
     border-radius: var(--raio-borda-l);
     box-shadow: var(--sombra-discreta);
     width: 100%;
@@ -92,6 +92,27 @@
     color: #FFFFFF;  
 }
 
+/* Garantir que os botões de ação fiquem lado a lado em telas médias/grandes
+   e empilhem em telas pequenas para melhor responsividade */
+.ticket-actions .btn {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}
+.ticket-actions .btn:first-child {
+    margin-left: 0; /* remove margin do primeiro botão */
+}
+
+@media (max-width: 576px) {
+    .ticket-actions .btn {
+        display: block;
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+    .ticket-actions .btn:last-child { margin-bottom: 0; }
+}
+
 .btn-voltar {
     background-color: var(--cor-secundaria);
     color: #FFFFFF;
@@ -107,7 +128,7 @@
 }
 
 .btn-confirm {
-    background-color: var(--cor-primaria);
+    background-color: var(--cor-sucesso);
     color: #FFFFFF;
     border: none;
     border-radius: var(--raio-borda-pílula) !important;
@@ -115,7 +136,7 @@
 }
 
 .btn-confirm:hover {
-    background-color: var(--cor-primaria-escura);
+    background-color: var(--cor-sucesso-escura);
     color: #FFFFFF;
     
 }

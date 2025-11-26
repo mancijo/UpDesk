@@ -1,0 +1,89 @@
+<!-- TESTE GEMINI v1 -->
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/static/js/auth_guard.js"></script>
+    <title>UpDesk - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body class="login-page-body">
+    <div class="login-card">
+        <h1 class="logo">UpDesk</h1> 
+        <form id="loginForm">
+            <div class="mb-3">
+                <label for="email" class="form-label visually-hidden">Email</label>
+                <input  type="email" id="email" class="form-control form__input--login" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+                <label for="senha" class="form-label visually-hidden" >Senha</label>
+                <input type="password" id="senha" class="form-control form__input--login" placeholder="Senha" required>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Lembrar-me</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-login">Login</button>
+        </form>
+
+                <div class="message" id="mensagem"></div>
+                <!-- Trigger modal -->
+                <a href="#" id="forgotLink" class="text-decoration-none text-primary mt-3" data-bs-toggle="modal" data-bs-target="#forgotModal">Esqueceu sua senha?</a>
+    </div>
+
+        <!-- modal esqueci senha -->
+        <div class="modal fade" id="forgotModal" tabindex="-1" aria-labelledby="forgotModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="forgotModalLabel">Recuperação de senha</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                                <div class="modal-body">
+                                    <!-- FORM: entrada de e-mail -->
+                                    <form id="forgotForm" class="forgot__form" novalidate>
+                                        <div class="mb-3">
+                                            <label for="forgotEmail" class="form-label">Digite seu e-mail</label>
+                                            <input type="email" class="form-control" id="forgotEmail" name="email" placeholder="seu email@empresa.com" required aria-describedby="forgotHelp">
+                                            <div id="forgotHelp" class="form-text">Será notificado o seu supervisor com o link de recuperação.</div>
+                                        </div>
+                                        <div id="forgotMessage" class="mb-3" aria-live="polite" style="display:none;"></div>
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" id="forgotSubmit" class="btn btn-send">Enviar</button>
+                                        </div>
+                                    </form>
+
+                                    <!-- CONFIRMATION: substitui o form após envio -->
+                                    <section id="forgotConfirmation" class="forgot__confirm" role="status" aria-live="polite" style="display:none;">
+                                        <div class="card border-0">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Solicitação enviada com sucesso! ✅</h5>
+                                                <p class="card-text">Um link de recuperação de senha foi enviado para o e-mail do seu supervisor para recuperação da sua senha.</p>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" id="confirmBack" class="btn btn-primary">Ok, Voltar para página de login</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                </div>
+            </div>
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+        crossorigin="anonymous"></script>
+    <script src="/static/js/login.js"></script>
+</body>
+
+</html>

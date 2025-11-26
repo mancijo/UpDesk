@@ -143,14 +143,12 @@ async function fetchTriagemChamados() {
                     <button class="btn btn-vizualizar-triagem btn-sm visualizar-btn"
                         data-id="${chamado.chamadoId}"
                         data-bs-toggle="modal" 
-                        data-bs-target="#visualizarChamadoModal"><i class="bi bi-eye"></i>
+                        data-bs-target="#visualizarChamadoModal">
                         Visualizar
                     </button>
-                    <button class="btn btn-transferir-triagem btn-sm transferir-btn" 
-                        data-id="${chamado.chamadoId}" 
-                        data-titulo="${chamado.tituloChamado}"><i class="bi bi-headset"></i>
-                        Triar
-                    </button>
+                    <a href="atendimento_triagem.html?id=${chamado.chamadoId}" class="btn btn-transferir-triagem btn-sm">
+                         Triar
+                    </a>
                 </td>
             `;
 

@@ -1,0 +1,54 @@
+body {
+    background: #f5f7fa;
+}
+
+.triagem-container {
+    max-width: 1400px;
+    margin: auto;
+    padding-top: 30px;
+}
+
+.section-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: #0d286d;
+    margin-bottom: 20px;
+}
+
+.status-badge {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+textarea {
+    resize: none;
+    min-height: 120px;
+}
+
+footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #777;
+    padding-bottom: 20px;
+}
+
+.btn-rounded {
+    border-radius: 10px;
+}
+
+.info-box {
+    font-size: .85rem;
+    background: #e8f6ff;
+    border-left: 4px solid #0d6efd;
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: #0d4a84;
+}

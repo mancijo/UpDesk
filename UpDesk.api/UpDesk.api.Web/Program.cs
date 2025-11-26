@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using UpDesk.Api.Data;
 using UpDesk.Api.Middleware;
 using UpDesk.Api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +30,9 @@ builder.Services.AddCors(options =>
 // Configura��o do Banco de Dados
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, sqlOptions =>
+        sqlOptions.EnableRetryOnFailure() // Habilita retry para falhas transitórias (recomendado em cloud)
+    ));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -38,6 +43,33 @@ builder.Services.AddHttpClient();
 
 // Registra o serviço JWT
 builder.Services.AddScoped<JwtService>();
+
+// Configura autenticação JWT
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "UpDesk_Secret_Key_Minimum_32_Characters_Long";
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "UpDesk";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "UpDesk";
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+        // Permitir tokens enviados via query string in development if needed (optional)
+        // options.Events = new JwtBearerEvents { OnMessageReceived = context => { ... } };
+    });
 
 // Registra o serviço de IA (usando mock temporariamente)
 // Se quiser usar o mock, descomente a linha abaixo e comente o registro do GeminiIaService
@@ -68,7 +100,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins); // Habilita a politica de CORS
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

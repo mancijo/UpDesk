@@ -71,33 +71,32 @@ h1 {
     font-weight: var(--fonte-peso-semi-bold);
 }
 
-.btn-primary {
-    background-color: var(--cor-primaria); 
-    color: #FFFFFF;  
-    border: solid 1px #000;
-    padding: 20px 20px; 
+.edit-user-btn {
+    background-color: var(--cor-primaria);
+    color: #fff;  
+    border-radius: var(--raio-borda-pílula) !important;
     cursor: pointer;
     transition: background-color 0.4s ease;
+    box-shadow: var(--sombra-intensa);
 }
 
-.btn-primary:hover {
+.edit-user-btn:hover {
     background-color: var(--cor-primaria-escura);
     color: #FFFFFF;
 }
 
 .btn-danger {
-    background-color: var(--cor-secundaria); 
-    color: #FFFFFF;
-    border: solid 1px #000;
-    padding: 20px 20px; 
+    background-color: var(--cor-perigo);
+    color: #fff;  
+    border-radius: var(--raio-borda-pílula) !important;
     cursor: pointer;
     transition: background-color 0.4s ease;
+    box-shadow: var(--sombra-intensa);
 }
 
 .btn-danger:hover {
-    background-color: var(--cor-secundaria-escura);
+    background-color: var(--cor-perigo-escura);
     color: #FFFFFF;
-    border: solid 1px #000;
 }
 
 .btn-criar-user {

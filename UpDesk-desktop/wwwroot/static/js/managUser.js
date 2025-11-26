@@ -114,14 +114,24 @@ function prepareDeleteModal(button) {
     const nome = button.dataset.nome;
     
     document.getElementById('delete-user-name').textContent = nome;
-    
+    // Limpa e foca o campo de senha no modal (se existir)
+    const pwdInput = document.getElementById('delete-current-password');
+    if (pwdInput) {
+        pwdInput.value = '';
+        // foco com timeout para garantir que o modal está visível
+        setTimeout(() => pwdInput.focus(), 200);
+    }
+
     const btnConfirmar = document.getElementById('btnConfirmarExcluir');
     // Passa o ID para o botão de confirmação, clonando para evitar múltiplos listeners
     const newBtn = btnConfirmar.cloneNode(true);
     btnConfirmar.parentNode.replaceChild(newBtn, btnConfirmar);
-    
-    newBtn.addEventListener('click', () => handleDeleteUser(id));
-    
+
+    newBtn.addEventListener('click', () => {
+        const senha = pwdInput ? pwdInput.value : '';
+        handleDeleteUser(id, senha);
+    });
+
     deleteUserModal.show();
 }
 
@@ -197,17 +207,54 @@ async function handleEditUser(event) {
  * Manipula a exclusão de um usuário.
  * @param {string} id O ID do usuário a ser excluído.
  */
-async function handleDeleteUser(id) {
+async function handleDeleteUser(id, currentUserPassword) {
     try {
-        // ATENÇÃO: Crie o endpoint DELETE /api/usuarios/{id} no seu backend.
-        const response = await fetchWithAuth(`/api/usuarios/${id}`, {
-            method: 'DELETE'
-        });
-        if (!response.ok) throw new Error('Erro ao excluir usuário');
+        if (!currentUserPassword) {
+            alert('Informe sua senha para confirmar a exclusão.');
+            return;
+        }
+
+        // Faz a verificação de senha com fetch manual (evita comportamentos globais de fetchWithAuth,
+        // como redirecionamentos automáticos em 401 que acabavam levando à tela de login).
+        const token = localStorage.getItem('authToken') || '';
+        let verifyResp;
+        try {
+            verifyResp = await fetch('/api/usuarios/verify-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token ? `Bearer ${token}` : ''
+                },
+                body: JSON.stringify({ password: currentUserPassword })
+            });
+        } catch (err) {
+            console.error('Erro de rede ao verificar senha', err);
+            alert('Erro de rede ao verificar a senha. Tente novamente.');
+            return;
+        }
+
+        // Se a senha estiver incorreta, o servidor retorna 401/403.
+        // Mostramos um pop-up amigável e permanecemos na página de gerenciamento.
+        if (verifyResp.status === 401 || verifyResp.status === 403) {
+            alert('Senha incorreta');
+            return;
+        }
+
+        if (!verifyResp.ok) {
+            const txt = await verifyResp.text();
+            throw new Error(txt || 'Erro na verificação de senha. Exclusão cancelada.');
+        }
+
+        // Se verificado, chama DELETE
+        const deleteResp = await fetchWithAuth(`/api/usuarios/${id}`, { method: 'DELETE' });
+        if (!deleteResp.ok) {
+            const text = await deleteResp.text();
+            throw new Error(text || 'Erro ao excluir usuário');
+        }
 
         deleteUserModal.hide();
         await fetchAndDisplayUsers(); // Atualiza a tabela
-    } catch (error) { 
+    } catch (error) {
         console.error(error);
         alert(error.message);
     }

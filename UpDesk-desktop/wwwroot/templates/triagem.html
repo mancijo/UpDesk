@@ -61,7 +61,7 @@
         </div>
 
             <div class="table-responsive mt-4">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped ">
                     <thead>
                     <tr>
                         <th>Id</th>
@@ -81,7 +81,7 @@
             </div>
                 <!-- Chamados serão inseridos aqui pelo triagem.js -->
             <div class="mt-4">
-                <a href="/templates/home.html" class="btn btn-voltar rounded-pill"><i class="bi bi-house"></i> Página Inicial</a>
+                <a href="/templates/home.html" class="btn btn-salvar rounded-pill"><i class="bi bi-house"></i> Página Inicial</a>
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-voltar-modal rounded-pill" data-bs-dismiss="modal">Voltar</button>
-                    <a href="#" id="modal-atender-chamado-link" class="btn btn-iniciar-modal rounded-pill">Iniciar triagem</a>
+                    <a href="atendimento_triagem.html?id=${chamadoId}" class="btn btn-confirm">Iniciar triagem</a>
                 </div>
             </div>
         </div>

@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusFilter = document.getElementById('status-filter');
     const searchInput = document.getElementById('search-input');
 
+    statusFilter.value = "Aberto";
+
     fetchAndDisplayChamados();
 
     searchButton.addEventListener('click', fetchAndDisplayChamados);
@@ -76,7 +78,7 @@ async function fetchAndDisplayChamados() {
 
     const userData = JSON.parse(localStorage.getItem('usuario'));
     const userRole = userData && userData.cargo ? userData.cargo.trim() : null;
-    const techRoles = ['Supervisor', 'Técnico N1', 'Técnico N2', 'Triagem'];
+    const techRoles = ['Supervisor', 'Tecnico N1', 'Tecnico N2', 'Triagem', 'Auxiliar Administrativo', 'Assistente Financeiro', 'Analista de RH'];
 
     if (userRole && !techRoles.includes(userRole)) {
         params.append('meus_chamados', 'true');

@@ -35,7 +35,7 @@ const ROLE_CONFIG = {
         home: "/templates/home_tecnicos.html",
         allowedNavs: [
             "nav-home", "nav-perfil", "nav-monitoramento",
-            "nav-chamado", "nav-meuschamados"
+            "nav-chamado", "nav-meuschamados", "nav-atender"
             
         ]
     },
@@ -53,15 +53,33 @@ const ROLE_CONFIG = {
         home: "/templates/home_triagem.html",
         allowedNavs: [
             "nav-perfil", "nav-home", "nav-monitoramento", "nav-triagem",
-            "nav-chamado", "nav-meuschamados"
+            "nav-chamado", "nav-meuschamados", "nav-atender"
+
         ]
     },
 
-    "Auxiliar administrativo": {
+    "Auxiliar Administrativo": {
         home: "/templates/home_usuario.html",
         allowedNavs: [
             "nav-home", "nav-chamado",
-            "nav-meuschamados", "nav-perfil"
+            "nav-meuschamados", "nav-perfil", 
+        ]
+    },
+
+    "Assistente Financeiro": {
+        home: "/templates/home_usuario.html",
+        allowedNavs: [
+            "nav-home", "nav-chamado",
+            "nav-meuschamados", "nav-perfil", "nav-atender"
+        ]
+    },
+
+
+    "Analista de RH": {
+        home: "/templates/home_usuario.html",
+        allowedNavs: [
+            "nav-home", "nav-chamado",
+            "nav-meuschamados", "nav-perfil", "nav-atender"
         ]
     }
 };
@@ -118,6 +136,8 @@ safeRedirect(user) {
         "/templates/ger_usuarios.html",
         "/templates/meus_chamados.html",
         "/templates/perfil.html",
+        "/templates/atender_chamado.html",
+
         roleInfo.home
     ];
 

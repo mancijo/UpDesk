@@ -68,30 +68,31 @@ input[type="text"] {
     color: #FFFFFF;
 }
 .btn-atender {
-    background-color: var(--cor-primaria); 
-    color: #FFFFFF;  
-    border: solid 1px #000;
-    padding: 20px 20px; 
+    background-color: var(--cor-sucesso);
+    color: #fff;  
+    border-radius: var(--raio-borda-pílula) !important;
     cursor: pointer;
     transition: background-color 0.4s ease;
+    box-shadow: var(--sombra-intensa);
 }
 
 .btn-atender:hover {
-    background-color: var(--cor-primaria-escura);
+    background-color: var(--cor-sucesso-escura);
     color: #FFFFFF;
 }
 
 .btn-vizualizar {
-    background-color: var(--cor-secundaria); 
-    color: #FFFFFF;  
-    border: solid 1px #000;
-    padding: 20px 20px; 
+    background-color: var(--cor-primaria);
+    color: #fff;  
+    border-radius: var(--raio-borda-pílula) !important;
     cursor: pointer;
     transition: background-color 0.4s ease;
+    box-shadow: var(--sombra-intensa);
 }
 
+
 .btn-vizualizar:hover {
-    background-color: var(--cor-secundaria-escura);
+    background-color: var(--cor-primaria-escura);
     color: #FFFFFF;
 }
 

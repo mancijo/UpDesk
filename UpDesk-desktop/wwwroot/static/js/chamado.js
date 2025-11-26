@@ -1,6 +1,10 @@
 // /static/js/chamado.js
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Proteção contra submissões duplicadas: sinal global para ignorar envios enquanto uma requisição está em andamento
+    // Usado por handleFormSubmit e handleSolutionWorked
+    window._updesk_isSubmittingChamado = false;
+
     const chamadoForm = document.getElementById('chamado-form');
     const suggestBtn = document.getElementById('suggest-solution-btn');
     const forceCreateBtn = document.getElementById('force-create-ticket-btn');
@@ -212,6 +216,10 @@ async function handleSolutionWorked() {
 	};
 
 	try {
+        // Evita que o usuário dispare duas requisições seguidas (ex.: duplo clique)
+        if (window._updesk_isSubmittingChamado) return;
+        window._updesk_isSubmittingChamado = true;
+
 		const token = localStorage.getItem('authToken');
 		const headers = { 'Content-Type': 'application/json' };
 		if (token) headers['Authorization'] = `Bearer ${token}`;
@@ -260,6 +268,10 @@ async function handleSolutionWorked() {
 	} catch (error) {
 		console.error('Erro ao resolver com IA:', error);
 		alert('Erro ao registrar chamado resolvido: ' + error.message);
+
+        } finally {
+                // libera a flag para permitir novos envios quando concluir (sucesso ou erro)
+                window._updesk_isSubmittingChamado = false;
 	}
 }
 
@@ -350,6 +362,10 @@ async function handleFormSubmit(event) {
     }
 
     try {
+        // Proteção contra submissão duplicada (duplo clique / múltiplos eventos)
+        if (window._updesk_isSubmittingChamado) return;
+        window._updesk_isSubmittingChamado = true;
+
         // Show global feedback while submitting the ticket
         showLoading('Seu chamado está sendo enviado para um técnico...');
         const token = localStorage.getItem('authToken');
@@ -365,7 +381,7 @@ async function handleFormSubmit(event) {
         if (response.ok) {
             hideLoading();
             alert('Chamado aberto com sucesso!');
-            window.location.href = '/templates/verChamado.html';
+            window.location.href = '/templates/chamado.html';
         } else {
             const errorText = await response.text();
             throw new Error(errorText);
@@ -378,6 +394,8 @@ async function handleFormSubmit(event) {
             submitButton.disabled = false;
             submitButton.textContent = 'Abrir Chamado';
         }
+        // libera a flag mesmo em erro
+        window._updesk_isSubmittingChamado = false;
     }
 
     function showError(msg) {

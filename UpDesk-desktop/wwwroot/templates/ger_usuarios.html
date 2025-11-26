@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,67 +10,102 @@
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stylesheet" href="../static/css/components/_ger-usuarios-page.css">
 </head>
+
 <body>
     <div id="navbar-placeholder"></div>
     <div class="main-panel">
-    <div class="user-page__container">
-        <h1 class="user-page__title">Gerenciamento de Usuários</h1>
+        <div class="user-page__container">
+            <h1 class="user-page__title">Gerenciamento de Usuários</h1>
 
-        <div class="user-page__tools">
-            <div class="d-flex m-2">
-                <input class="form-control user-page__search-input" type="search" id="search-input" placeholder="Pesquisar usuário por nome ou email...">
-                <button class="btn btn-outline-secondary" id="search-button">Buscar</button>
+            <div class="user-page__tools">
+                <div class="d-flex m-2">
+                    <input class="form-control user-page__search-input" type="search" id="search-input"
+                        placeholder="Pesquisar usuário por nome ou email...">
+                    <button class="btn btn-outline-secondary" id="search-button">Buscar</button>
+                </div>
+                <button class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#modalCriarUsuario">Criar
+                    Usuário</button>
             </div>
-            <button class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#modalCriarUsuario">Criar Usuário</button>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Cargo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuarios-table-body">
+                        <!-- Conteúdo preenchido por managUser.js -->
+                    </tbody>
+                </table>
+            </div>
+            <a href="/templates/home.html" class="btn btn-salvar user-page__voltar-btn"><i class="bi bi-house"></i>
+                Página Inicial</a>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Cargo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="usuarios-table-body">
-                    <!-- Conteúdo preenchido por managUser.js -->
-                </tbody>
-            </table>
-        </div>
-        <a href="/templates/home.html" class="btn btn-secondary user-page__voltar-btn"><i class="bi bi-house"></i> Página Inicial</a>
-    </div>
+        <!-- Modal de Criar Usuário -->
+        <div class="modal fade" id="modalCriarUsuario" tabindex="-1" aria-labelledby="modalCriarUsuarioLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="formCriarUsuario" novalidate>
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="modalCriarUsuarioLabel">Criar Novo Usuário</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Fechar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3"><label for="create-nome" class="form-label">Nome</label><input type="text"
+                                    class="form-control" id="create-nome" name="nome" required></div>
+                            <div class="mb-3"><label for="create-email" class="form-label">Email</label><input
+                                    type="email" class="form-control" id="create-email" name="email" required></div>
+                            <div class="mb-3"><label for="create-telefone" class="form-label">Telefone</label><input
+                                    type="text" class="form-control" id="create-telefone" name="telefone"></div>
+                            <!--DROPDOWN-->
+                            <div class="mb-3">
+                                <label for="create-setor" class="form-label">Setor</label>
+                                <select class="form-select" id="create-setor" name="setor" required>
+                                    <option value="" disabled selected>Selecione seu setor</option>
+                                    <option value="TI">TI</option>
+                                    <option value="RH">RH</option>
+                                    <option value="Financeiro">Financeiro</option>
+                                    <option value="Administrativo">Administrativo</option>
+                                </select>
+                            </div>
 
-    <!-- Modal de Criar Usuário -->
-    <div class="modal fade" id="modalCriarUsuario" tabindex="-1" aria-labelledby="modalCriarUsuarioLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form id="formCriarUsuario" novalidate>
-                    <div class="modal-header">
-                        <h2 class="modal-title" id="modalCriarUsuarioLabel">Criar Novo Usuário</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3"><label for="create-nome" class="form-label">Nome</label><input type="text" class="form-control" id="create-nome" name="nome" required></div>
-                        <div class="mb-3"><label for="create-email" class="form-label">Email</label><input type="email" class="form-control" id="create-email" name="email" required></div>
-                        <div class="mb-3"><label for="create-telefone" class="form-label">Telefone</label><input type="text" class="form-control" id="create-telefone" name="telefone"></div>
-                        <div class="mb-3"><label for="create-setor" class="form-label">Setor</label><input type="text" class="form-control" id="create-setor" name="setor"></div>
-                        <div class="mb-3"><label for="create-cargo" class="form-label">Cargo</label><input type="text" class="form-control" id="create-cargo" name="cargo"></div>
-                        <div class="mb-3"><label for="create-senha" class="form-label">Senha</label><input type="password" class="form-control" id="create-senha" name="senha" required></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-criar-user">Criar Usuário</button>
-                    </div>
-                </form>
+                            <div class="mb-3">
+                                <label for="create-cargo" class="form-label">Cargo</label>
+                                <select class="form-select" id="create-cargo" name="cargo" required>
+                                    <option value="" disabled selected>Selecione seu cargo</option>
+                                    <option value="Tecnico N1">Tecnico N1</option>
+                                    <option value="Tecnico N2">Tecnico N2</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="Triagem">Triagem</option>
+                                    <option value="Auxilixar Administrativo">Auxilixar Administrativo</option>
+                                    <option value="Assistente Financeiro">Assistente Financeiro</option>
+                                    <option value="Analista de RH">Analista de RH</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3"><label for="create-senha" class="form-label">Senha</label><input
+                                    type="password" class="form-control" id="create-senha" name="senha" required></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-criar-user">Criar Usuário</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- Modal de Editar Usuário -->
-    <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form id="formEditarUsuario" novalidate>
@@ -79,12 +115,40 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3"><label for="edit-nome" class="form-label">Nome</label><input type="text" class="form-control" id="edit-nome" name="nome" required></div>
-                        <div class="mb-3"><label for="edit-email" class="form-label">Email</label><input type="email" class="form-control" id="edit-email" name="email" required></div>
-                        <div class="mb-3"><label for="edit-telefone" class="form-label">Telefone</label><input type="text" class="form-control" id="edit-telefone" name="telefone"></div>
-                        <div class="mb-3"><label for="edit-setor" class="form-label">Setor</label><input type="text" class="form-control" id="edit-setor" name="setor"></div>
-                        <div class="mb-3"><label for="edit-cargo" class="form-label">Cargo</label><input type="text" class="form-control" id="edit-cargo" name="cargo"></div>
-                        <div class="mb-3"><label for="edit-senha" class="form-label">Nova Senha</label><input type="password" class="form-control" id="edit-senha" name="senha" placeholder="Deixe em branco para não alterar"></div>
+                        <div class="mb-3"><label for="edit-nome" class="form-label">Nome</label><input type="text"
+                                class="form-control" id="edit-nome" name="nome" required></div>
+                        <div class="mb-3"><label for="edit-email" class="form-label">Email</label><input type="email"
+                                class="form-control" id="edit-email" name="email" required></div>
+                        <div class="mb-3"><label for="edit-telefone" class="form-label">Telefone</label><input
+                                type="text" class="form-control" id="edit-telefone" name="telefone"></div>
+                        
+                        <div class="mb-3">
+                                <label for="edit-setor" class="form-label">Setor</label>
+                                <select class="form-select" id="edit-setor" name="setor" required>
+                                    <option value="">Selecione seu setor</option>
+                                    <option value="TI">TI</option>
+                                    <option value="RH">RH</option>
+                                    <option value="Financeiro">Financeiro</option>
+                                    <option value="Administrativo">Administrativo</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="edit-cargo" class="form-label">Cargo</label>
+                                <select class="form-select" id="edit-cargo" name="cargo" required>
+                                    <option value="">Selecione seu cargo</option>
+                                    <option value="Tecnico N1">Tecnico N1</option>
+                                    <option value="Tecnico N2">Tecnico N2</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="Triagem">Triagem</option>
+                                    <option value="Auxiliar Administrativo">Auxiliar Administrativo</option>
+                                    <option value="Assistente Financeiro">Assistente Financeiro</option>
+                                    <option value="Analista de RH">Analista de RH</option>
+                                </select>
+                            </div>
+                        <div class="mb-3"><label for="edit-senha" class="form-label">Nova Senha</label><input
+                                type="password" class="form-control" id="edit-senha" name="senha"
+                                placeholder="Deixe em branco para não alterar"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -96,7 +160,8 @@
     </div>
 
     <!-- Modal de Confirmação de Exclusão -->
-    <div class="modal fade" id="modalExcluirUsuario" tabindex="-1" aria-labelledby="modalExcluirUsuarioLabel" aria-hidden="true">
+    <div class="modal fade" id="modalExcluirUsuario" tabindex="-1" aria-labelledby="modalExcluirUsuarioLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -104,7 +169,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Tem certeza que deseja excluir o usuário <strong id="delete-user-name"></strong>? Esta ação não pode ser revertida.</p>
+                    <p>Tem certeza que deseja excluir o usuário <strong id="delete-user-name"></strong>? Esta ação não
+                        pode ser revertida.</p>
+                    <p class="text-muted small">Por segurança, informe sua senha para confirmar a exclusão:</p>
+                    <div class="mb-3">
+                        <label for="delete-current-password" class="form-label">Sua senha</label>
+                        <input type="password" class="form-control" id="delete-current-password" placeholder="Digite sua senha">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -119,4 +190,5 @@
     <script src="../static/js/main.js"></script>
     <script src="../static/js/managUser.js"></script>
 </body>
+
 </html>

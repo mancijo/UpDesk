@@ -50,7 +50,7 @@
         </div>
 
         <div class="bottom-bar">
-            <a href="/templates/home.html" class="btn btn-home"><i class="bi bi-house"></i> Página inicial</a>
+            <a href="/templates/home.html" class="btn btn-salvar"><i class="bi bi-house"></i> Página inicial</a>
             <button class="btn btn-gestao" data-bs-toggle="modal" data-bs-target="#modalRelatorio"><i class="bi bi-printer"></i> relatório Gestão</button>
         </div>
     </div>
@@ -132,5 +132,27 @@
     <script src="../static/js/auth_guard.js"></script>
     <script src="../static/js/main.js"></script>
     <script src="../static/js/verChamado.js"></script>
+    <!-- Garantir que nenhum modal fique aberto por engano ao carregar a página -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (window.bootstrap) {
+                    const modalEl = document.getElementById('visualizarChamadoModal');
+                    if (modalEl) {
+                        const inst = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                        // Força fechar qualquer modal que esteja aberto por engano
+                        inst.hide();
+                    }
+                }
+            } catch (e) {
+                console.warn('Não foi possível resetar estado do modal automaticamente:', e);
+            }
+
+            // Remove quaisquer backdrops que possam ter sido deixados por scripts anteriores
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            // Também garante que o body não fique sem scroll por causa de classes deixadas
+            document.body.classList.remove('modal-open');
+        });
+    </script>
 </body>
 </html>
